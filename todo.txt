@@ -1,7 +1,21 @@
-DESIGN(DEDIE):
+DESIGN (DEDIE):
 	Object Design:     *****EXPORT AS A PNG*****
 		- 4 circle types
 		- Indicator Arrow
 		- Sample stage/design (in code)
 		- Power Bar
 
+
+PROGRAMMING (NIKHIL)
+	- Install SFML
+	- Get C++ working with a compiler
+	- Compile a program in SFML
+	- GET FAMILIAR!
+
+PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//************
+	- STAGE PROPERTIES (circle, collisions)
+	- Moving cursor (360 degrees) with mouse
+	- Basic game outline. 
+
+
+	

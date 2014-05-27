@@ -13,12 +13,14 @@ HOW TO PLAY:
 
 
 CONTROLS:
-	- Moving : up/down/left/right
+	- Moving : w/a/s/d
 	- Shooting bread : spacebar 
 	- To cycle between bread : tab
 	- Pause - p
 	- Reset - r
-
+	- Switch characters - left click
+	- Move around cursor - mouse position
+	- Abilitiy activation - right click (hold/press)
 
 GAME FEATURES:
 	- Power bar for firing power of bread (either hold space or toggle)
