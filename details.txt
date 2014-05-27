@@ -1,0 +1,30 @@
+"baker" = big circle
+"oven" = end portal
+"bread" = little guys
+
+OBJECTIVE:
+	Get the "baker" to the "oven" using bread to complete the stage and move onto the next
+
+HOW TO PLAY:
+	- Cursor automatically starts on baker
+	- Since baker is useless alone, he needs the bread to help him reach the oven
+	- Each piece of bread has different abilities to help the baker across each stage
+	- Baker can choose which size of bread he wants to use. 
+
+
+CONTROLS:
+	- Moving : up/down/left/right
+	- Shooting bread : spacebar 
+	- To cycle between bread : tab
+	- Pause - p
+	- Reset - r
+
+
+GAME FEATURES:
+	- Power bar for firing power of bread (either hold space or toggle)
+	- Trajectory is based on position of arrow + power of powerbar 
+	- If all bread is used, player can choose to restart game
+	- Internal time limit - depends on stage
+	- Pause / Reset
+ 
+

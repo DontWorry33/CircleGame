@@ -1,0 +1,7 @@
+DESIGN(DEDIE):
+	Object Design:     *****EXPORT AS A PNG*****
+		- 4 circle types
+		- Indicator Arrow
+		- Sample stage/design (in code)
+		- Power Bar
+
