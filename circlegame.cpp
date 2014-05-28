@@ -54,7 +54,7 @@ int main()
 			    (shape_x <= 0)) NULL; //left side of screen
 
 			//if no collisions, then move
-            else shape.move(-5.f,0.f);
+        		else shape.move(-5.f,0.f);
 		}
 
 
@@ -87,7 +87,7 @@ int main()
 				((shape_x > 530 && shape_x < 590) && shape_y >= 365)) NULL; //top of line
 
 			//if no collisions, then move
-            else shape.move(0.f,5.f);
+            		else shape.move(0.f,5.f);
 		}
 
 
