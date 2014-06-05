@@ -21,7 +21,7 @@ class Game
 		void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 	
 	
-		//constans for update statistics
+		//constants for update statistics
 		static const float PlayerSpeed;
 		static const sf::Time TimePerFrame;
 
@@ -65,12 +65,12 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 			   mIsMovingLeft(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont()
 {
-	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
+	mWindow.create(sf::VideoMode(800, 600), "CircleGame!");
 	
 	//set circle stuff
-	mCircleTexture.loadFromFile("../../Baker_Images/TheBakerOne.png");
-	mCircle.setTexture(&mCircleTexture);
-	mCircle.setRadius(28.5);
+	//mCircleTexture.loadFromFile("../../Baker_Images/TheBakerOne.png");
+	//mCircle.setTexture(&mCircleTexture);
+	mCircle.setRadius(18.5);
 	
 	//set background
 	mBackgroundTexture.loadFromFile("../../Stage_Images/Set-StageOne.png");
@@ -85,8 +85,8 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	mStatisticsText.setColor(sf::Color::White);
 	
 	//Change as radius of circle changes.
-	mCircleOrigin.x = 28.5;
-	mCircleOrigin.y = 28.5;
+	mCircleOrigin.x = 18.5; /* DEDIE: Should we just make this equal mCircle.setRadius? Since they are the same?*/
+	mCircleOrigin.y = mCircleOrigin.x; //y must equal x to have perfect circle. Only need modify one value.
 	mCircle.setOrigin(mCircleOrigin);
 	
 	//Start pos relative to the map
@@ -176,10 +176,10 @@ void Game::update(sf::Time elapsedTime)
 		
 	if (mIsMovingDown)
 	{
-		if  ((mCirclePos.x <= 287-mCircleOrigin.x && mCirclePos.y >=437-mCircleOrigin.y) || //top of portal box
+		if  ((mCirclePos.x <= 232+mCircleOrigin.x && mCirclePos.y >=434-mCircleOrigin.y) || //top of portal box
 				 (mCirclePos.y >= 595-mCircleOrigin.y) ||  //bottom of screen
-				((mCirclePos.x > 580-mCircleOrigin.x && mCirclePos.x < 587+mCircleOrigin.x) && mCirclePos.y >= 400-mCircleOrigin.y)) NULL; //top of line
-				
+				((mCirclePos.x > 571-mCircleOrigin.x && mCirclePos.x <= 589+mCircleOrigin.x) && mCirclePos.y >= 402-mCircleOrigin.y)) NULL; //top of line
+			
 		else
 		{
 			movement.y += PlayerSpeed;
@@ -189,8 +189,8 @@ void Game::update(sf::Time elapsedTime)
 	if (mIsMovingLeft)
 	{
 		
-		if ((mCirclePos.x <= 235+mCircleOrigin.x && mCirclePos.y >= 400+mCircleOrigin.y) || //portal box
-			   ((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 530+mCircleOrigin.x) && mCirclePos.y >= 370+mCircleOrigin.y)  ||  //line
+		if ( (mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y) || //portal box
+			   ((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||  //line
 				(mCirclePos.x <= 0+mCircleOrigin.x)) NULL;
 		else 
 		{
@@ -202,7 +202,7 @@ void Game::update(sf::Time elapsedTime)
 	
 	if (mIsMovingRight)
 	{	
-		if (((mCirclePos.x >= 570-mCircleOrigin.x && mCirclePos.x < 590-mCircleOrigin.x) && mCirclePos.y >= 370+mCircleOrigin.y)  || //line 
+		if (((mCirclePos.x >= 567-mCircleOrigin.x && mCirclePos.x < 590-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)  || //line 
 				 (mCirclePos.x >= 800-mCircleOrigin.x)) NULL;
 		else 
 		{

@@ -15,7 +15,7 @@ int main()
 
     //Create background sprite/image.
     sf::Texture bkg_img;
-    bkg_img.loadFromFile("Set-StageOne.png");
+    bkg_img.loadFromFile("../Stage_Images/Set-StageOne.png");
     sf::Sprite bkg;
     bkg.setTexture(bkg_img);
 
