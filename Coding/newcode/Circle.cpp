@@ -171,12 +171,18 @@ void Game::update(sf::Time elapsedTime)
 		else 
 		{
 			movement.y -= PlayerSpeed;
-			rotateangle = PlayerSpeed;
+			if ((mCirclePos.x <= 0+mCircleOrigin.x) ||
+				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)
+				) rotateangle = -PlayerSpeed;
+			else rotateangle = PlayerSpeed;
 		}
 	}	
 		
 	if (mIsMovingDown)
 	{
+
+		
+
 		if  ((mCirclePos.x <= 232+mCircleOrigin.x && mCirclePos.y >=434-mCircleOrigin.y) || //top of portal box
 				 (mCirclePos.y >= 595-mCircleOrigin.y) ||  //bottom of screen
 				((mCirclePos.x > 571-mCircleOrigin.x && mCirclePos.x <= 589+mCircleOrigin.x) && mCirclePos.y >= 402-mCircleOrigin.y)) NULL; //top of line
@@ -184,7 +190,9 @@ void Game::update(sf::Time elapsedTime)
 		else
 		{
 			movement.y += PlayerSpeed;
-			rotateangle = -PlayerSpeed;
+			if ((mCirclePos.x <= 0+mCircleOrigin.x) || 
+				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)) rotateangle=PlayerSpeed;
+			else rotateangle = -PlayerSpeed;
 		}
 	}	
 		
@@ -197,7 +205,8 @@ void Game::update(sf::Time elapsedTime)
 		else 
 		{
 			movement.x -= PlayerSpeed;
-			rotateangle = -PlayerSpeed;
+			if (mCirclePos.y <= 0+mCircleOrigin.y) rotateangle = PlayerSpeed;
+			else rotateangle = -PlayerSpeed;
 		}
 	}
 	
@@ -209,7 +218,8 @@ void Game::update(sf::Time elapsedTime)
 		else 
 		{
 			movement.x += PlayerSpeed;
-			rotateangle = PlayerSpeed;
+			if (mCirclePos.y <=0+mCircleOrigin.y) rotateangle = -PlayerSpeed;
+			else rotateangle = PlayerSpeed;
 		}
 	}	
 	
