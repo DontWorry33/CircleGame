@@ -68,8 +68,8 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	mWindow.create(sf::VideoMode(800, 600), "CircleGame!");
 	
 	//set circle stuff
-	//mCircleTexture.loadFromFile("../../Baker_Images/TheBakerOne.png");
-	//mCircle.setTexture(&mCircleTexture);
+	mCircleTexture.loadFromFile("../../Character_Images/Roti.png");
+	mCircle.setTexture(&mCircleTexture);
 	mCircle.setRadius(18.5);
 	
 	//set background
@@ -171,6 +171,7 @@ void Game::update(sf::Time elapsedTime)
 		else 
 		{
 			movement.y -= PlayerSpeed;
+			rotateangle = PlayerSpeed;
 		}
 	}	
 		
@@ -183,6 +184,7 @@ void Game::update(sf::Time elapsedTime)
 		else
 		{
 			movement.y += PlayerSpeed;
+			rotateangle = -PlayerSpeed;
 		}
 	}	
 		
