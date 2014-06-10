@@ -172,8 +172,8 @@ void Game::update(sf::Time elapsedTime)
 		{
 			movement.y -= PlayerSpeed;
 			if ((mCirclePos.x <= 0+mCircleOrigin.x) ||
-				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)
-				) rotateangle = -PlayerSpeed;
+				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||
+				(mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y)) rotateangle = -PlayerSpeed;
 			else rotateangle = PlayerSpeed;
 		}
 	}	
@@ -191,7 +191,8 @@ void Game::update(sf::Time elapsedTime)
 		{
 			movement.y += PlayerSpeed;
 			if ((mCirclePos.x <= 0+mCircleOrigin.x) || 
-				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)) rotateangle=PlayerSpeed;
+				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||
+				(mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y)) rotateangle=PlayerSpeed;
 			else rotateangle = -PlayerSpeed;
 		}
 	}	
