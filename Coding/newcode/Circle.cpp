@@ -3,7 +3,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <cmath>
 #include "StringHelpers.hpp"
+
+#define PI 3.14159265
 
 class Game
 {
@@ -30,7 +33,11 @@ class Game
 		//Circle sprite/texture
 		sf::Texture	mCircleTexture;
 		sf::CircleShape mCircle;
-		
+			
+		//Arrow Indicator
+		sf::Texture mArrowTexture;
+		sf::Sprite mArrow;
+
 		//Circle properties
 		sf::Vector2f mCirclePos;
 		sf::Vector2f mCircleOrigin;
@@ -45,6 +52,9 @@ class Game
 		bool mIsMovingDown;
 		bool mIsMovingRight;
 		bool mIsMovingLeft;	
+
+		//mouse position
+		sf::Vector2i mMousePos;
 	
 		//statistics
 		sf::Font mFont;
@@ -56,36 +66,41 @@ class Game
 };
 
 
-const float Game::PlayerSpeed = 200.f;
+const float Game::PlayerSpeed = 250.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont()
+			   mFont(), mArrowTexture(), mArrow()
 {
-	mWindow.create(sf::VideoMode(800, 600), "CircleGame!");
+	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
 	//set circle stuff
-	mCircleTexture.loadFromFile("../../Character_Images/Roti.png");
+	mCircleTexture.loadFromFile("../../Character_Images/temp_circle_texture.png");
 	mCircle.setTexture(&mCircleTexture);
-	mCircle.setRadius(18.5);
+	mCircle.setRadius(20);
 	
 	//set background
-	mBackgroundTexture.loadFromFile("../../Stage_Images/Set-StageOne.png");
+	mBackgroundTexture.loadFromFile("../../Stage_Images/IntroStage.png");
 	mBackground.setTexture(mBackgroundTexture);
 	
 	//set all statistics
 	mStatisticsNumFrames = 0;
 	mFont.loadFromFile("Sansation.ttf");
 	mStatisticsText.setFont(mFont);
-	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(20);
 	mStatisticsText.setColor(sf::Color::White);
 	
+	//set arrow stuff
+	mArrowTexture.loadFromFile("../../Character_Images/Arrowhead.png");
+	mArrow.setTexture(mArrowTexture);
+	mArrow.setPosition(490+20,600-20);
+	mArrow.setOrigin(20,20);
+
 	//Change as radius of circle changes.
-	mCircleOrigin.x = 18.5; /* DEDIE: Should we just make this equal mCircle.setRadius? Since they are the same?*/
+	mCircleOrigin.x = mCircle.getRadius(); /* DEDIE: Should we just make this equal mCircle.setRadius? Since they are the same?*/
 	mCircleOrigin.y = mCircleOrigin.x; //y must equal x to have perfect circle. Only need modify one value.
 	mCircle.setOrigin(mCircleOrigin);
 	
@@ -99,6 +114,7 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	
 	//Set current position to starting position
 	mCirclePos = mCircle.getPosition();
+
 	
 	
 }
@@ -112,7 +128,28 @@ void Game::run()
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen())
 	{
-		std::cout << "X: " << mCirclePos.x << "\nY: " << mCirclePos.y << std::endl; //debugging purposes
+		
+		//std::cout << "X: " << mCirclePos.x << "\nY: " << mCirclePos.y << std::endl; //debugging purposes
+
+		//set the arrow position to follow the circle
+		mArrow.setPosition(mCircle.getPosition());
+
+		//get mouse-coordinates relative to the window
+		mMousePos = sf::Mouse::getPosition(mWindow);
+		
+		//Positions of Origin for mArrow
+		int cx=mArrow.getPosition().x;
+		int cy=mArrow.getPosition().y;
+
+		//The angle is arctangent of mArrow origin - current mouse position of Y/X.
+		float angle_in_rad = atan2(cy-mMousePos.y,cx-mMousePos.x);
+
+		//atan2 returns angle in radians, convert to degrees for debugging purposes		
+		float angle_in_deg = (angle_in_rad*180)/PI;
+
+		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
+		mArrow.setPosition(cx-(mCircle.getRadius() * cos(angle_in_rad)), cy-(mCircle.getRadius() * sin(angle_in_rad)));
+		
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > TimePerFrame)
@@ -139,6 +176,9 @@ void Game::processEvents()
 
 			case sf::Event::KeyReleased:
 				handlePlayerInput(event.key.code, false);
+				break;
+
+			case sf::Event::MouseMoved:
 				break;
 
 			case sf::Event::Closed:
@@ -172,8 +212,8 @@ void Game::update(sf::Time elapsedTime)
 		{
 			movement.y -= PlayerSpeed;
 			if ((mCirclePos.x <= 0+mCircleOrigin.x) ||
-				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||
-				(mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y)) rotateangle = -PlayerSpeed;
+				((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||
+				(mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y)) rotateangle = -PlayerSpeed;
 			else rotateangle = PlayerSpeed;
 		}
 	}	
@@ -183,25 +223,27 @@ void Game::update(sf::Time elapsedTime)
 
 		
 
-		if  ((mCirclePos.x <= 232+mCircleOrigin.x && mCirclePos.y >=434-mCircleOrigin.y) || //top of portal box
-				 (mCirclePos.y >= 595-mCircleOrigin.y) ||  //bottom of screen
-				((mCirclePos.x > 571-mCircleOrigin.x && mCirclePos.x <= 589+mCircleOrigin.x) && mCirclePos.y >= 402-mCircleOrigin.y)) NULL; //top of line
+		if  ((mCirclePos.x <= 450+mCircleOrigin.x && mCirclePos.x > 86-mCircleOrigin.x && mCirclePos.y >=732-mCircleOrigin.y) || //top of portal box
+				 (mCirclePos.y >= 783-mCircleOrigin.y) ||  //bottom of screen
+				((mCirclePos.x > 747-mCircleOrigin.x && mCirclePos.x <= 772+mCircleOrigin.x) && mCirclePos.y >= 463-mCircleOrigin.y)) NULL; //top of line
 			
 		else
 		{
 			movement.y += PlayerSpeed;
 			if ((mCirclePos.x <= 0+mCircleOrigin.x) || 
-				((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||
-				(mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y)) rotateangle=PlayerSpeed;
+				((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||
+				(mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y)) rotateangle=PlayerSpeed;
 			else rotateangle = -PlayerSpeed;
 		}
 	}	
 		
+
+
 	if (mIsMovingLeft)
 	{
 		
-		if ( (mCirclePos.x <= 236+mCircleOrigin.x && mCirclePos.y >= 438-mCircleOrigin.y) || //portal box
-			   ((mCirclePos.x <= 590+mCircleOrigin.x && mCirclePos.x > 571-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y) ||  //line
+		if ( (mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y) || //portal box
+			   ((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||  //line
 				(mCirclePos.x <= 0+mCircleOrigin.x)) NULL;
 		else 
 		{
@@ -211,11 +253,11 @@ void Game::update(sf::Time elapsedTime)
 		}
 	}
 	
-	
+
 	if (mIsMovingRight)
 	{	
-		if (((mCirclePos.x >= 567-mCircleOrigin.x && mCirclePos.x < 590-mCircleOrigin.x) && mCirclePos.y > 404-mCircleOrigin.y)  || //line 
-				 (mCirclePos.x >= 800-mCircleOrigin.x)) NULL;
+		if (((mCirclePos.x >= 745-mCircleOrigin.x && mCirclePos.x < 775-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y)  || //line 
+				 (mCirclePos.x >= 1200-mCircleOrigin.x) || ((mCirclePos.x >= 81-mCircleOrigin.x && mCirclePos.x <= 455-mCircleOrigin.x) && mCirclePos.y >= 735-mCircleOrigin.x)) NULL;
 		else 
 		{
 			movement.x += PlayerSpeed;
@@ -256,8 +298,8 @@ void Game::render()
 	mWindow.clear();	
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
+	mWindow.draw(mArrow);
 	mWindow.draw(mCircle);
-	//mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
 
