@@ -149,7 +149,7 @@ void Game::run()
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 		mArrow.setPosition(cx-(mCircle.getRadius() * cos(angle_in_rad)), cy-(mCircle.getRadius() * sin(angle_in_rad)));
-		
+		mArrow.setRotation(angle_in_deg-90);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > TimePerFrame)
