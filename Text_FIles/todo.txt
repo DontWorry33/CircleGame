@@ -1,21 +1,30 @@
 DESIGN (DEDIE):
 	Object Design:     *****EXPORT AS A PNG*****
-		- 4 circle types
-		- Indicator Arrow
-		- Sample stage/design (in code)
+		- 4 circle types  (*)
+		- Indicator Arrow  (*)
+		- Sample stage/design (in code) (*)
 		- Power Bar
+		- Learn what a makefile does/is
+		- Update arrow
+		- Start learning SFML
+
 
 
 PROGRAMMING (NIKHIL)
-	- Install SFML
-	- Get C++ working with a compiler
+	- Install SFML 
+	- Get C++ working with a compiler (*)
 	- Compile a program in SFML
-	- GET FAMILIAR!
+	- GET FAMILIAR! (*)
+	- Go through source code and see what we've done, figure out why/how
+	- trajectory of projectiles shooting from arrow, basic idea
+
 
 PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//************
-	- STAGE PROPERTIES (circle, collisions)
-	- Moving cursor (360 degrees) with mouse
-	- Basic game outline. 
-
+	- STAGE PROPERTIES (circle, collisions) (*)
+	- Moving cursor (360 degrees) with mouse (*)
+	- Basic game outline.  (*)
+	- Gravity
+	- Switching
+	- Entities
 
 	
