@@ -235,6 +235,7 @@ void Game::processEvents()
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {	
+	if (key == sf::Keyboard::Space) mCircle.setPosition(mCircle.getPosition().x, 0);
 	if (key == sf::Keyboard::W)
 		mIsMovingUp = isPressed;
 	else if (key == sf::Keyboard::S)
@@ -243,6 +244,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
+
 }
 
 
@@ -252,6 +254,8 @@ void Game::update(sf::Time elapsedTime)
 	int rotateangle=0;
 
 
+
+	
 
 
 	if (mIsMovingUp)
