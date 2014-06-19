@@ -16,6 +16,7 @@ class Game
 		
 		//functions
 		void run();
+		void checkGravity();
 		void processEvents();
 		void update(sf::Time elapsedTime);
 		void render();
@@ -61,26 +62,33 @@ class Game
 		sf::Text mStatisticsText;
 		sf::Time mStatisticsUpdateTime;
 		std::size_t	mStatisticsNumFrames;
+
+		//Gravity
+		const float g; //gravity constant initalized in constructor
+		const float timePerGravityUpdate;  //amount of time before acceleration update
+		float gCurrent; //curent gravity
+		sf::Clock gravityClock; //measure time
 	
 	
 };
 
 
-const float Game::PlayerSpeed = 250.f;
+const float Game::PlayerSpeed = 200.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
+
 
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow()
+			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.2)
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
 	//set circle stuff
-	mCircleTexture.loadFromFile("../../Character_Images/temp_circle_texture.png");
+	mCircleTexture.loadFromFile("../../Character_Images/Anpan.png");
 	mCircle.setTexture(&mCircleTexture);
-	mCircle.setRadius(20);
+	mCircle.setRadius(36);
 	
 	//set background
 	mBackgroundTexture.loadFromFile("../../Stage_Images/IntroStage.png");
@@ -96,8 +104,8 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	//set arrow stuff
 	mArrowTexture.loadFromFile("../../Character_Images/Arrowhead.png");
 	mArrow.setTexture(mArrowTexture);
-	mArrow.setPosition(490+20,600-20);
-	mArrow.setOrigin(20,20);
+	mArrow.setPosition(490+45,600-30);
+	mArrow.setOrigin(45,30);
 
 	//Change as radius of circle changes.
 	mCircleOrigin.x = mCircle.getRadius(); /* DEDIE: Should we just make this equal mCircle.setRadius? Since they are the same?*/
@@ -106,7 +114,7 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	
 	//Start pos relative to the map
 	mStartPos.x = 490;
-	mStartPos.y = 600;
+	mStartPos.y = 0;
 	
 	//Must add Origin if changed. Default is (0,0), easy to modify later with bigger circles.
 	mCircle.setPosition(mStartPos.x+mCircleOrigin.x, mStartPos.y-mCircleOrigin.y);
@@ -115,7 +123,7 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	//Set current position to starting position
 	mCirclePos = mCircle.getPosition();
 
-	
+	gCurrent = g;
 	
 }
 
@@ -129,7 +137,7 @@ void Game::run()
 	while (mWindow.isOpen())
 	{
 		
-		//std::cout << "X: " << mCirclePos.x << "\nY: " << mCirclePos.y << std::endl; //debugging purposes
+		std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
 
 		//set the arrow position to follow the circle
 		mArrow.setPosition(mCircle.getPosition());
@@ -149,9 +157,35 @@ void Game::run()
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 		mArrow.setPosition(cx-(mCircle.getRadius() * cos(angle_in_rad)), cy-(mCircle.getRadius() * sin(angle_in_rad)));
+		
+		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
+
+		//get the current amount of time elapsed
+		sf::Time updateGravity = gravityClock.getElapsedTime();
+
+		//if the current time is less than our update time
+		if (updateGravity.asSeconds() <= timePerGravityUpdate)
+		{
+			//keep getting the time until it is greater
+			updateGravity = gravityClock.getElapsedTime();
+
+		}
+
+		//once it is greater, update our current G (acceleration) and reset the clock to repeat
+		else 
+		{
+			gCurrent+=g;
+			updateGravity = gravityClock.restart();
+		}
+
+
+		//apply gravity
+		checkGravity();
+
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
+
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
 			timeSinceLastUpdate -= TimePerFrame;
@@ -162,6 +196,17 @@ void Game::run()
 		render();
 	}
 }
+
+void Game::checkGravity()
+{
+	if (mCirclePos.y <= 785-mCircleOrigin.y)
+	{
+		mCircle.move(0,gCurrent);
+	}
+	else gCurrent = g;
+
+}
+
 
 void Game::processEvents()
 {
@@ -205,9 +250,13 @@ void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
 	int rotateangle=0;
+
+
+
+
 	if (mIsMovingUp)
 	{	
-		if (mCirclePos.y <= 0+mCircleOrigin.y) NULL; //top of screen
+		if (mCirclePos.y >=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
