@@ -43,7 +43,8 @@ class Game
 		sf::Vector2f mCirclePos;
 		sf::Vector2f mCircleOrigin;
 		sf::Vector2f mStartPos;
-		
+		sf::Vector2f mCircleGrav;
+	
 		//Background sprite/texture
 		sf::Texture mBackgroundTexture;
 		sf::Sprite mBackground;
@@ -64,11 +65,8 @@ class Game
 		std::size_t	mStatisticsNumFrames;
 
 		//Gravity
-		const float g; //gravity constant initalized in constructor
-		const float timePerGravityUpdate;  //amount of time before acceleration update
-		float gCurrent; //curent gravity
-		sf::Clock gravityClock; //measure time
-	
+		const float gravity;
+		const float mCircleWeight;	
 	
 };
 
@@ -81,7 +79,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.2)
+			   mFont(), mArrowTexture(), mArrow(), gravity(0.2), mCircleWeight(0.9)  
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -123,7 +121,6 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	//Set current position to starting position
 	mCirclePos = mCircle.getPosition();
 
-	gCurrent = g;
 	
 }
 
@@ -161,27 +158,9 @@ void Game::run()
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
 
-		//get the current amount of time elapsed
-		sf::Time updateGravity = gravityClock.getElapsedTime();
-
-		//if the current time is less than our update time
-		if (updateGravity.asSeconds() <= timePerGravityUpdate)
-		{
-			//keep getting the time until it is greater
-			updateGravity = gravityClock.getElapsedTime();
-
-		}
-
-		//once it is greater, update our current G (acceleration) and reset the clock to repeat
-		else 
-		{
-			gCurrent+=g;
-			updateGravity = gravityClock.restart();
-		}
-
-
-		//apply gravity
+		//Gravity Implementation
 		checkGravity();
+		mCircle.move(mCircleGrav.x, mCircleGrav.y);
 
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -197,13 +176,18 @@ void Game::run()
 	}
 }
 
+
 void Game::checkGravity()
 {
 	if (mCirclePos.y <= 777-mCircleOrigin.y)
 	{
-		mCircle.move(0,gCurrent);
+		//mCircle.move(0,gCurrent);
+		mCircleGrav.y += (gravity+mCircleWeight);
 	}
-	else gCurrent = g;
+	else 
+	{
+		mCircleGrav.y = 0; //reset velocity value
+	}
 
 }
 
@@ -260,7 +244,7 @@ void Game::update(sf::Time elapsedTime)
 
 	if (mIsMovingUp)
 	{	
-		if (mCirclePos.y >=0 ) NULL; //top of screen
+		if (mCirclePos.y <=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
