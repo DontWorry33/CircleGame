@@ -5,8 +5,11 @@
 #include <string>
 #include <cmath>
 #include "StringHelpers.hpp"
+#include "Entity.cpp"
 
 #define PI 3.14159265
+#define ENTITIES_MAX 2
+
 
 class Game
 {
@@ -15,11 +18,14 @@ class Game
 		Game();
 		
 		//functions
-		void run();
-		void checkGravity();
-		void processEvents();
-		void update(sf::Time elapsedTime);
-		void render();
+		void run(Entity* entities[ENTITIES_MAX]);
+		void checkGravity(Entity* entities[ENTITIES_MAX]);
+		void entitySelector(Entity* entities[ENTITIES_MAX]);
+		void Arrow(Entity* entities[ENTITIES_MAX]);
+
+		void processEvents(Entity* entities[ENTITIES_MAX]);
+		void update(sf::Time elapsedTime,Entity* entities[ENTITIES_MAX]);
+		void render(Entity* entities[ENTITIES_MAX]);
 
 		void updateStatistics(sf::Time elapsedTime);	
 		void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
@@ -30,19 +36,11 @@ class Game
 		static const sf::Time TimePerFrame;
 
 		sf::RenderWindow mWindow;		
-		
-		//Circle sprite/texture
-		sf::Texture	mCircleTexture;
-		sf::CircleShape mCircle;
-			
+
 		//Arrow Indicator
 		sf::Texture mArrowTexture;
 		sf::Sprite mArrow;
 
-		//Circle properties
-		sf::Vector2f mCirclePos;
-		sf::Vector2f mCircleOrigin;
-		sf::Vector2f mStartPos;
 		
 		//Background sprite/texture
 		sf::Texture mBackgroundTexture;
@@ -52,7 +50,8 @@ class Game
 		bool mIsMovingUp;
 		bool mIsMovingDown;
 		bool mIsMovingRight;
-		bool mIsMovingLeft;	
+		bool mIsMovingLeft;
+		bool mIsSpaceBar;
 
 		//mouse position
 		sf::Vector2i mMousePos;
@@ -70,26 +69,23 @@ class Game
 		sf::Clock gravityClock; //measure time
 	
 	
+		int currentEntityIndex;
 };
 
 
 const float Game::PlayerSpeed = 200.f;
-const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
+const sf::Time Game::TimePerFrame = sf::seconds(1.f/100.f);
 
 
 //instantiates most objects and sets starting values
-Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
+Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mStatisticsText(), mStatisticsUpdateTime(),
+			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.2)
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
-	//set circle stuff
-	mCircleTexture.loadFromFile("../../Character_Images/Anpan.png");
-	mCircle.setTexture(&mCircleTexture);
-	mCircle.setRadius(36);
-	
+
 	//set background
 	mBackgroundTexture.loadFromFile("../../Stage_Images/IntroStage.png");
 	mBackground.setTexture(mBackgroundTexture);
@@ -98,6 +94,7 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	mStatisticsNumFrames = 0;
 	mFont.loadFromFile("Sansation.ttf");
 	mStatisticsText.setFont(mFont);
+
 	mStatisticsText.setCharacterSize(20);
 	mStatisticsText.setColor(sf::Color::White);
 	
@@ -107,21 +104,7 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 	mArrow.setPosition(490+45,600-30);
 	mArrow.setOrigin(45,30);
 
-	//Change as radius of circle changes.
-	mCircleOrigin.x = mCircle.getRadius(); /* DEDIE: Should we just make this equal mCircle.setRadius? Since they are the same?*/
-	mCircleOrigin.y = mCircleOrigin.x; //y must equal x to have perfect circle. Only need modify one value.
-	mCircle.setOrigin(mCircleOrigin);
-	
-	//Start pos relative to the map
-	mStartPos.x = 490;
-	mStartPos.y = 0;
-	
-	//Must add Origin if changed. Default is (0,0), easy to modify later with bigger circles.
-	mCircle.setPosition(mStartPos.x+mCircleOrigin.x, mStartPos.y-mCircleOrigin.y);
-	
-	
-	//Set current position to starting position
-	mCirclePos = mCircle.getPosition();
+	currentEntityIndex = 0;
 
 	gCurrent = g;
 	
@@ -130,21 +113,61 @@ Game::Game() : mBackgroundTexture(), mBackground(), mCircleTexture(), mCircle(),
 
 //main game loop. Runs all functions, processes events, updates game, updates statistics and renders
 //read 
-void Game::run()
+void Game::run(Entity* entities[ENTITIES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen())
 	{
-		
-		std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
-
 		//set the arrow position to follow the circle
-		mArrow.setPosition(mCircle.getPosition());
-
+		mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+		Arrow(entities);
 		//get mouse-coordinates relative to the window
 		mMousePos = sf::Mouse::getPosition(mWindow);
+		for (int x=0; x<ENTITIES_MAX; x++)
+		{
+
+			entities[x]->eBounds.x = entities[x]->cCircle.getPosition().x - entities[x]->cRadius;
+			entities[x]->eBounds.y = entities[x]->cCircle.getPosition().y - entities[x]->cRadius;
+
+		}
 		
+		//std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
+		//get the current amount of time elapsed
+		sf::Time updateGravity = gravityClock.getElapsedTime();
+
+		//if the current time is less than our update time
+		if (updateGravity.asSeconds() <= timePerGravityUpdate)
+		{
+			//keep getting the time until it is greater
+			updateGravity = gravityClock.getElapsedTime();
+		}
+		//once it is greater, update our current G (acceleration) and reset the clock to repeat
+		else 
+		{
+			gCurrent+=g;
+			updateGravity = gravityClock.restart();
+		}
+
+
+		
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
+
+		while (timeSinceLastUpdate > TimePerFrame)
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+			processEvents(entities);
+			update(TimePerFrame,entities);
+		}
+		updateStatistics(elapsedTime);
+		render(entities);
+	}
+}
+
+
+void Game::Arrow(Entity* entities[ENTITIES_MAX])
+{
 		//Positions of Origin for mArrow
 		int cx=mArrow.getPosition().x;
 		int cy=mArrow.getPosition().y;
@@ -156,60 +179,59 @@ void Game::run()
 		float angle_in_deg = (angle_in_rad*180)/PI;
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
-		mArrow.setPosition(cx-(mCircle.getRadius() * cos(angle_in_rad)), cy-(mCircle.getRadius() * sin(angle_in_rad)));
+		mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
 		
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
 
-		//get the current amount of time elapsed
-		sf::Time updateGravity = gravityClock.getElapsedTime();
-
-		//if the current time is less than our update time
-		if (updateGravity.asSeconds() <= timePerGravityUpdate)
-		{
-			//keep getting the time until it is greater
-			updateGravity = gravityClock.getElapsedTime();
-
-		}
-
-		//once it is greater, update our current G (acceleration) and reset the clock to repeat
-		else 
-		{
-			gCurrent+=g;
-			updateGravity = gravityClock.restart();
-		}
-
-
-		//apply gravity
-		checkGravity();
-
-		sf::Time elapsedTime = clock.restart();
-		timeSinceLastUpdate += elapsedTime;
-
-		while (timeSinceLastUpdate > TimePerFrame)
-		{
-			timeSinceLastUpdate -= TimePerFrame;
-			processEvents();
-			update(TimePerFrame);
-		}
-		updateStatistics(elapsedTime);
-		render();
-	}
 }
 
-void Game::checkGravity()
+void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 {
-	if (mCirclePos.y <= 785-mCircleOrigin.y)
+
+	for (int x=0; x<ENTITIES_MAX; x++)
 	{
-		mCircle.move(0,gCurrent);
+
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			std::cout << mMousePos.x << ", " << mMousePos.y << std::endl;
+			std::cout << "bounds X from " <<  entities[0]->eBounds.x << " to " << entities[0]->eBounds.x+entities[x]->eTextureSize.x << std::endl;
+			 if ( ((mMousePos.x >= entities[x]->eBounds.x) &&
+				(mMousePos.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) && 
+				((mMousePos.y >= entities[x]->eBounds.y) && 
+				mMousePos.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y))
+			{
+				for (int y=0; y<ENTITIES_MAX; y++) entities[y]->isCurrentEntity = false;
+				entities[x]->isCurrentEntity = true;
+				break;
+			}
+		}
 	}
-	else gCurrent = g;
+
 
 }
 
 
-void Game::processEvents()
+void Game::checkGravity(Entity* entities[ENTITIES_MAX])
 {
+	for (int x=0; x<ENTITIES_MAX; x++)
+	{
+
+		if (entities[x]->cCircle.getPosition().y <= 785-entities[x]->cRadius)
+		{
+			entities[x]->cCircle.move(0,gCurrent);
+		}
+		//else gCurrent = g;
+	}
+}
+
+
+void Game::processEvents(Entity* entities[ENTITIES_MAX])
+{
+		checkGravity(entities);
+
+		entitySelector(entities);
 	sf::Event event;
 	while (mWindow.pollEvent(event))
 	{
@@ -235,7 +257,8 @@ void Game::processEvents()
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {	
-	if (key == sf::Keyboard::Space) mCircle.setPosition(mCircle.getPosition().x, 0);
+	if (key == sf::Keyboard::Space)
+		mIsSpaceBar = isPressed;
 	if (key == sf::Keyboard::W)
 		mIsMovingUp = isPressed;
 	else if (key == sf::Keyboard::S)
@@ -248,25 +271,29 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 }
 
 
-void Game::update(sf::Time elapsedTime)
+void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	sf::Vector2f movement(0.f, 0.f);
 	int rotateangle=0;
+	for (int x=0; x<ENTITIES_MAX; x++)
+	{
+		if (entities[x]->isCurrentEntity) currentEntityIndex = x;
+	}
 
 
-
-	
+	if (mIsSpaceBar)
+		entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x, 0);
 
 
 	if (mIsMovingUp)
 	{	
-		if (mCirclePos.y >=0 ) NULL; //top of screen
+		if (entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
-			if ((mCirclePos.x <= 0+mCircleOrigin.x) ||
-				((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||
-				(mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y)) rotateangle = -PlayerSpeed;
+			if ((entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius) ||
+				((entities[currentEntityIndex]->cCircle.getPosition().x <= 775+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x > 747-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y > 465-entities[currentEntityIndex]->cRadius) ||
+				(entities[currentEntityIndex]->cCircle.getPosition().x <= 455+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x >= 87-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().y >= 735-entities[currentEntityIndex]->cRadius)) rotateangle = -PlayerSpeed;
 			else rotateangle = PlayerSpeed;
 		}
 	}	
@@ -276,16 +303,16 @@ void Game::update(sf::Time elapsedTime)
 
 		
 
-		if  ((mCirclePos.x <= 450+mCircleOrigin.x && mCirclePos.x > 86-mCircleOrigin.x && mCirclePos.y >=732-mCircleOrigin.y) || //top of portal box
-				 (mCirclePos.y >= 783-mCircleOrigin.y) ||  //bottom of screen
-				((mCirclePos.x > 747-mCircleOrigin.x && mCirclePos.x <= 772+mCircleOrigin.x) && mCirclePos.y >= 463-mCircleOrigin.y)) NULL; //top of line
+		if  ((entities[currentEntityIndex]->cCircle.getPosition().x <= 450+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x > 86-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().y >=732-entities[currentEntityIndex]->cRadius) || //top of portal box
+				 (entities[currentEntityIndex]->cCircle.getPosition().y >= 783-entities[currentEntityIndex]->cRadius) ||  //bottom of screen
+				((entities[currentEntityIndex]->cCircle.getPosition().x > 747-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x <= 772+entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y >= 463-entities[currentEntityIndex]->cRadius)) NULL; //top of line
 			
 		else
 		{
 			movement.y += PlayerSpeed;
-			if ((mCirclePos.x <= 0+mCircleOrigin.x) || 
-				((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||
-				(mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y)) rotateangle=PlayerSpeed;
+			if ((entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius) || 
+				((entities[currentEntityIndex]->cCircle.getPosition().x <= 775+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x > 747-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y > 465-entities[currentEntityIndex]->cRadius) ||
+				(entities[currentEntityIndex]->cCircle.getPosition().x <= 455+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x >= 87-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().y >= 735-entities[currentEntityIndex]->cRadius)) rotateangle=PlayerSpeed;
 			else rotateangle = -PlayerSpeed;
 		}
 	}	
@@ -295,13 +322,13 @@ void Game::update(sf::Time elapsedTime)
 	if (mIsMovingLeft)
 	{
 		
-		if ( (mCirclePos.x <= 455+mCircleOrigin.x && mCirclePos.x >= 87-mCircleOrigin.x && mCirclePos.y >= 735-mCircleOrigin.y) || //portal box
-			   ((mCirclePos.x <= 775+mCircleOrigin.x && mCirclePos.x > 747-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y) ||  //line
-				(mCirclePos.x <= 0+mCircleOrigin.x)) NULL;
+		if ( (entities[currentEntityIndex]->cCircle.getPosition().x <= 455+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x >= 87-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().y >= 735-entities[currentEntityIndex]->cRadius) || //portal box
+			   ((entities[currentEntityIndex]->cCircle.getPosition().x <= 775+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x > 747-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y > 465-entities[currentEntityIndex]->cRadius) ||  //line
+				(entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius)) NULL;
 		else 
 		{
 			movement.x -= PlayerSpeed;
-			if (mCirclePos.y <= 0+mCircleOrigin.y) rotateangle = PlayerSpeed;
+			if (entities[currentEntityIndex]->cCircle.getPosition().y <= 0+entities[currentEntityIndex]->cRadius) rotateangle = PlayerSpeed;
 			else rotateangle = -PlayerSpeed;
 		}
 	}
@@ -309,20 +336,20 @@ void Game::update(sf::Time elapsedTime)
 
 	if (mIsMovingRight)
 	{	
-		if (((mCirclePos.x >= 745-mCircleOrigin.x && mCirclePos.x < 775-mCircleOrigin.x) && mCirclePos.y > 465-mCircleOrigin.y)  || //line 
-				 (mCirclePos.x >= 1200-mCircleOrigin.x) || ((mCirclePos.x >= 81-mCircleOrigin.x && mCirclePos.x <= 455-mCircleOrigin.x) && mCirclePos.y >= 735-mCircleOrigin.x)) NULL;
+		if (((entities[currentEntityIndex]->cCircle.getPosition().x >= 745-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x < 775-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y > 465-entities[currentEntityIndex]->cRadius)  || //line 
+				 (entities[currentEntityIndex]->cCircle.getPosition().x >= 1200-entities[currentEntityIndex]->cRadius) || ((entities[currentEntityIndex]->cCircle.getPosition().x >= 81-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x <= 455-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y >= 735-entities[currentEntityIndex]->cRadius)) NULL;
 		else 
 		{
 			movement.x += PlayerSpeed;
-			if (mCirclePos.y <=0+mCircleOrigin.y) rotateangle = -PlayerSpeed;
+			if (entities[currentEntityIndex]->cCircle.getPosition().y <=0+entities[currentEntityIndex]->cRadius) rotateangle = -PlayerSpeed;
 			else rotateangle = PlayerSpeed;
 		}
 	}	
 	
 	
-	mCircle.move(movement * elapsedTime.asSeconds());
-	mCircle.rotate(rotateangle*elapsedTime.asSeconds());
-	mCirclePos = mCircle.getPosition();
+	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
+	entities[currentEntityIndex]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
+	//mCirclePos = mCircle.getPosition();
 	
 	
 }
@@ -346,13 +373,13 @@ void Game::updateStatistics(sf::Time elapsedTime)
 }
 
 
-void Game::render()
+void Game::render(Entity* entities[ENTITIES_MAX])
 {
 	mWindow.clear();	
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mArrow);
-	mWindow.draw(mCircle);
+	for (int x=0; x<ENTITIES_MAX; x++) mWindow.draw(entities[x]->cCircle);
 	mWindow.display();
 }
 
