@@ -18,21 +18,12 @@ struct Entity
 		sf::Vector2f eBounds; //give current position x and y boundries for entity
 		float weight;
 		bool isCurrentEntity;
+
+		float gCurrent;
 		//Entity& operator= (const Entity &cSource);
 
 };
-/*
-Entity& Entity::operator= (const Entity &cEntity)
-{
-	if (this==&cEntity) return *this;
-	cCircle = cEntity.cCircle;
-	cRadius = cEntity.cRadius;
-	eTexture = cEntity.eTexture;
-	eStartPos = cEntity.eStartPos;
-	weight = cEntity.weight;
 
-}
-*/
 
 struct Baker : public Entity
 {
@@ -58,11 +49,13 @@ struct Baker : public Entity
 			cCircle.setPosition(eStartPos.x,eStartPos.y);
 
 			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight = 2.f;
 		}
 
 
 };
-
 
 
 class Roti : public Entity
@@ -89,6 +82,41 @@ class Roti : public Entity
 			cCircle.setPosition(eStartPos.x,eStartPos.y);
 
 			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight = 1.f;
+
+		}
+
+};
+
+
+class Anpan : public Entity
+{
+	public:
+		Anpan()
+		{
+			eTexture.loadFromFile("../../Character_Images/Anpan.png");
+
+			eTextureSize = eTexture.getSize();
+			cRadius = eTextureSize.x/2;
+
+			cCircle.setTexture(&eTexture);
+			cCircle.setRadius(cRadius);
+			cCircle.setOrigin(cRadius,cRadius);
+
+			eStartPos.x = 1000;
+			eStartPos.y = 600;
+
+			eBounds.x = cCircle.getPosition().x - cRadius;
+			eBounds.y = cCircle.getPosition().y - cRadius;
+
+			cCircle.setPosition(eStartPos.x,eStartPos.y);
+
+			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight =0.5;
 		}
 
 };

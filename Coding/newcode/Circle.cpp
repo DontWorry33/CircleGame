@@ -8,7 +8,7 @@
 #include "Entity.cpp"
 
 #define PI 3.14159265
-#define ENTITIES_MAX 2
+#define ENTITIES_MAX 3
 
 
 class Game
@@ -145,7 +145,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 		//once it is greater, update our current G (acceleration) and reset the clock to repeat
 		else 
 		{
-			gCurrent+=g;
+			for (int x=0; x<ENTITIES_MAX; x++)	entities[x]->gCurrent+=g;
 			updateGravity = gravityClock.restart();
 		}
 
@@ -202,10 +202,9 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 				((mMousePos.y >= entities[x]->eBounds.y) && 
 				mMousePos.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y))
 			{
-				for (int y=0; y<ENTITIES_MAX; y++) entities[y]->isCurrentEntity = false;
 				entities[x]->isCurrentEntity = true;
-				break;
 			}
+			else entities[x]->isCurrentEntity = false;
 		}
 	}
 
@@ -215,14 +214,16 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 void Game::checkGravity(Entity* entities[ENTITIES_MAX])
 {
+	bool isOnGround = true;
 	for (int x=0; x<ENTITIES_MAX; x++)
 	{
 
 		if (entities[x]->cCircle.getPosition().y <= 785-entities[x]->cRadius)
 		{
-			entities[x]->cCircle.move(0,gCurrent);
+			isOnGround = false;
+			entities[x]->cCircle.move(0,entities[x]->gCurrent+entities[x]->weight);
 		}
-		//else gCurrent = g;
+		if (isOnGround) entities[x]->gCurrent = g;
 	}
 }
 
