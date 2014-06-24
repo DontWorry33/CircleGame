@@ -29,4 +29,8 @@ GAME FEATURES:
 	- Internal time limit - depends on stage
 	- Pause / Reset
  
-
+GAME BREAD ABILITIES:
+	- The Baker: Basic motion. Reaches 'oven' to complete stage. Interacts with each bread in different ways to solve puzzles and progress. 
+	- Roti: Power of attraction/repulsion. Can push or pull The Baker away from it. Only means of moving upwards in game.
+	- Anpan: Power of displacement. Can switch positions with the Baker. *To implement, programming-wise, check to make sure parallel sides of The Baker's new position are not colliding. If they are, then displacement does not occur.
+	- Boule: Power of Distortion. Can affect the stage to reveal hidden passages that can be used to unlock switches and/or further utilise all other bread, and The Baker to complete stages. Only bread that interacts with The Baker AND the other breads as well.

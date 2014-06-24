@@ -1,3 +1,6 @@
+Try to make all blocks in stage an entity, so that collisions are much easier to handle as we create more stages in the game. - Later project.
+
+______________________________________________________________________
 DESIGN (DEDIE):
 	Object Design:     *****EXPORT AS A PNG*****
 		- 4 circle types  (*)
