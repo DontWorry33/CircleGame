@@ -81,7 +81,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/100.f);
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.2)
+			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002)
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -101,8 +101,8 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 	//set arrow stuff
 	mArrowTexture.loadFromFile("../../Character_Images/Arrowhead.png");
 	mArrow.setTexture(mArrowTexture);
-	mArrow.setPosition(490+45,600-30);
-	mArrow.setOrigin(45,30);
+	mArrow.setPosition(490+45,600-55);
+	mArrow.setOrigin(45,55);
 
 	currentEntityIndex = 0;
 
