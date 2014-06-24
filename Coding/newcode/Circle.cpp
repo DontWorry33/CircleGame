@@ -20,6 +20,7 @@ class Game
 		//functions
 		void run(Entity* entities[ENTITIES_MAX]);
 		void checkGravity(Entity* entities[ENTITIES_MAX]);
+		void checkBounds(Entity* entities[ENTITIES_MAX]);
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
 		void Arrow(Entity* entities[ENTITIES_MAX]);
 
@@ -73,8 +74,8 @@ class Game
 };
 
 
-const float Game::PlayerSpeed = 200.f;
-const sf::Time Game::TimePerFrame = sf::seconds(1.f/100.f);
+const float Game::PlayerSpeed = 300.f;
+const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
 //instantiates most objects and sets starting values
@@ -117,6 +118,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
 	while (mWindow.isOpen())
 	{
 		//set the arrow position to follow the circle
@@ -149,8 +151,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 			updateGravity = gravityClock.restart();
 		}
 
-
-		
+		//processEvents(entities);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 
@@ -195,8 +196,8 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			std::cout << mMousePos.x << ", " << mMousePos.y << std::endl;
-			std::cout << "bounds X from " <<  entities[0]->eBounds.x << " to " << entities[0]->eBounds.x+entities[x]->eTextureSize.x << std::endl;
+			//std::cout << mMousePos.x << ", " << mMousePos.y << std::endl;
+			//std::cout << "bounds X from " <<  entities[0]->eBounds.x << " to " << entities[0]->eBounds.x+entities[x]->eTextureSize.x << std::endl;
 			 if ( ((mMousePos.x >= entities[x]->eBounds.x) &&
 				(mMousePos.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) && 
 				((mMousePos.y >= entities[x]->eBounds.y) && 
@@ -211,6 +212,39 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 }
 
+void Game::checkBounds(Entity* entities[ENTITIES_MAX])
+{
+	for (int x=0; x<ENTITIES_MAX; x++)
+	{
+		//floor
+		if (entities[x]->cCircle.getPosition().y >= 785-entities[x]->cRadius) entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x,785-entities[x]->cRadius);
+		//portal box
+		if ((entities[x]->cCircle.getPosition().x <= 450+entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().x > 86-entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().y >=732-entities[x]->cRadius)) entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x,732-entities[x]->cRadius);
+		//line
+		if (((entities[x]->cCircle.getPosition().x > 747-entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().x <= 772+entities[x]->cRadius) && 
+			entities[x]->cCircle.getPosition().y >= 463-gCurrent-entities[x]->cRadius)) entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x,463-entities[x]->cRadius);
+		//left entity collision
+			/*
+		if ((entities[currentEntityIndex]->cCircle.getPosition().x-entities[currentEntityIndex]->cRadius <= entities[x]->cCircle.getPosition().x+entities[x]->cRadius) &&
+		(entities[currentEntityIndex]->cCircle.getPosition().x-entities[currentEntityIndex]->cRadius >= entities[x]->cCircle.getPosition().x-entities[x]->cRadius) && 
+		entities[currentEntityIndex]->cCircle.getPosition().y-entities[currentEntityIndex]->cRadius >= entities[x]->cCircle.getPosition().y-entities[x]->cRadius)  //entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x, entities[currentEntityIndex]->cCircle.getPosition().y))  
+			{
+				std::cout << "X: " << x << " = " << entities[x]->cCircle.getPosition().x << std::endl;
+				entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x, entities[currentEntityIndex]->cCircle.getPosition().y);
+			//(entities[currentEntityIndex]->cCircle.getPosition().y-entities[currentEntityIndex]->cRadius <= entities[x]->cCircle.getPosition().y+entities[x]->cRadius) ) entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x, entities[currentEntityIndex]->cCircle.getPosition().y);
+				return true;
+			}
+		return false;
+		*/
+	}
+
+
+
+}
+
 
 void Game::checkGravity(Entity* entities[ENTITIES_MAX])
 {
@@ -218,12 +252,26 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX])
 	for (int x=0; x<ENTITIES_MAX; x++)
 	{
 
-		if (entities[x]->cCircle.getPosition().y <= 785-entities[x]->cRadius)
-		{
+		if (
+			//floor
+			entities[x]->cCircle.getPosition().y >=  785-entities[x]->cRadius ||
+
+			//portal box
+			(entities[x]->cCircle.getPosition().x <= 450+entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().x > 86-entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().y >=732-entities[x]->cRadius) ||
+
+			//line
+			((entities[x]->cCircle.getPosition().x > 747-entities[x]->cRadius && 
+			entities[x]->cCircle.getPosition().x <= 772+entities[x]->cRadius) && 
+			entities[x]->cCircle.getPosition().y >= 463-entities[x]->cRadius)) NULL;
+		else {
 			isOnGround = false;
 			entities[x]->cCircle.move(0,entities[x]->gCurrent+entities[x]->weight);
 		}
 		if (isOnGround) entities[x]->gCurrent = g;
+
+		checkBounds(entities);
 	}
 }
 
@@ -288,7 +336,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsMovingUp)
 	{	
-		if (entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
+		if (entities[currentEntityIndex]->cCircle.getPosition().y <=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
@@ -323,15 +371,21 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	if (mIsMovingLeft)
 	{
 		
+			
 		if ( (entities[currentEntityIndex]->cCircle.getPosition().x <= 455+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x >= 87-entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().y >= 735-entities[currentEntityIndex]->cRadius) || //portal box
 			   ((entities[currentEntityIndex]->cCircle.getPosition().x <= 775+entities[currentEntityIndex]->cRadius && entities[currentEntityIndex]->cCircle.getPosition().x > 747-entities[currentEntityIndex]->cRadius) && entities[currentEntityIndex]->cCircle.getPosition().y > 465-entities[currentEntityIndex]->cRadius) ||  //line
-				(entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius)) NULL;
+				(entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius) ) NULL;
+				//||((entities[currentEntityIndex]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) && entities[currentEntityIndex]->eBounds.x >=entities[x]->eBounds.x) &&
+				//entities[currentEntityIndex]->eBounds.y+entities[currentEntityIndex]->eTextureSize.x <= entities[x]->eBounds.y) NULL;
 		else 
 		{
 			movement.x -= PlayerSpeed;
 			if (entities[currentEntityIndex]->cCircle.getPosition().y <= 0+entities[currentEntityIndex]->cRadius) rotateangle = PlayerSpeed;
 			else rotateangle = -PlayerSpeed;
 		}
+		
+
+
 	}
 	
 
@@ -383,4 +437,3 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 	for (int x=0; x<ENTITIES_MAX; x++) mWindow.draw(entities[x]->cCircle);
 	mWindow.display();
 }
-

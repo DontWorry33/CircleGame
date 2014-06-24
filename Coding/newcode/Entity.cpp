@@ -20,7 +20,6 @@ struct Entity
 		bool isCurrentEntity;
 
 		float gCurrent;
-		//Entity& operator= (const Entity &cSource);
 
 };
 
@@ -51,7 +50,7 @@ struct Baker : public Entity
 			isCurrentEntity = false;
 			gCurrent = 0.6;
 
-			weight = 2.f;
+			weight = 10.f;
 		}
 
 
