@@ -21,10 +21,11 @@ struct Entity
 
 		float gCurrent;
 		
+		virtual void create(){};
 		//Manual Constructors. To be controlled in-game, instead.
-		void createRoti();
-		void createAnpan();
-		void createBoule();
+		//void createRoti();
+		//void createAnpan();
+		//void createBoule();
 
 };
 
@@ -61,6 +62,104 @@ struct Baker : public Entity
 
 };
 
+class Roti : public Entity
+{
+	public:
+
+		Roti(){} //blank constructor, same for other 2
+		void create()
+		{
+			eTexture.loadFromFile("../../Character_Images/Roti.png");
+
+			eTextureSize = eTexture.getSize();
+			cRadius = eTextureSize.x/2;
+
+			cCircle.setTexture(&eTexture);
+			cCircle.setRadius(cRadius);
+			cCircle.setOrigin(cRadius,cRadius);
+
+			eStartPos.x = 900;
+			eStartPos.y = 600;
+
+			eBounds.x = cCircle.getPosition().x - cRadius;
+			eBounds.y = cCircle.getPosition().y - cRadius;
+
+			cCircle.setPosition(eStartPos.x,eStartPos.y);
+
+			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight = 1.f;
+
+		}
+
+};
+
+
+class Anpan : public Entity
+{
+	public:
+		Anpan(){}
+		void create()
+		{
+			eTexture.loadFromFile("../../Character_Images/Anpan.png");
+
+			eTextureSize = eTexture.getSize();
+			cRadius = eTextureSize.x/2;
+
+			cCircle.setTexture(&eTexture);
+			cCircle.setRadius(cRadius);
+			cCircle.setOrigin(cRadius,cRadius);
+
+			eStartPos.x = 1000;
+			eStartPos.y = 600;
+
+			eBounds.x = cCircle.getPosition().x - cRadius;
+			eBounds.y = cCircle.getPosition().y - cRadius;
+
+			cCircle.setPosition(eStartPos.x,eStartPos.y);
+
+			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight =0.5;
+		}
+
+};
+
+
+class Boule : public Entity
+{
+	public:
+		Boule(){}
+		void create()
+		{
+			eTexture.loadFromFile("../../Character_Images/Boule.png");
+
+			eTextureSize = eTexture.getSize();
+			cRadius=eTextureSize.x/2;
+
+			cCircle.setTexture(&eTexture);
+			cCircle.setRadius(cRadius);
+			cCircle.setOrigin(cRadius,cRadius);
+
+			eStartPos.x=200;
+			eStartPos.y=400;
+
+			eBounds.x = cCircle.getPosition().x - cRadius;
+			eBounds.y = cCircle.getPosition().y - cRadius;
+
+			cCircle.setPosition(eStartPos.x,eStartPos.y);
+
+			isCurrentEntity = false;
+			gCurrent = 0.6;
+
+			weight = 0.4;
+		}
+};
+
+
+/*
 void Entity::createRoti()
 {
 
@@ -142,7 +241,7 @@ void Entity::createBoule()
 		weight = 0.4;
 
 }
-
+*/
 
 
 
@@ -179,71 +278,6 @@ struct Baker : public Entity
 
 
 };
-
-class Roti : public Entity
-{
-	public:
-
-		Roti()
-		{
-			eTexture.loadFromFile("../../Character_Images/Roti.png");
-
-			eTextureSize = eTexture.getSize();
-			cRadius = eTextureSize.x/2;
-
-			cCircle.setTexture(&eTexture);
-			cCircle.setRadius(cRadius);
-			cCircle.setOrigin(cRadius,cRadius);
-
-			eStartPos.x = 900;
-			eStartPos.y = 600;
-
-			eBounds.x = cCircle.getPosition().x - cRadius;
-			eBounds.y = cCircle.getPosition().y - cRadius;
-
-			cCircle.setPosition(eStartPos.x,eStartPos.y);
-
-			isCurrentEntity = false;
-			gCurrent = 0.6;
-
-			weight = 1.f;
-
-		}
-
-};
-
-
-class Anpan : public Entity
-{
-	public:
-		Anpan()
-		{
-			eTexture.loadFromFile("../../Character_Images/Anpan.png");
-
-			eTextureSize = eTexture.getSize();
-			cRadius = eTextureSize.x/2;
-
-			cCircle.setTexture(&eTexture);
-			cCircle.setRadius(cRadius);
-			cCircle.setOrigin(cRadius,cRadius);
-
-			eStartPos.x = 1000;
-			eStartPos.y = 600;
-
-			eBounds.x = cCircle.getPosition().x - cRadius;
-			eBounds.y = cCircle.getPosition().y - cRadius;
-
-			cCircle.setPosition(eStartPos.x,eStartPos.y);
-
-			isCurrentEntity = false;
-			gCurrent = 0.6;
-
-			weight =0.5;
-		}
-
-};
-
 */
-
 #endif
 

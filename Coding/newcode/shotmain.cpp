@@ -9,9 +9,9 @@ int main()
 {
 	Game game;
 	Baker baker;
-	Entity roti;
-	Entity anpan;
-	Entity boule;
+	Roti roti;
+	Anpan anpan;
+	Boule boule;
 
 	Entity* entities[4];
 	entities[0] = &baker;

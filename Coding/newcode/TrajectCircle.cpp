@@ -362,17 +362,17 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
 		if (currentlySelected%3 == 1)
 		{
-			entities[1]->createRoti();
+			entities[1]->create();
 		}
 
 		else if (currentlySelected%3 == 2)
 		{
-			entities[2]->createAnpan();
+			entities[2]->create();
 		}
 		
 		else if (currentlySelected%3 == 0)
 		{
-			entities[3]->createBoule();
+			entities[3]->create();
 		} 
 	}
 
