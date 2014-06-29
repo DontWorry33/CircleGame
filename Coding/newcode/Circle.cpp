@@ -19,9 +19,9 @@ class Game
 		
 		//functions
 		void run(Entity* entities[ENTITIES_MAX]);
-		void checkGravity(Entity* entities[ENTITIES_MAX]);
+		void checkGravity(Entity* entities[ENTITIES_MAX], int character); //D: Now takes two arguments. Second for iteration
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
-		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id);
+		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int character);//D: extra argument. Same reason
 
 		void breadSelector(sf::Keyboard::Key key, int selectedEntity); //D: new function to update Tab selection.	
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
@@ -74,7 +74,7 @@ class Game
 	
 	
 		int currentEntityIndex;
-		int currentlySelected; //D: added currentlySelected int
+		//int currentlySelected; //D: added currentlySelected int
 
 };
 
@@ -87,7 +87,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002), currentlySelected(1)
+			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002) 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -170,7 +170,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 		{
 			timeSinceLastUpdate -= TimePerFrame;
 			processEvents(entities);
-			checkGravity(entities);
+			for (int x = 0; x<ENTITIES_MAX; x++) { checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
 
 			update(TimePerFrame,entities);
 		}
@@ -227,6 +227,7 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 }
 
+/*
 void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 {
 	if ( key == sf::Keyboard::Tab)
@@ -244,26 +245,26 @@ void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 		return;
 	}
 }
+*/
 
 //stage id is index of entities which you need to apply the gravity check on
-bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id)
+bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x)
 {
-	for (int x=0; x<ENTITIES_MAX; x++)
+	
+	if (entities[x]->isCircle)
 	{
-		if (entities[x]->isCircle)
-		{
-			if (
-				((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x+8) &&
-				 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x-8)) &&
-				((entities[x]->eBounds.y+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.y) &&
-				 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+entities[stage_id]->eTextureSize.y+50)
-				) 
-				{
-					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius+5);
-					return true;	
-				}		
-		}
+		if (
+			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x+8) &&
+			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x-8)) &&
+			((entities[x]->eBounds.y+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.y) &&
+			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+entities[stage_id]->eTextureSize.y+50)
+			) 
+			{
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius+5);
+				return true;	
+			}		
 	}
+	
 	return false;
 
 }
@@ -284,28 +285,29 @@ void Game::checkBounds(Entity* entities[ENTITIES_MAX])
 }
 
 
-void Game::checkGravity(Entity* entities[ENTITIES_MAX])
+void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 {
 	bool isOnGround = true;
-	for (int x=0; x<ENTITIES_MAX; x++)
-	{
-		if (entities[x]->isCircle)
-		{
-			//need this to reset gravity if touching a surface
-			if ( entities[x]->cCircle.getPosition().y >=  785-entities[x]->cRadius)  NULL;
-			else if (isTouchingSurface(entities,4)) NULL; //4 is portal box
-			else if (isTouchingSurface(entities,5)) NULL; //5 is line
-			else 
-			{
-				isOnGround = false;
-				//std::cout << "entity: " << x << " , " << " gcurrent: " << entities[x]->gCurrent << std::endl;
-				entities[x]->cCircle.move(0,entities[x]->gCurrent+entities[x]->weight);
-			}
-		}
-		if (isOnGround) entities[x]->gCurrent = g;
-		checkBounds(entities);
+	//for (int x=0; x<4; x++) { entities[x]->isOnGround = true; }
 
+	if (entities[character]->isCircle)
+	{
+			//need this to reset gravity if touching a surface
+		if ( (entities[character]->cCircle.getPosition().y >=  785-entities[character]->cRadius) )  NULL;
+		else if (isTouchingSurface(entities,4, character)) NULL; //4 is portal box
+		else if (isTouchingSurface(entities,5, character)) NULL; //5 is line
+		else 
+		{
+			isOnGround = false;
+			//entities[x]->isOnGround = false;
+			//std::cout << "entity: " << x << " , " << " gcurrent: " << entities[character]->gCurrent << std::endl;
+			entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
+		}
 	}
+	if (/*entities[x]->isOnGround*/isOnGround) entities[character]->gCurrent = g;
+	checkBounds(entities);
+
+	
 		
 
 }
@@ -325,7 +327,7 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 				break;
 
 			case sf::Event::KeyReleased:
-				breadSelector(event.key.code, 0); 
+				//breadSelector(event.key.code, 0); 
 				handlePlayerInput(event.key.code, false);
 				break;
 
@@ -363,7 +365,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	{
 		if (entities[x]->isCurrentEntity) currentEntityIndex = x;
 	}
-
+/*
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
 		std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
@@ -383,6 +385,11 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		}
 	}
 
+*/
+	if (mIsSpaceBar)
+	{
+		entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,0);
+	}
 	if (mIsMovingUp)
 	{	
 		bool canMoveUp = true;
@@ -423,7 +430,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		}
 		
 
-		if  ( !canMoveDown  || (entities[currentEntityIndex]->cCircle.getPosition().y >= 783-entities[currentEntityIndex]->cRadius))  NULL;  //bottom of screen
+		if  ( !canMoveDown  || (entities[currentEntityIndex]->cCircle.getPosition().y >= 785-entities[currentEntityIndex]->cRadius))  NULL;  //bottom of screen
 		else
 		{
 			movement.y += PlayerSpeed;
