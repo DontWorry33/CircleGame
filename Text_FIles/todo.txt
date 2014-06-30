@@ -42,8 +42,3 @@ PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//*****
 	- Make all objects dynamic on map.
 
 	
-
-
-make canMove(direction) entity specific (maybe game specific?)
-check if entitiy[x].canMove(direction) throughout for proper collision, then setPosition(currpos);
-make sure to check gravity too or just modify checkBounds and uncomment.
