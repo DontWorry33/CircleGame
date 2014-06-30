@@ -1,33 +1,49 @@
 Try to make all blocks in stage an entity, so that collisions are much easier to handle as we create more stages in the game. - Later project.
 
 ______________________________________________________________________
-DESIGN (DEDIE):
-	Object Design:     *****EXPORT AS A PNG*****
-		- 4 circle types  (*)
-		- Indicator Arrow  (*)
-		- Sample stage/design (in code) (*)
-		- Power Bar
-		- Learn what a makefile does/is
-		- Update arrow
-		- Start learning SFML
 
+
+
+
+DESIGN (DEDIE):
+	- 4 circle types  (*)
+	- Indicator Arrow  (*)
+	- Sample stage/design (in code) (*)
+	- Power Bar (*)
+	- Learn what a makefile does/is (*)
+	- Update arrow  (*)
+	- Start learning SFML  (*)
+	- Trajectory in game
+	- Design portal and teleportations paths
+	- Look into entity to entity collisions
+	- Change objects on map to seperate ones
 
 
 PROGRAMMING (NIKHIL)
-	- Install SFML 
+	- Go through source code and see what we've done, figure out why/how 
+	- Install SFML (*)
 	- Get C++ working with a compiler (*)
-	- Compile a program in SFML
+	- Compile a program in SFML (*)
 	- GET FAMILIAR! (*)
-	- Go through source code and see what we've done, figure out why/how
-	- trajectory of projectiles shooting from arrow, basic idea
+	- trajectory of projectiles shooting from arrow, basic idea (*)
+	- Look into particle collisions
+	- Keep learning C++/SFML
 
 
 PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//************
 	- STAGE PROPERTIES (circle, collisions) (*)
 	- Moving cursor (360 degrees) with mouse (*)
 	- Basic game outline.  (*)
-	- Gravity
-	- Switching
-	- Entities
+	- Gravity (*)
+	- Switching (*)
+	- Entities (*)
+	- Entity to Entity collisions
+	- Polish trajectory
+	- Make all objects dynamic on map.
 
 	
+
+
+make canMove(direction) entity specific (maybe game specific?)
+check if entitiy[x].canMove(direction) throughout for proper collision, then setPosition(currpos);
+make sure to check gravity too or just modify checkBounds and uncomment.
