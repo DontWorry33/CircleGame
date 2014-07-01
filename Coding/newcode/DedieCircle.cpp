@@ -5,7 +5,7 @@
 #include <string>
 #include <cmath>
 #include "StringHelpers.hpp"
-#include "Entity.cpp"
+#include "DedieEntity.cpp"
 
 #define PI 3.14159265
 #define ENTITIES_MAX 6
@@ -74,7 +74,7 @@ class Game
 	
 	
 		int currentEntityIndex;
-		int currentlySelectedX, currentlySelectedY; //D: X for modulo check. Y for selectorimage display.
+		int currentlySelected; //D: For tab selection.
 
 };
 
@@ -87,7 +87,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002), currentlySelectedX(1), currentlySelectedY(1) 
+			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002), currentlySelected(1) 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -232,12 +232,9 @@ void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 {
 	if ( key == sf::Keyboard::Tab)
 	{
-		currentlySelectedX ++;
-		if (currentlySelectedX%3 == 1) {currentlySelectedY = 1;}
-		else if (currentlySelectedX%3 == 2) {currentlySelectedY = 2;}
-		else if (currentlySelectedX%3 == 0) {currentlySelectedY = 3;}
+		currentlySelected ++;
 		std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
-		std::cout << "currentlySelected is: " << currentlySelectedX << std::endl;
+		std::cout << "currentlySelected is: " << currentlySelected << std::endl;
 		return;
 	}
 	
@@ -371,20 +368,20 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
-		std::cout << "SpaceBar check/currSelect: " << currentlySelectedX << std::endl;
-		if (currentlySelectedX%3 == 1)
+		std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
+		if (currentlySelected%3 == 1 && !entities[1]->isCreated)
 		{
 			entities[1]->create();
 		//	entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 
-		else if (currentlySelectedX%3 == 2)
+		else if (currentlySelected%3 == 2 && !entities[2]->isCreated)
 		{
 			entities[2]->create();
 			//entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 		
-		else if (currentlySelectedX%3 == 0)
+		else if (currentlySelected%3 == 0 && !entities[3]->isCreated)
 		{
 			entities[3]->create();
 			//entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
@@ -530,7 +527,10 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mArrow);
-	mWindow.draw(entities[currentlySelectedY]->eSprite2); //D; Draws the tab selector now.
+	if (currentlySelected%3 != 0) mWindow.draw(entities[currentlySelected]->eSprite2); //D; Draws the tab selector now.
+	else if (currentlySelected%3 == 0) mWindow.draw(entities[3]->eSprite2);
+	
+
 	for (int x=0; x<ENTITIES_MAX; x++) 
 	{
 		if (entities[x]->isCircle) mWindow.draw(entities[x]->cCircle);

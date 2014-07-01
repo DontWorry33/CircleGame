@@ -29,10 +29,7 @@ struct Entity
 	bool isCurrentEntity;
 	float isClickable;
 	bool isCircle;
-	bool isOnGround; //D: Each entity needs a Gravity check, or they're all sharing the same one.
 	bool isCreated;
-
-
 
 	float gCurrent;
 	
@@ -63,7 +60,6 @@ struct PortalBox : public Entity
 		isClickable = false;
 		isCircle = false;
 		isCreated = true;
-
 		gCurrent = 0;
 
 
@@ -92,7 +88,6 @@ struct Line : public Entity
 		isClickable = false;
 		isCircle = false;
 		isCreated = true;
-
 		gCurrent = 0;
 
 
@@ -124,9 +119,7 @@ struct Baker : public Entity
 		isCurrentEntity = true;
 		isCircle = true;
 		isClickable = true;
-		isOnGround = true;
 		isCreated = true;
-
 
 		gCurrent = 0.6;
 
@@ -140,12 +133,11 @@ struct Roti : public Entity
 {
 
 	Roti(){
+		isCreated = false;
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
-		isOnGround = true;
-		isCreated = false;
-
+		
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Roti_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
@@ -179,10 +171,10 @@ struct Roti : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
+		isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 1.f;
-		isCreated = true;
 
 	}
 
@@ -191,13 +183,13 @@ struct Roti : public Entity
 
 struct Anpan : public Entity
 {
-	Anpan(){
+	Anpan()
+	{
+		isCreated = false;
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
-		isOnGround = true;
-		isCreated = false;
-
+		
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Anpan_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
@@ -230,11 +222,10 @@ struct Anpan : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
+		isCreated = true;
 		gCurrent = 0.6;
 
 		weight =0.5;
-		isCreated = true;
-
 	}
 
 };
@@ -242,13 +233,13 @@ struct Anpan : public Entity
 
 struct Boule : public Entity
 {
-	Boule(){
+	Boule()
+	{
+		isCreated = false;
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
-		isOnGround = true;
-		isCreated = false;
-
+		
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Boule_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
@@ -283,11 +274,10 @@ struct Boule : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
+		isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 0.4;
-		isCreated = true;
-
 	}
 };
 
