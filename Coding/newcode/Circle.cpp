@@ -523,6 +523,8 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 	mWindow.clear();	
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
+	if (currentlySelected%3 != 0) mWindow.draw(entities[currentlySelected%3]->eSprite2);
+	else mWindow.draw(entities[3]->eSprite2);
 	for (int x=0; x<ENTITIES_MAX; x++) 
 	{
 		if (entities[x]->isCircle) mWindow.draw(entities[x]->cCircle);

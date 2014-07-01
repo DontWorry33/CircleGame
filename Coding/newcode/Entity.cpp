@@ -12,6 +12,14 @@ struct Entity
 	sf::Texture eTexture;
 	sf::Vector2u eTextureSize;
 	sf::Sprite eSprite;
+	
+	//D: Part 2. Duplicates of needed variables. Have a -2 suffix
+	sf::Texture eTexture2;
+	sf::Vector2u eTextureSize2;
+	sf::Sprite eSprite2;
+	sf::Vector2f eStartPos2;
+	sf:: Vector2f eBounds2;
+
 	int cRadius;
 	sf::CircleShape cCircle;
 	sf::Vector2f eStartPos;
@@ -21,7 +29,10 @@ struct Entity
 	bool isCurrentEntity;
 	float isClickable;
 	bool isCircle;
+	bool isOnGround; //D: Each entity needs a Gravity check, or they're all sharing the same one.
 	bool isCreated;
+
+
 
 	float gCurrent;
 	
@@ -52,6 +63,7 @@ struct PortalBox : public Entity
 		isClickable = false;
 		isCircle = false;
 		isCreated = true;
+
 		gCurrent = 0;
 
 
@@ -80,6 +92,7 @@ struct Line : public Entity
 		isClickable = false;
 		isCircle = false;
 		isCreated = true;
+
 		gCurrent = 0;
 
 
@@ -103,18 +116,18 @@ struct Baker : public Entity
 		eStartPos.x=490;
 		eStartPos.y=600;
 
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
-
-
-
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
 		isCurrentEntity = true;
 		isCircle = true;
 		isClickable = true;
+		isOnGround = true;
 		isCreated = true;
+
+
 		gCurrent = 0.6;
 
 		weight = 10.f;
@@ -126,16 +139,30 @@ struct Baker : public Entity
 struct Roti : public Entity
 {
 
-	Roti()
-	{
-		isCreated = false; 
+	Roti(){
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+		isOnGround = true;
+		isCreated = false;
+
+		//BreadSelector Initialisation
+		eTexture2.loadFromFile("../../Stage_Images/Roti_Selected.png");
+		eTextureSize2 = eTexture2.getSize();
+		eSprite2.setTexture(eTexture2);
+		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
+
+		eStartPos2.x = 599;
+		eStartPos2.y = 70-eTextureSize2.y/2;
+
+		eSprite2.setPosition(eStartPos2);
+		//---------------------------- 
 	}
-	void create() 
+	void create() //blank constructor, same for other 2
 	{
-		eTexture.loadFromFile("../../Character_Images/Roti.png");
+	
+
+		eTexture.loadFromFile("../../Character_Images/Roti.png");		
 
 		eTextureSize = eTexture.getSize();
 		cRadius = eTextureSize.x/2;
@@ -147,18 +174,15 @@ struct Roti : public Entity
 		eStartPos.x = 900;
 		eStartPos.y = 600;
 
-
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
-
-
-
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
-		isCreated = true;
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
+
 		gCurrent = 0.6;
 
 		weight = 1.f;
+		isCreated = true;
 
 	}
 
@@ -167,15 +191,28 @@ struct Roti : public Entity
 
 struct Anpan : public Entity
 {
-	Anpan()
-	{
-		isCreated = false; 
+	Anpan(){
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+		isOnGround = true;
+		isCreated = false;
+
+		//BreadSelector Initialisation
+		eTexture2.loadFromFile("../../Stage_Images/Anpan_Selected.png");
+		eTextureSize2 = eTexture2.getSize();
+		eSprite2.setTexture(eTexture2);
+		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
+
+		eStartPos2.x = 600;
+		eStartPos2.y = 70-eTextureSize2.y/2;
+
+		eSprite2.setPosition(eStartPos2);
+		//----------------------------
 	}
 	void create()
 	{
+
 		eTexture.loadFromFile("../../Character_Images/Anpan.png");
 
 		eTextureSize = eTexture.getSize();
@@ -188,18 +225,16 @@ struct Anpan : public Entity
 		eStartPos.x = 1000;
 		eStartPos.y = 600;
 
-
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
-
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
-
-		isCreated = true;
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
 		gCurrent = 0.6;
 
 		weight =0.5;
+		isCreated = true;
+
 	}
 
 };
@@ -207,17 +242,30 @@ struct Anpan : public Entity
 
 struct Boule : public Entity
 {
-	Boule()
-	{
-		isCreated = false;
+	Boule(){
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+		isOnGround = true;
+		isCreated = false;
+
+		//BreadSelector Initialisation
+		eTexture2.loadFromFile("../../Stage_Images/Boule_Selected.png");
+		eTextureSize2 = eTexture2.getSize();
+		eSprite2.setTexture(eTexture2);
+		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
+
+		eStartPos2.x = 600;
+		eStartPos2.y = 70-eTextureSize2.y/2;
+
+		eSprite2.setPosition(eStartPos2);
+		//----------------------------
 	}
+
+
 	void create()
 	{
-		isCurrentEntity = false;
-		std::cout << "ASDASDSAD: " << this->isCurrentEntity << std::endl;
+
 		eTexture.loadFromFile("../../Character_Images/Boule.png");
 
 		eTextureSize = eTexture.getSize();
@@ -230,18 +278,16 @@ struct Boule : public Entity
 		eStartPos.x=1100;
 		eStartPos.y=400;
 
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
-
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
-
-		
-		isCreated = true;
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
 		gCurrent = 0.6;
 
 		weight = 0.4;
+		isCreated = true;
+
 	}
 };
 
