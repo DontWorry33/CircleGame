@@ -133,7 +133,7 @@ struct Roti : public Entity
 		isCircle = true;
 		isClickable = true;
 	}
-	void create() //blank constructor, same for other 2
+	void create() 
 	{
 		eTexture.loadFromFile("../../Character_Images/Roti.png");
 
