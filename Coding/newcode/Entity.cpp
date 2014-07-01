@@ -21,6 +21,7 @@ struct Entity
 	bool isCurrentEntity;
 	float isClickable;
 	bool isCircle;
+	bool isCreated;
 
 	float gCurrent;
 	
@@ -50,6 +51,7 @@ struct PortalBox : public Entity
 		isCurrentEntity = false;
 		isClickable = false;
 		isCircle = false;
+		isCreated = true;
 		gCurrent = 0;
 
 
@@ -77,6 +79,7 @@ struct Line : public Entity
 		isCurrentEntity = false;
 		isClickable = false;
 		isCircle = false;
+		isCreated = true;
 		gCurrent = 0;
 
 
@@ -100,15 +103,18 @@ struct Baker : public Entity
 		eStartPos.x=490;
 		eStartPos.y=600;
 
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
+
+
+
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCurrentEntity = false;
+		isCurrentEntity = true;
 		isCircle = true;
 		isClickable = true;
-
+		isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 10.f;
@@ -120,7 +126,13 @@ struct Baker : public Entity
 struct Roti : public Entity
 {
 
-	Roti(){}
+	Roti()
+	{
+		isCreated = false; 
+		isCurrentEntity = false;
+		isCircle = true;
+		isClickable = true;
+	}
 	void create() //blank constructor, same for other 2
 	{
 		eTexture.loadFromFile("../../Character_Images/Roti.png");
@@ -135,15 +147,15 @@ struct Roti : public Entity
 		eStartPos.x = 900;
 		eStartPos.y = 600;
 
-		eBounds.x = cCircle.getPosition().x - cRadius;
-		eBounds.y = cCircle.getPosition().y - cRadius;
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCurrentEntity = false;
-		isCircle = true;
-		isClickable = true;
 
+
+		eBounds.x = cCircle.getPosition().x - cRadius;
+		eBounds.y = cCircle.getPosition().y - cRadius;
+
+		isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 1.f;
@@ -155,7 +167,13 @@ struct Roti : public Entity
 
 struct Anpan : public Entity
 {
-	Anpan(){}
+	Anpan()
+	{
+		isCreated = false; 
+		isCurrentEntity = false;
+		isCircle = true;
+		isClickable = true;
+	}
 	void create()
 	{
 		eTexture.loadFromFile("../../Character_Images/Anpan.png");
@@ -170,14 +188,14 @@ struct Anpan : public Entity
 		eStartPos.x = 1000;
 		eStartPos.y = 600;
 
-		eBounds.x = cCircle.getPosition().x - cRadius;
-		eBounds.y = cCircle.getPosition().y - cRadius;
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCurrentEntity = false;
-		isCircle = true;
-		isClickable = true;
+		eBounds.x = cCircle.getPosition().x - cRadius;
+		eBounds.y = cCircle.getPosition().y - cRadius;
+
+
+		isCreated = true;
 
 		gCurrent = 0.6;
 
@@ -189,9 +207,17 @@ struct Anpan : public Entity
 
 struct Boule : public Entity
 {
-	Boule(){}
+	Boule()
+	{
+		isCreated = false;
+		isCurrentEntity = false;
+		isCircle = true;
+		isClickable = true;
+	}
 	void create()
 	{
+		isCurrentEntity = false;
+		std::cout << "ASDASDSAD: " << this->isCurrentEntity << std::endl;
 		eTexture.loadFromFile("../../Character_Images/Boule.png");
 
 		eTextureSize = eTexture.getSize();
@@ -204,15 +230,14 @@ struct Boule : public Entity
 		eStartPos.x=1100;
 		eStartPos.y=400;
 
+		cCircle.setPosition(eStartPos.x,eStartPos.y);
+
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
 
-		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCurrentEntity = false;
-		isCircle = true;
-		isClickable = true;
-
+		
+		isCreated = true;
 
 		gCurrent = 0.6;
 

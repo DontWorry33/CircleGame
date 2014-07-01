@@ -74,7 +74,7 @@ class Game
 	
 	
 		int currentEntityIndex;
-		//int currentlySelected; //D: added currentlySelected int
+		int currentlySelected; //D: added currentlySelected int
 
 };
 
@@ -111,6 +111,7 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 	mArrow.setOrigin(45,55);
 
 	currentEntityIndex = 0;
+	currentlySelected = 1;
 
 	gCurrent = g;
 	
@@ -123,14 +124,16 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-
 	while (mWindow.isOpen())
 	{
+		mMousePos = sf::Mouse::getPosition(mWindow);
+		
+
 		//set the arrow position to follow the circle
 		mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+
 		Arrow(entities);
 		//get mouse-coordinates relative to the window
-		mMousePos = sf::Mouse::getPosition(mWindow);
 
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
@@ -194,7 +197,7 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 		mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
-		
+
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
 
@@ -210,6 +213,7 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
+				//std::cout << "click " << std::endl;
 				//std::cout << mMousePos.x << ", " << mMousePos.y << std::endl;
 				//std::cout << "bounds X from " <<  entities[0]->eBounds.x << " to " << entities[0]->eBounds.x+entities[x]->eTextureSize.x << std::endl;
 				 if ( ((mMousePos.x >= entities[x]->eBounds.x) &&
@@ -227,32 +231,25 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 }
 
-/*
+
 void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 {
 	if ( key == sf::Keyboard::Tab)
 	{
 		currentlySelected ++;
-		std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
-		std::cout << "currentlySelected is: " << currentlySelected << std::endl;
-		return;
-	}
-	
-
-	else 
-	{
-		//std::cout << "Not on TheBaker" << std::endl;
+		//std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
+		//std::cout << "currentlySelected is: " << currentlySelected << std::endl;
 		return;
 	}
 }
-*/
+
 
 //stage id is index of entities which you need to apply the gravity check on
 bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x)
 {
 	
 	if (entities[x]->isCircle)
-	{
+	{		
 		if (
 			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x+8) &&
 			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x-8)) &&
@@ -304,7 +301,7 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 			entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
 		}
 	}
-	if (/*entities[x]->isOnGround*/isOnGround) entities[character]->gCurrent = g;
+	if (isOnGround) entities[character]->gCurrent = g;
 	checkBounds(entities);
 
 	
@@ -327,7 +324,7 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 				break;
 
 			case sf::Event::KeyReleased:
-				//breadSelector(event.key.code, 0); 
+				breadSelector(event.key.code, 0); 
 				handlePlayerInput(event.key.code, false);
 				break;
 
@@ -361,31 +358,37 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	sf::Vector2f movement(0.f, 0.f);
 	int rotateangle=0;
+
+	
 	for (int x=0; x<ENTITIES_MAX; x++)
 	{
-		if (entities[x]->isCurrentEntity) currentEntityIndex = x;
+		if (entities[x]->isCurrentEntity)  
+			{
+				currentEntityIndex = x;
+			}
 	}
-/*
+
+
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
-		std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
-		if (currentlySelected%3 == 1)
+		//std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
+		if (currentlySelected%3 == 1 && !entities[1]->isCreated)
 		{
 			entities[1]->create();
 		}
 
-		else if (currentlySelected%3 == 2)
+		else if (currentlySelected%3 == 2 && !entities[2]->isCreated)
 		{
 			entities[2]->create();
 		}
 		
-		else if (currentlySelected%3 == 0)
+		else if (currentlySelected%3 == 0 && !entities[3]->isCreated)
 		{
 			entities[3]->create();
 		}
 	}
 
-*/
+
 	if (mIsSpaceBar)
 	{
 		entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,0);
@@ -442,7 +445,6 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsMovingLeft)
 	{
-		//std::cout << "currentEntityIndex: " << currentEntityIndex << std::endl;
 		bool canMoveLeft = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
@@ -493,7 +495,6 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	
 	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
 	entities[currentEntityIndex]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
-	//mCirclePos = mCircle.getPosition();
 	
 	
 }
@@ -522,11 +523,11 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 	mWindow.clear();	
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
-	mWindow.draw(mArrow);
 	for (int x=0; x<ENTITIES_MAX; x++) 
 	{
 		if (entities[x]->isCircle) mWindow.draw(entities[x]->cCircle);
 		else mWindow.draw(entities[x]->eSprite);
 	}
+	mWindow.draw(mArrow);
 	mWindow.display();
 }
