@@ -33,8 +33,9 @@ class Game
 
 		void updateStatistics(sf::Time elapsedTime);	
 		void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-	
-	
+
+		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities	
+
 		//constants for update statistics
 		static const float PlayerSpeed;
 		static const sf::Time TimePerFrame;
@@ -56,11 +57,12 @@ class Game
 		bool mIsMovingRight;
 		bool mIsMovingLeft;
 		bool mIsSpaceBar;
+		bool mIsLaunched; //D: used to initiate trajectory.
 
 		//mouse position
 		sf::Vector2i mMousePos;
 	
-		//statistics
+		//Statistics
 		sf::Font mFont;
 		sf::Text mStatisticsText;
 		sf::Time mStatisticsUpdateTime;
@@ -72,6 +74,9 @@ class Game
 		float gCurrent; //curent gravity
 		sf::Clock gravityClock; //measure time
 	
+		//Trajectory
+		const float timePerShot;
+		sf::Clock shotClock; //length of shooting force's application.
 	
 		int currentEntityIndex;
 		int currentlySelectedX, currentlySelectedY; //D: For tab selection.
@@ -86,8 +91,9 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002), currentlySelectedX(1), currentlySelectedY(1) 
+			   mIsMovingLeft(false), mIsSpaceBar(false), mIsLaunched(true), mStatisticsText(), mStatisticsUpdateTime(),
+			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002), currentlySelectedX(1), currentlySelectedY(1),
+			   timePerShot(2.0) 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -123,7 +129,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-
+	
 	while (mWindow.isOpen())
 	{
 		//set the arrow position to follow the circle
@@ -140,7 +146,8 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 				entities[x]->eBounds.y = entities[x]->cCircle.getPosition().y - entities[x]->cRadius;
 			}
 		}
-		
+
+
 		//std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
 		//get the current amount of time elapsed
 		sf::Time updateGravity = gravityClock.getElapsedTime();
@@ -166,17 +173,40 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 
+
+
+
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
+			
 			timeSinceLastUpdate -= TimePerFrame;
 			processEvents(entities);
 			for (int x = 0; x<ENTITIES_MAX; x++) { checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
 
 			update(TimePerFrame,entities);
+			std::cout << "mIslaunched : " << mIsLaunched << std::endl;
+
+//Gamma	
+			sf::Time initialShot = shotClock.getElapsedTime();
+
+			if ( (mIsLaunched) && (initialShot.asSeconds() <= timePerShot) )
+			{
+				trajectory(elapsedTime, entities);
+			}	
+
+			else if (initialShot.asSeconds() > timePerShot)
+			{
+				mIsLaunched = false;
+				initialShot = shotClock.restart();
+			}
+//-----
+
+			
 		}
 		updateStatistics(elapsedTime);
 		render(entities);
 	}
+	
 }
 
 
@@ -236,15 +266,12 @@ void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 		if (currentlySelectedX%3 == 1) currentlySelectedY = 1;
 		else if (currentlySelectedX%3 == 2) currentlySelectedY = 2;
 		else if (currentlySelectedX%3 == 0) currentlySelectedY = 3;
-		std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
-		std::cout << "currentlySelected is: " << currentlySelectedX << std::endl;
 		return;
 	}
 	
 
 	else 
 	{
-		//std::cout << "Not on TheBaker" << std::endl;
 		return;
 	}
 }
@@ -291,7 +318,6 @@ void Game::checkBounds(Entity* entities[ENTITIES_MAX])
 void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 {
 	bool isOnGround = true;
-	//for (int x=0; x<4; x++) { entities[x]->isOnGround = true; }
 
 	if (entities[character]->isCircle)
 	{
@@ -302,12 +328,10 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 		else 
 		{
 			isOnGround = false;
-			//entities[x]->isOnGround = false;
-			//std::cout << "entity: " << x << " , " << " gcurrent: " << entities[character]->gCurrent << std::endl;
 			entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
 		}
 	}
-	if (/*entities[x]->isOnGround*/isOnGround) entities[character]->gCurrent = g;
+	if (isOnGround) entities[character]->gCurrent = g;
 	checkBounds(entities);
 
 	
@@ -360,10 +384,27 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 }
 
 
+void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+	sf::Vector2f motion(0.f, 0.f);	
+
+	if (mIsLaunched)
+	{
+		motion.y -= 150.f;
+		motion.x += 100.f;
+		entities[1]->cCircle.move(motion * elapsedTime.asSeconds());
+		
+	}
+}
+
+
 void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	sf::Vector2f movement(0.f, 0.f);
 	int rotateangle=0;
+	
+	int motionValue=0;
+
 	for (int x=0; x<ENTITIES_MAX; x++)
 	{
 		if (entities[x]->isCurrentEntity) currentEntityIndex = x;
@@ -371,23 +412,30 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
-		std::cout << "SpaceBar check/currSelect: " << currentlySelectedX << std::endl;
 		if (currentlySelectedX%3 == 1 && !entities[1]->isCreated)
 		{
 			entities[1]->create();
-		//	entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			
+			//Sets user to the Entity they shot out.
+			//entities[currentEntityIndex]->isCurrentEntity = false;	
+			//entities[1]->isCurrentEntity = true;
+			//currentEntityIndex = 1;
+
+			mIsLaunched = true; //DK
+
 		}
 
 		else if (currentlySelectedX%3 == 2 && !entities[2]->isCreated)
 		{
 			entities[2]->create();
-			//entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 		
 		else if (currentlySelectedX%3 == 0 && !entities[3]->isCreated)
 		{
 			entities[3]->create();
-			//entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 	}
 
@@ -497,7 +545,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		}
 	}	
 	
-	
+
 	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
 	entities[currentEntityIndex]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
 	//mCirclePos = mCircle.getPosition();
