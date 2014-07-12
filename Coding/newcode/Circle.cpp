@@ -23,9 +23,12 @@ class Game
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int character);//D: extra argument. Same reason
 
-		void breadSelector(sf::Keyboard::Key key, int selectedEntity); //D: new function to update Tab selection.	
+		void breadSelector(sf::Keyboard::Key key, int selectedEntity); //D: new function to update Tab selection.
+		void powerMetreUpdate(sf::Keyboard::Key key);	
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
 		void Arrow(Entity* entities[ENTITIES_MAX]);
+		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities	
+
 
 		void processEvents(Entity* entities[ENTITIES_MAX]);
 		void update(sf::Time elapsedTime,Entity* entities[ENTITIES_MAX]);
@@ -57,6 +60,13 @@ class Game
 		bool mIsMovingLeft;
 		bool mIsSpaceBar;
 
+
+		//Trajectory
+		bool mIsLaunched; //D: used to initiate trajectory.
+		sf::Clock shotClock; //length of shooting force's application.
+		const float timePerShot;
+
+
 		//mouse position
 		sf::Vector2i mMousePos;
 	
@@ -65,6 +75,15 @@ class Game
 		sf::Text mStatisticsText;
 		sf::Time mStatisticsUpdateTime;
 		std::size_t	mStatisticsNumFrames;
+
+		//power gauuge
+		sf::Sprite mPowerGaugeShell;
+		sf::Sprite mPowerGaugeMetre;
+		sf::Texture mPowerGaugeShellTexture;
+		sf::Texture mPowerGaugeMetreTexture;
+
+		float powerMetre;
+		bool mPowerRelease;
 
 		//Gravity
 		const float g; //gravity constant initalized in constructor
@@ -87,7 +106,8 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
-			   mFont(), mArrowTexture(), mArrow(), g(0.6), timePerGravityUpdate(0.0002) 
+			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(10.0) 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -110,10 +130,20 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 	mArrow.setPosition(490+45,600-55);
 	mArrow.setOrigin(45,55);
 
+	//set powergauge stuff
+	mPowerGaugeMetreTexture.loadFromFile("../../Character_Images/PowerGauge_Metre.png");
+	mPowerGaugeShellTexture.loadFromFile("../../Character_Images/PowerGauge_Shell.png");
+	mPowerGaugeMetre.setTexture(mPowerGaugeMetreTexture);
+	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
+
 	currentEntityIndex = 0;
 	currentlySelected = 1;
 
 	gCurrent = g;
+	mIsLaunched = false;
+
+	powerMetre = 0;
+	mPowerRelease = false;
 	
 }
 
@@ -131,6 +161,10 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 
 		//set the arrow position to follow the circle
 		mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+
+		mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
+		mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition());
+
 
 		Arrow(entities);
 		//get mouse-coordinates relative to the window
@@ -176,6 +210,23 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 			for (int x = 0; x<ENTITIES_MAX; x++) { checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
 
 			update(TimePerFrame,entities);
+
+			
+			sf::Time initialShot = shotClock.getElapsedTime();
+
+			if ( (mIsLaunched) && (initialShot.asSeconds() <= timePerShot) )
+			{
+				mPowerRelease = true;
+				trajectory(elapsedTime, entities);
+			}	
+
+			else if (initialShot.asSeconds() > timePerShot)
+			{
+				mIsLaunched = false;
+				initialShot = shotClock.restart();
+			}
+			
+
 		}
 		updateStatistics(elapsedTime);
 		render(entities);
@@ -197,6 +248,8 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 		mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
+		//std::cout << mArrow.getPosition().x << " , " << mArrow.getPosition().y << std::endl;
+		//std::cout << angle_in_deg << std::endl;	
 
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
@@ -237,12 +290,25 @@ void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 	if ( key == sf::Keyboard::Tab)
 	{
 		currentlySelected ++;
+		//std::cout << currentlySelected << std::endl;
 		//std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
 		//std::cout << "currentlySelected is: " << currentlySelected << std::endl;
 		return;
 	}
 }
 
+void Game::powerMetreUpdate(sf::Keyboard::Key key)
+{
+	//bool positive = true;
+	if (key == sf::Keyboard::Space) 
+		{
+			//std::cout << "PM: " << powerMetre << std::endl;
+			if (powerMetre <=60 ) powerMetre+=1.5;
+			else powerMetre = 0;
+		}
+
+
+}
 
 //stage id is index of entities which you need to apply the gravity check on
 bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x)
@@ -304,9 +370,25 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 	if (isOnGround) entities[character]->gCurrent = g;
 	checkBounds(entities);
 
-	
-		
+}
 
+
+
+void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+	sf::Vector2f motion(0.f, 0.f);	
+	double xDirection = mArrow.getPosition().x - entities[0]->cCircle.getPosition().x;
+	double yDirection = mArrow.getPosition().y - entities[0]->cCircle.getPosition().y;
+
+	if (mIsLaunched)
+	{
+		motion.y += yDirection*(powerMetre/1.5) ;
+		std::cout << "y: " << motion.y << std::endl;
+		motion.x += xDirection*(powerMetre/1.5);
+		std::cout << "x: " << motion.x << std::endl;
+		entities[1]->cCircle.move(motion * elapsedTime.asSeconds());
+		
+	}
 }
 
 
@@ -321,11 +403,19 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 		{
 			case sf::Event::KeyPressed:
 				handlePlayerInput(event.key.code, true);
+				breadSelector(event.key.code, 0);
+				powerMetreUpdate(event.key.code); 
 				break;
 
 			case sf::Event::KeyReleased:
-				breadSelector(event.key.code, 0); 
 				handlePlayerInput(event.key.code, false);
+				
+				if (event.key.code == sf::Keyboard::Space) 
+					{
+						mIsLaunched = true;
+						//powerMetre=0;
+					}
+				
 				break;
 
 			case sf::Event::MouseMoved:
@@ -340,17 +430,22 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {	
-	if (key == sf::Keyboard::Space)
+	if (key == sf::Keyboard::Space){
 		mIsSpaceBar = isPressed;
+		//powerMetreUpdate(key);		
+	}
 	if (key == sf::Keyboard::W)
 		mIsMovingUp = isPressed;
-	else if (key == sf::Keyboard::S)
+	if (key == sf::Keyboard::S)
 		mIsMovingDown = isPressed;
-	else if (key == sf::Keyboard::A)
+	if (key == sf::Keyboard::A)
 		mIsMovingLeft = isPressed;
-	else if (key == sf::Keyboard::D)
+	if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
-
+	/*
+	if (key == sf::Keyboard::Tab)
+		breadSelector(key,0);
+	*/
 }
 
 
@@ -358,6 +453,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	sf::Vector2f movement(0.f, 0.f);
 	int rotateangle=0;
+	int motionValue=0;
 
 	
 	for (int x=0; x<ENTITIES_MAX; x++)
@@ -375,23 +471,30 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		if (currentlySelected%3 == 1 && !entities[1]->isCreated)
 		{
 			entities[1]->create();
+			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			
+
+
 		}
 
 		else if (currentlySelected%3 == 2 && !entities[2]->isCreated)
 		{
 			entities[2]->create();
+			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 		
 		else if (currentlySelected%3 == 0 && !entities[3]->isCreated)
 		{
 			entities[3]->create();
+			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 		}
 	}
 
 
 	if (mIsSpaceBar)
 	{
-		entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,0);
+		//entities[currentEntityIndex]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,0);
+		NULL;
 	}
 	if (mIsMovingUp)
 	{	
@@ -523,13 +626,44 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 	mWindow.clear();	
 	mWindow.draw(mBackground);
 	mWindow.draw(mStatisticsText);
-	if (currentlySelected%3 != 0) mWindow.draw(entities[currentlySelected%3]->eSprite2);
-	else mWindow.draw(entities[3]->eSprite2);
+	
+	if (currentlySelected%3 == 1) 
+	{
+		entities[1]->cCircle.setOutlineThickness(5);
+		entities[1]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
+		mWindow.draw(entities[1]->eSprite2);
+		entities[2]->cCircle.setOutlineThickness(0);
+		entities[3]->cCircle.setOutlineThickness(0);
+	}
+	else if (currentlySelected%3 == 2) 
+	{
+		entities[2]->cCircle.setOutlineThickness(5);
+		entities[2]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
+		mWindow.draw(entities[2]->eSprite2);
+		entities[1]->cCircle.setOutlineThickness(0);
+		entities[3]->cCircle.setOutlineThickness(0);
+
+	}
+	else
+	{
+		entities[3]->cCircle.setOutlineThickness(5);
+		entities[3]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
+		mWindow.draw(entities[3]->eSprite2);
+		entities[1]->cCircle.setOutlineThickness(0);
+		entities[2]->cCircle.setOutlineThickness(0);
+
+	}
+	
 	for (int x=0; x<ENTITIES_MAX; x++) 
 	{
 		if (entities[x]->isCircle) mWindow.draw(entities[x]->cCircle);
 		else mWindow.draw(entities[x]->eSprite);
 	}
+	mWindow.draw(mPowerGaugeShell);
+	mPowerGaugeMetre.setTextureRect(sf::IntRect(0,0,mPowerGaugeMetreTexture.getSize().x,powerMetre));
+	mWindow.draw(mPowerGaugeMetre);
 	mWindow.draw(mArrow);
 	mWindow.display();
 }
+//									x_left		y_top		x_right						y_bottom
+//	ani_spr.SetSubRect(sf::IntRect(ani_xpos, ani_ypos, ani_xpos+(ani_img_width), ani_ypos+(ani_img_height)));
