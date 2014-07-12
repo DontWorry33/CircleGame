@@ -2,7 +2,10 @@ Try to make all blocks in stage an entity, so that collisions are much easier to
 
 ______________________________________________________________________
 
-
+FOURTH:	
+	- Bread only shows AFTER space is released.
+	- Trajectory occurs on all three breads
+	- 
 
 
 DESIGN (DEDIE):
@@ -17,6 +20,7 @@ DESIGN (DEDIE):
 	- Design portal and teleportations paths
 	- Look into entity to entity collisions
 	- Change objects on map to seperate ones
+	- Stop trajectory of bread after coming into contact
 
 
 PROGRAMMING (NIKHIL)
@@ -40,5 +44,7 @@ PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//*****
 	- Entity to Entity collisions
 	- Polish trajectory
 	- Make all objects dynamic on map.
+	- Figure when bread collides with entity, why random collision
+
 
 	
