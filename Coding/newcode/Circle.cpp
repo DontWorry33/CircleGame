@@ -94,6 +94,7 @@ class Game
 	
 		int currentEntityIndex;
 		int currentlySelected; //D: added currentlySelected int
+		int shotChooser;
 
 };
 
@@ -107,7 +108,7 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(10.0) 
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(5.0), shotChooser(1) 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -211,21 +212,59 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 
 			update(TimePerFrame,entities);
 
-			
+//---------------------Trajectory Force Parameters	
 			sf::Time initialShot = shotClock.getElapsedTime();
 
 			if ( (mIsLaunched) && (initialShot.asSeconds() <= timePerShot) )
 			{
 				mPowerRelease = true;
 				trajectory(elapsedTime, entities);
-			}	
+				std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
+			
+			//Right Border Collision Check	
+				if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+				{
+					mIsLaunched = false;
+					initialShot = shotClock.restart();
+					entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+				
+				}
+				
+			//Left Border Collision Check	
+				if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
+				{
+					mIsLaunched = false;
+					initialShot = shotClock.restart();
+					entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+				
+				}
+
+			//Top Border Collision Check
+				if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
+				{
+					mIsLaunched = false;
+					initialShot = shotClock.restart();
+					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
+				
+				}
+
+			//Bottom Border Collision Check
+				if (entities[shotChooser]->cCircle.getPosition().y >= 770-entities[shotChooser]->cRadius)
+				{
+					mIsLaunched = false;
+					initialShot = shotClock.restart();
+					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+				
+				}	
+			}
 
 			else if (initialShot.asSeconds() > timePerShot)
 			{
 				mIsLaunched = false;
 				initialShot = shotClock.restart();
 			}
-			
+
+//------------------------	
 
 		}
 		updateStatistics(elapsedTime);
@@ -383,10 +422,10 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	if (mIsLaunched)
 	{
 		motion.y += yDirection*(powerMetre/1.5) ;
-		std::cout << "y: " << motion.y << std::endl;
+		//std::cout << "y: " << motion.y << std::endl;
 		motion.x += xDirection*(powerMetre/1.5);
-		std::cout << "x: " << motion.x << std::endl;
-		entities[1]->cCircle.move(motion * elapsedTime.asSeconds());
+		//std::cout << "x: " << motion.x << std::endl;
+		entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
 		
 	}
 }
@@ -442,10 +481,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
-	/*
-	if (key == sf::Keyboard::Tab)
-		breadSelector(key,0);
-	*/
 }
 
 
@@ -472,21 +507,21 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		{
 			entities[1]->create();
 			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
-			
-
-
+			shotChooser = 1;
 		}
 
 		else if (currentlySelected%3 == 2 && !entities[2]->isCreated)
 		{
 			entities[2]->create();
 			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			shotChooser = 2;
 		}
 		
 		else if (currentlySelected%3 == 0 && !entities[3]->isCreated)
 		{
 			entities[3]->create();
 			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			shotChooser = 3;
 		}
 	}
 
