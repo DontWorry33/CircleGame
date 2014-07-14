@@ -227,7 +227,8 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 					mIsLaunched = false;
 					initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-				
+			
+					entities[shotChooser]->isCreated = true;	
 				}
 				
 			//Left Border Collision Check	
@@ -237,6 +238,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 					initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
 				
+					entities[shotChooser]->isCreated = true;
 				}
 
 			//Top Border Collision Check
@@ -246,6 +248,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 					initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
 				
+					entities[shotChooser]->isCreated = true;
 				}
 
 			//Bottom Border Collision Check
@@ -255,13 +258,16 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 					initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
 				
-				}	
+					entities[shotChooser]->isCreated = true;
+				}
+				
 			}
 
 			else if (initialShot.asSeconds() > timePerShot)
 			{
 				mIsLaunched = false;
 				initialShot = shotClock.restart();
+				entities[shotChooser]->isCreated = true;
 			}
 
 //------------------------	
@@ -419,7 +425,7 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	double xDirection = mArrow.getPosition().x - entities[0]->cCircle.getPosition().x;
 	double yDirection = mArrow.getPosition().y - entities[0]->cCircle.getPosition().y;
 
-	if (mIsLaunched)
+	if (mIsLaunched && !(entities[shotChooser]->isCreated))
 	{
 		motion.y += yDirection*(powerMetre/1.5) ;
 		//std::cout << "y: " << motion.y << std::endl;
