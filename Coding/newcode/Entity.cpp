@@ -171,7 +171,7 @@ struct Roti : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCreated = true;
+		//isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 1.f;
@@ -222,7 +222,7 @@ struct Anpan : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCreated = true;
+		//isCreated = true;
 		gCurrent = 0.6;
 
 		weight =0.5;
@@ -274,7 +274,7 @@ struct Boule : public Entity
 
 		cCircle.setPosition(eStartPos.x,eStartPos.y);
 
-		isCreated = true;
+		//isCreated = true;
 		gCurrent = 0.6;
 
 		weight = 0.4;
