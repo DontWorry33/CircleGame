@@ -16,11 +16,11 @@ DESIGN (DEDIE):
 	- Learn what a makefile does/is (*)
 	- Update arrow  (*)
 	- Start learning SFML  (*)
-	- Trajectory in game
+	- Trajectory in game (*)
+	- Look into entity to entity collisions (*)
+	- Change objects on map to seperate ones (*)
+	- Stop trajectory of bread after coming into contact (*)
 	- Design portal and teleportations paths
-	- Look into entity to entity collisions
-	- Change objects on map to seperate ones
-	- Stop trajectory of bread after coming into contact
 
 
 PROGRAMMING (NIKHIL)
@@ -41,10 +41,16 @@ PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//*****
 	- Gravity (*)
 	- Switching (*)
 	- Entities (*)
-	- Entity to Entity collisions
-	- Polish trajectory
-	- Make all objects dynamic on map.
+	- Entity to Entity collisions (*)
+	- Polish trajectory (*)
+	- Make all objects dynamic on map. (*)
 	- Figure when bread collides with entity, why random collision
+	- Fix collisions
 
 
 	
+GENERAL:
+	FIX RANDOM DROP BUG!
+	DEBUG
+	DEBUG
+	DEBUG

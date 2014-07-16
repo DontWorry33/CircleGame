@@ -27,7 +27,8 @@ class Game
 		void powerMetreUpdate(sf::Keyboard::Key key);	
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
 		void Arrow(Entity* entities[ENTITIES_MAX]);
-		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities	
+		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities
+		bool checkHitting(Entity* entities[ENTITIES_MAX]);
 
 
 		void processEvents(Entity* entities[ENTITIES_MAX]);
@@ -96,6 +97,9 @@ class Game
 		int currentlySelected; //D: added currentlySelected int
 		int shotChooser;
 
+		bool noY;
+		bool mouseLock;
+
 };
 
 
@@ -108,7 +112,8 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(5.0), shotChooser(1) 
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(10000.0), shotChooser(1)	
+
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
 	
@@ -145,7 +150,9 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 
 	powerMetre = 0;
 	mPowerRelease = false;
-	
+
+	noY = false;	
+	mouseLock=false;
 }
 
 
@@ -157,7 +164,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen())
 	{
-		mMousePos = sf::Mouse::getPosition(mWindow);
+		if (!mouseLock) mMousePos = sf::Mouse::getPosition(mWindow);
 		
 
 		//set the arrow position to follow the circle
@@ -181,24 +188,7 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 		
 		//std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
 		//get the current amount of time elapsed
-		sf::Time updateGravity = gravityClock.getElapsedTime();
 
-		//if the current time is less than our update time
-		if (updateGravity.asSeconds() <= timePerGravityUpdate)
-		{
-			//keep getting the time until it is greater
-			updateGravity = gravityClock.getElapsedTime();
-		}
-		//once it is greater, update our current G (acceleration) and reset the clock to repeat
-		else 
-		{
-			for (int x=0; x<ENTITIES_MAX; x++)	
-				{
-					if (entities[x]->gCurrent < G_MAX) entities[x]->gCurrent+=g;
-					else entities[x]->gCurrent = G_MAX;
-				}
-			updateGravity = gravityClock.restart();
-		}
 
 		//processEvents(entities);
 		sf::Time elapsedTime = clock.restart();
@@ -206,38 +196,65 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
+
 			timeSinceLastUpdate -= TimePerFrame;
 			processEvents(entities);
 			for (int x = 0; x<ENTITIES_MAX; x++) { checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
 
 			update(TimePerFrame,entities);
 
-//---------------------Trajectory Force Parameters	
-			sf::Time initialShot = shotClock.getElapsedTime();
 
-			if ( (mIsLaunched) && (initialShot.asSeconds() <= timePerShot) )
+//---------------------GRAVITY
+			sf::Time updateGravity = gravityClock.getElapsedTime();
+
+			//if the current time is less than our update time
+			if (updateGravity.asSeconds() <= timePerGravityUpdate)
 			{
+				//keep getting the time until it is greater
+				updateGravity = gravityClock.getElapsedTime();
+			}
+			//once it is greater, update our current G (acceleration) and reset the clock to repeat
+			else 
+			{
+				for (int x=0; x<ENTITIES_MAX; x++)	
+					{
+						if (entities[x]->gCurrent < G_MAX) entities[x]->gCurrent+=g;
+						else entities[x]->gCurrent = G_MAX;
+					}
+				updateGravity = gravityClock.restart();
+			}
+
+
+//---------------------Trajectory Force Parameters	
+			//sf::Time initialShot = shotClock.getElapsedTime();
+
+			if ( (mIsLaunched)) //&& (initialShot.asSeconds() <= timePerShot) )
+			{
+				std::cout << "SC : " << shotChooser << std::endl;
+				mouseLock=true;
 				mPowerRelease = true;
 				trajectory(elapsedTime, entities);
-				std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
+				//std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
 			
 			//Right Border Collision Check	
 				if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
 				{
 					mIsLaunched = false;
-					initialShot = shotClock.restart();
+					//initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
 			
-					entities[shotChooser]->isCreated = true;	
+					entities[shotChooser]->isCreated = true;
+					entities[shotChooser]->gCurrent = 0;	
 				}
 				
 			//Left Border Collision Check	
 				if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
 				{
 					mIsLaunched = false;
-					initialShot = shotClock.restart();
+					//initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
 				
+					entities[shotChooser]->gCurrent = 0;	
 					entities[shotChooser]->isCreated = true;
 				}
 
@@ -245,9 +262,10 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 				if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
 				{
 					mIsLaunched = false;
-					initialShot = shotClock.restart();
+					//initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
 				
+					entities[shotChooser]->gCurrent = 0;	
 					entities[shotChooser]->isCreated = true;
 				}
 
@@ -255,20 +273,50 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 				if (entities[shotChooser]->cCircle.getPosition().y >= 770-entities[shotChooser]->cRadius)
 				{
 					mIsLaunched = false;
-					initialShot = shotClock.restart();
+					//initialShot = shotClock.restart();
 					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
 				
 					entities[shotChooser]->isCreated = true;
+					entities[shotChooser]->gCurrent = 0;	
 				}
 				
+				if (checkHitting(entities))
+				{
+					mIsLaunched = false;
+					//initialShot = shotClock.restart();
+					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+					entities[shotChooser]->gCurrent = 0;	
+					entities[shotChooser]->isCreated = true;
+				}
+				
+
+				if (isTouchingSurface(entities, 4, shotChooser))
+				{
+					mIsLaunched = false;
+					//initialShot = shotClock.restart();
+					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+					entities[shotChooser]->isCreated = true;
+				}
+
+				if (isTouchingSurface(entities, 5, shotChooser))
+				{
+					mIsLaunched = false;
+					//initialShot = shotClock.restart();
+					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+					entities[shotChooser]->isCreated = true;
+				}
+				
+								
 			}
 
-			else if (initialShot.asSeconds() > timePerShot)
+			/*else if (initialShot.asSeconds() > timePerShot)
 			{
+				//std::cout << "TIME BREAK " << std::endl;
 				mIsLaunched = false;
 				initialShot = shotClock.restart();
 				entities[shotChooser]->isCreated = true;
-			}
+			}*/
+			else mouseLock=false;
 
 //------------------------	
 
@@ -362,13 +410,13 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x
 	if (entities[x]->isCircle)
 	{		
 		if (
-			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x+8) &&
-			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x-8)) &&
+			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x) &&
+			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x)) &&
 			((entities[x]->eBounds.y+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.y) &&
-			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+entities[stage_id]->eTextureSize.y+50)
-			) 
+			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+entities[stage_id]->eTextureSize.y)
+			)
 			{
-				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius+5);
+				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius+5);
 				return true;	
 			}		
 	}
@@ -418,9 +466,44 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 }
 
 
+bool Game::checkHitting(Entity* entities[ENTITIES_MAX])
+{
+	
+	for (int x=0; x<ENTITIES_MAX; x++)
+	{
+		if (entities[x]->isCircle)
+		{
+			if ((
+				((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[4]->eBounds.x+8) &&
+				 (entities[x]->eBounds.x <= entities[4]->eBounds.x+entities[4]->eTextureSize.x-8)) &&
+				((entities[x]->eBounds.y <= entities[4]->eBounds.y+entities[4]->eTextureSize.y) &&
+				 (entities[x]->eBounds.y >= entities[4]->eBounds.y))	
+				)
+
+				||
+
+				(
+				((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[5]->eBounds.x+8) &&
+				 (entities[x]->eBounds.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x-8)) &&
+				((entities[x]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y) &&
+				 (entities[x]->eBounds.y >= entities[5]->eBounds.y))	
+				)
+				)
+
+				{
+					//std::cout << "SC: " << entities[shotChooser]->eBounds.y << std::endl;
+					//std::cout << "Bounds: " << entities[4]->eBounds.y+entities[4]->eTextureSize.y << std::endl;
+					return true;
+				}
+		}
+	}
+	return false;
+}
 
 void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
+
+
 	sf::Vector2f motion(0.f, 0.f);	
 	double xDirection = mArrow.getPosition().x - entities[0]->cCircle.getPosition().x;
 	double yDirection = mArrow.getPosition().y - entities[0]->cCircle.getPosition().y;
@@ -431,7 +514,9 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		//std::cout << "y: " << motion.y << std::endl;
 		motion.x += xDirection*(powerMetre/1.5);
 		//std::cout << "x: " << motion.x << std::endl;
+		//checkHitting(entities);
 		entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
+		//checkHitting(entities);
 		
 	}
 }
@@ -512,7 +597,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		if (currentlySelected%3 == 1 && !entities[1]->isCreated)
 		{
 			entities[1]->create();
-			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition());
+			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition().x, entities[0]->cCircle.getPosition().y);
 			shotChooser = 1;
 		}
 
@@ -551,7 +636,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				) canMoveUp = false;
 
 		}
-		if ( !canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y <=0 ) NULL; //top of screen
+		if ( !canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
