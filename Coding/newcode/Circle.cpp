@@ -18,7 +18,7 @@ class Game
 		Game();
 		
 		//functions
-		void run(Entity* entities[ENTITIES_MAX]);
+		int run(Entity* entities[ENTITIES_MAX]);
 		void checkGravity(Entity* entities[ENTITIES_MAX], int character); //D: Now takes two arguments. Second for iteration
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int character);//D: extra argument. Same reason
@@ -29,6 +29,7 @@ class Game
 		void Arrow(Entity* entities[ENTITIES_MAX]);
 		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities
 		bool checkHitting(Entity* entities[ENTITIES_MAX]);
+		void activateAnpanPower(Entity* entities[ENTITIES_MAX]);
 
 
 		void processEvents(Entity* entities[ENTITIES_MAX]);
@@ -60,6 +61,7 @@ class Game
 		bool mIsMovingRight;
 		bool mIsMovingLeft;
 		bool mIsSpaceBar;
+		bool mTeleportation;
 
 
 		//Trajectory
@@ -83,8 +85,9 @@ class Game
 		sf::Texture mPowerGaugeShellTexture;
 		sf::Texture mPowerGaugeMetreTexture;
 
+
+		//
 		float powerMetre;
-		bool mPowerRelease;
 
 		//Gravity
 		const float g; //gravity constant initalized in constructor
@@ -97,26 +100,34 @@ class Game
 		int currentlySelected; //D: added currentlySelected int
 		int shotChooser;
 
-		bool noY;
 		bool mouseLock;
+
+		bool positionLock;
+
+		bool mResetGame;
+
+		bool mDrawMetre;
+
+
+		//stores position of baker so we can manipulate  positionLock.
+		sf::Vector2f traj_pos;
 
 };
 
 
-const float Game::PlayerSpeed = 250.f;
+const float Game::PlayerSpeed = 150.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mIsSpaceBar(false), mStatisticsText(), mStatisticsUpdateTime(),
+			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(10000.0), shotChooser(1)	
 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
-	
 
 	//set background
 	mBackgroundTexture.loadFromFile("../../Stage_Images/IntroStage.png");
@@ -142,54 +153,47 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 	mPowerGaugeMetre.setTexture(mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
 
+
+	//current entity index is the bread which is clicked
 	currentEntityIndex = 0;
+
+	//currently selected is which bread is going to be fired
 	currentlySelected = 1;
 
 	gCurrent = g;
+
+
+	//this determins wether we call trajectory or not.
 	mIsLaunched = false;
 
+	//power bar multiplier for trajectory
 	powerMetre = 0;
-	mPowerRelease = false;
 
-	noY = false;	
+	//Locks mouse and position when trajectory is active so that we don't get curved bread.
 	mouseLock=false;
+	positionLock = false;
+
+	//checks to see if we pressed "r"
+	mResetGame = false;
+
+	//Only draws meter when we hit space
+	mDrawMetre = false;
 }
 
 
 //main game loop. Runs all functions, processes events, updates game, updates statistics and renders
 //read 
-void Game::run(Entity* entities[ENTITIES_MAX])
+int Game::run(Entity* entities[ENTITIES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen())
 	{
-		if (!mouseLock) mMousePos = sf::Mouse::getPosition(mWindow);
 		
-
-		//set the arrow position to follow the circle
-		mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
-
-		mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
-		mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition());
-
-
-		Arrow(entities);
-		//get mouse-coordinates relative to the window
-
-		for (int x=0; x<ENTITIES_MAX; x++)
-		{
-			if (entities[x]->isCircle)
-			{
-				entities[x]->eBounds.x = entities[x]->cCircle.getPosition().x - entities[x]->cRadius;
-				entities[x]->eBounds.y = entities[x]->cCircle.getPosition().y - entities[x]->cRadius;
-			}
-		}
-		
-		//std::cout << "X: " << mMousePos.x << "\nY: " << mMousePos.y << std::endl; //debugging purposes
 		//get the current amount of time elapsed
+		if (mResetGame) break;
 
-
+		
 		//processEvents(entities);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
@@ -198,132 +202,170 @@ void Game::run(Entity* entities[ENTITIES_MAX])
 		{
 
 			timeSinceLastUpdate -= TimePerFrame;
-			processEvents(entities);
-			for (int x = 0; x<ENTITIES_MAX; x++) { checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
 
-			update(TimePerFrame,entities);
-
-
-//---------------------GRAVITY
-			sf::Time updateGravity = gravityClock.getElapsedTime();
-
-			//if the current time is less than our update time
-			if (updateGravity.asSeconds() <= timePerGravityUpdate)
+			//if mouse lock is not active, get the curr pos, same with position
+			if (!mouseLock) mMousePos = sf::Mouse::getPosition(mWindow);
+			if (!positionLock)
 			{
-				//keep getting the time until it is greater
-				updateGravity = gravityClock.getElapsedTime();
+				traj_pos = entities[0]->cCircle.getPosition();
+			//	std::cout << "lock pos(X): " << traj_pos.x << std::endl;
+				mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+
 			}
-			//once it is greater, update our current G (acceleration) and reset the clock to repeat
-			else 
+			else
 			{
-				for (int x=0; x<ENTITIES_MAX; x++)	
+				mArrow.setPosition(traj_pos);
+			}
+			//	std::cout << "LOCKED!!!" << std::endl;
+
+			//set the arrow position to follow the circle
+
+			mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
+			mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition());
+
+
+			Arrow(entities);
+			//get mouse-coordinates relative to the window
+
+			for (int x=0; x<ENTITIES_MAX; x++)
+			{
+				if (entities[x]->isCircle)
+				{
+					entities[x]->eBounds.x = entities[x]->cCircle.getPosition().x - entities[x]->cRadius;
+					entities[x]->eBounds.y = entities[x]->cCircle.getPosition().y - entities[x]->cRadius;
+				}
+			}
+
+			for (int x = 0; x<ENTITIES_MAX; x++) { if (entities[x]->isCircle) checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
+
+	//---------------------GRAVITY
+				sf::Time updateGravity = gravityClock.getElapsedTime();
+
+				//if the current time is less than our update time
+				if (updateGravity.asSeconds() <= timePerGravityUpdate)
+				{
+					//keep getting the time until it is greater
+					updateGravity = gravityClock.getElapsedTime();
+				}
+				//once it is greater, update our current G (acceleration) and reset the clock to repeat
+				else 
+				{
+					for (int x=0; x<ENTITIES_MAX; x++)	
 					{
 						if (entities[x]->gCurrent < G_MAX) entities[x]->gCurrent+=g;
 						else entities[x]->gCurrent = G_MAX;
 					}
-				updateGravity = gravityClock.restart();
-			}
-
-
-//---------------------Trajectory Force Parameters	
-			//sf::Time initialShot = shotClock.getElapsedTime();
-
-			if ( (mIsLaunched)) //&& (initialShot.asSeconds() <= timePerShot) )
-			{
-				std::cout << "SC : " << shotChooser << std::endl;
-				mouseLock=true;
-				mPowerRelease = true;
-				trajectory(elapsedTime, entities);
-				//std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
-			
-			//Right Border Collision Check	
-				if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
-				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-			
-					entities[shotChooser]->isCreated = true;
-					entities[shotChooser]->gCurrent = 0;	
-				}
-				
-			//Left Border Collision Check	
-				if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
-				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-				
-					entities[shotChooser]->gCurrent = 0;	
-					entities[shotChooser]->isCreated = true;
+					updateGravity = gravityClock.restart();
 				}
 
-			//Top Border Collision Check
-				if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
+				//std::cout << "PM : " << powerMetre << std::endl;
+	//---------------------Trajectory Force Parameters	
+				//sf::Time initialShot = shotClock.getElapsedTime();
+
+				if ( (mIsLaunched)) //&& (initialShot.asSeconds() <= timePerShot) )
 				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
+					//std::cout << "SC : " << shotChooser << std::endl;
+					positionLock = true;
+					mouseLock=true;
+
+					trajectory(elapsedTime, entities);
+					//std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
 				
-					entities[shotChooser]->gCurrent = 0;	
-					entities[shotChooser]->isCreated = true;
+				//Right Border Collision Check	
+					if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+				
+						entities[shotChooser]->isCreated = true;
+						entities[shotChooser]->gCurrent = 0;	
+					}
+					
+				//Left Border Collision Check	
+					if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+					
+						entities[shotChooser]->gCurrent = 0;	
+						entities[shotChooser]->isCreated = true;
+					}
+
+				//Top Border Collision Check
+					if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
+					
+						entities[shotChooser]->gCurrent = 0;	
+						entities[shotChooser]->isCreated = true;
+					}
+
+				//Bottom Border Collision Check
+					if (entities[shotChooser]->cCircle.getPosition().y >= 770-entities[shotChooser]->cRadius)
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+					
+						entities[shotChooser]->isCreated = true;
+						entities[shotChooser]->gCurrent = 0;	
+					}
+					
+					if (checkHitting(entities))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+						entities[shotChooser]->gCurrent = 0;	
+						entities[shotChooser]->isCreated = true;
+					}
+					
+
+					
+					if (isTouchingSurface(entities, 4, shotChooser))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+						entities[shotChooser]->isCreated = true;
+					}
+
+					if (isTouchingSurface(entities, 5, shotChooser))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						//initialShot = shotClock.restart();
+						//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+						entities[shotChooser]->isCreated = true;
+					}						
 				}
 
-			//Bottom Border Collision Check
-				if (entities[shotChooser]->cCircle.getPosition().y >= 770-entities[shotChooser]->cRadius)
+
+				else 
 				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-				
-					entities[shotChooser]->isCreated = true;
-					entities[shotChooser]->gCurrent = 0;	
+					mouseLock=false;
+					positionLock=false;
 				}
-				
-				if (checkHitting(entities))
-				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-					entities[shotChooser]->gCurrent = 0;	
-					entities[shotChooser]->isCreated = true;
-				}
-				
+			processEvents(entities);
 
-				if (isTouchingSurface(entities, 4, shotChooser))
-				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-					entities[shotChooser]->isCreated = true;
-				}
-
-				if (isTouchingSurface(entities, 5, shotChooser))
-				{
-					mIsLaunched = false;
-					//initialShot = shotClock.restart();
-					//entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-					entities[shotChooser]->isCreated = true;
-				}
-				
-								
-			}
-
-			/*else if (initialShot.asSeconds() > timePerShot)
-			{
-				//std::cout << "TIME BREAK " << std::endl;
-				mIsLaunched = false;
-				initialShot = shotClock.restart();
-				entities[shotChooser]->isCreated = true;
-			}*/
-			else mouseLock=false;
-
-//------------------------	
-
+			update(TimePerFrame,entities);
 		}
+
 		updateStatistics(elapsedTime);
 		render(entities);
 	}
+	if (mResetGame) return 1;
+	return 0;
 }
 
 
@@ -341,8 +383,6 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 		mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
-		//std::cout << mArrow.getPosition().x << " , " << mArrow.getPosition().y << std::endl;
-		//std::cout << angle_in_deg << std::endl;	
 
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
@@ -359,9 +399,6 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				//std::cout << "click " << std::endl;
-				//std::cout << mMousePos.x << ", " << mMousePos.y << std::endl;
-				//std::cout << "bounds X from " <<  entities[0]->eBounds.x << " to " << entities[0]->eBounds.x+entities[x]->eTextureSize.x << std::endl;
 				 if ( ((mMousePos.x >= entities[x]->eBounds.x) &&
 					(mMousePos.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) && 
 					((mMousePos.y >= entities[x]->eBounds.y) && 
@@ -377,15 +414,33 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 }
 
+//power is swapping.
+void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX])
+{
+
+	//Need to check if able to fit first, refer to bugs.txt
+
+	//currentEntityIndex 2 = Boule. Check main.cpp for indicies.
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 2)
+	{
+		std::cout << "activating SWAP" << std::endl;	
+		sf::Vector2f temp_pos = entities[0]->cCircle.getPosition();
+		entities[0]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+		entities[currentEntityIndex]->cCircle.setPosition(temp_pos);
+		entities[currentEntityIndex]->isCurrentEntity = false;
+		currentEntityIndex = 0;
+		entities[0]->isCurrentEntity = true;
+
+	}
+
+}
+
 
 void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
 {
 	if ( key == sf::Keyboard::Tab)
 	{
-		currentlySelected ++;
-		//std::cout << currentlySelected << std::endl;
-		//std::cout << "currentEntity is: " << currentEntityIndex << std::endl;
-		//std::cout << "currentlySelected is: " << currentlySelected << std::endl;
+		currentlySelected++;
 		return;
 	}
 }
@@ -395,9 +450,14 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 	//bool positive = true;
 	if (key == sf::Keyboard::Space) 
 		{
-			//std::cout << "PM: " << powerMetre << std::endl;
+			mDrawMetre = true;
 			if (powerMetre <=60 ) powerMetre+=1.5;
 			else powerMetre = 0;
+		}
+	else 
+		{
+			mDrawMetre=false;
+			if (!mIsLaunched) powerMetre=0;
 		}
 
 
@@ -412,11 +472,12 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x
 		if (
 			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x) &&
 			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x)) &&
-			((entities[x]->eBounds.y+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.y) &&
-			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+entities[stage_id]->eTextureSize.y)
+			((entities[x]->eBounds.y+entities[x]->eTextureSize.y >= entities[stage_id]->eBounds.y) &&
+			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+25)
 			)
 			{
-				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius+5);
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius);
+				//std::cout << "touchin da surf" << std::endl;
 				return true;	
 			}		
 	}
@@ -448,15 +509,13 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 
 	if (entities[character]->isCircle)
 	{
-			//need this to reset gravity if touching a surface
+		//need this to reset gravity if touching a surface
 		if ( (entities[character]->cCircle.getPosition().y >=  785-entities[character]->cRadius) )  NULL;
 		else if (isTouchingSurface(entities,4, character)) NULL; //4 is portal box
 		else if (isTouchingSurface(entities,5, character)) NULL; //5 is line
 		else 
 		{
 			isOnGround = false;
-			//entities[x]->isOnGround = false;
-			//std::cout << "entity: " << x << " , " << " gcurrent: " << entities[character]->gCurrent << std::endl;
 			entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
 		}
 	}
@@ -471,28 +530,29 @@ bool Game::checkHitting(Entity* entities[ENTITIES_MAX])
 	
 	for (int x=0; x<ENTITIES_MAX; x++)
 	{
-		if (entities[x]->isCircle)
+		if (!entities[x]->isCircle)
 		{
-			if ((
-				((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[4]->eBounds.x+8) &&
-				 (entities[x]->eBounds.x <= entities[4]->eBounds.x+entities[4]->eTextureSize.x-8)) &&
-				((entities[x]->eBounds.y <= entities[4]->eBounds.y+entities[4]->eTextureSize.y) &&
-				 (entities[x]->eBounds.y >= entities[4]->eBounds.y))	
+			if (				
+				(
+				((entities[shotChooser]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
+				 (entities[shotChooser]->eBounds.x >= entities[x]->eBounds.x)) && 
+				((entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= entities[x]->eBounds.y) && //+8 is give/take value
+				 (entities[shotChooser]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y))
 				)
 
 				||
 
 				(
-				((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[5]->eBounds.x+8) &&
-				 (entities[x]->eBounds.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x-8)) &&
-				((entities[x]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y) &&
-				 (entities[x]->eBounds.y >= entities[5]->eBounds.y))	
-				)
+				((entities[shotChooser]->eBounds.x + entities[shotChooser]->eTextureSize.x >= entities[x]->eBounds.x) &&
+				 (entities[shotChooser]->eBounds.x + entities[shotChooser]->eTextureSize.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
+				((entities[shotChooser]->eBounds.y + entities[shotChooser]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
+				 (entities[shotChooser]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
 				)
 
+			   )
+
 				{
-					//std::cout << "SC: " << entities[shotChooser]->eBounds.y << std::endl;
-					//std::cout << "Bounds: " << entities[4]->eBounds.y+entities[4]->eTextureSize.y << std::endl;
+					std::cout << x << "  IS TOUCHING STAGE PART" << std::endl;
 					return true;
 				}
 		}
@@ -505,19 +565,14 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 
 	sf::Vector2f motion(0.f, 0.f);	
-	double xDirection = mArrow.getPosition().x - entities[0]->cCircle.getPosition().x;
-	double yDirection = mArrow.getPosition().y - entities[0]->cCircle.getPosition().y;
+	double xDirection = mArrow.getPosition().x - traj_pos.x;
+	double yDirection = mArrow.getPosition().y - traj_pos.y;
 
 	if (mIsLaunched && !(entities[shotChooser]->isCreated))
 	{
-		motion.y += yDirection*(powerMetre/1.5) ;
-		//std::cout << "y: " << motion.y << std::endl;
-		motion.x += xDirection*(powerMetre/1.5);
-		//std::cout << "x: " << motion.x << std::endl;
-		//checkHitting(entities);
+		motion.y += yDirection*(powerMetre/2);
+		motion.x += xDirection*(powerMetre/2);
 		entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
-		//checkHitting(entities);
-		
 	}
 }
 
@@ -527,6 +582,7 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 {
 	entitySelector(entities);
 	sf::Event event;
+	
 	while (mWindow.pollEvent(event))
 	{
 		switch (event.type)
@@ -551,6 +607,12 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 			case sf::Event::MouseMoved:
 				break;
 
+
+			case sf::Event::MouseButtonPressed:
+				activateAnpanPower(entities);
+				break;
+
+
 			case sf::Event::Closed:
 				mWindow.close();
 				break;
@@ -572,6 +634,13 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	if (key == sf::Keyboard::D)
 		mIsMovingRight = isPressed;
+	if (key == sf::Keyboard::T)
+		mTeleportation = isPressed;
+	if (key == sf::Keyboard::R) 
+		{
+			std::cout << "reset" << std::endl;
+			mResetGame=true;
+		}
 }
 
 
@@ -672,7 +741,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		
 
 
-	if (mIsMovingLeft)
+	if (mIsMovingLeft && !positionLock)
 	{
 		bool canMoveLeft = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
@@ -698,7 +767,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	}
 	
 
-	if (mIsMovingRight)
+	if (mIsMovingRight && !positionLock)
 	{	
 		bool canMoveRight = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
@@ -720,6 +789,11 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 			rotateangle = PlayerSpeed;
 		}
 	}	
+
+	if (mTeleportation)
+	{
+		entities[currentEntityIndex]->cCircle.setPosition(0,785-entities[currentEntityIndex]->cRadius);
+	}
 	
 	
 	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
@@ -785,11 +859,12 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 		if (entities[x]->isCircle) mWindow.draw(entities[x]->cCircle);
 		else mWindow.draw(entities[x]->eSprite);
 	}
-	mWindow.draw(mPowerGaugeShell);
 	mPowerGaugeMetre.setTextureRect(sf::IntRect(0,0,mPowerGaugeMetreTexture.getSize().x,powerMetre));
-	mWindow.draw(mPowerGaugeMetre);
+	if (mDrawMetre)
+	{
+		mWindow.draw(mPowerGaugeShell);
+		mWindow.draw(mPowerGaugeMetre);
+	}
 	mWindow.draw(mArrow);
 	mWindow.display();
 }
-//									x_left		y_top		x_right						y_bottom
-//	ani_spr.SetSubRect(sf::IntRect(ani_xpos, ani_ypos, ani_xpos+(ani_img_width), ani_ypos+(ani_img_height)));
