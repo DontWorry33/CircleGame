@@ -20,18 +20,23 @@ DESIGN (DEDIE):
 	- Look into entity to entity collisions (*)
 	- Change objects on map to seperate ones (*)
 	- Stop trajectory of bread after coming into contact (*)
-	- Design portal and teleportations paths
+	- Design portal and teleportations paths (*)
+	- Design roti power, fully functioning, working within the game, PERFECT or die.
+	- Design bool switch
+	- Make the raising platform
+	- Design null sign when baker can't be teleported.
 
 
 PROGRAMMING (NIKHIL)
-	- Go through source code and see what we've done, figure out why/how 
 	- Install SFML (*)
 	- Get C++ working with a compiler (*)
 	- Compile a program in SFML (*)
 	- GET FAMILIAR! (*)
 	- trajectory of projectiles shooting from arrow, basic idea (*)
-	- Look into particle collisions
-	- Keep learning C++/SFML
+	- Look into particle collisions (*)
+	- Go through source code and see what we've done, figure out why/how 
+	- Keep learning C++/SFML 
+	- Design boule power. Come up with sample code in any language, try to use SFML classes/syntax.
 
 
 PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//************
@@ -44,13 +49,13 @@ PROGRAMMING (HUSSAIN)    ***********//COMMENT ALLLLLLLLLLLLLLLLL THE CODE//*****
 	- Entity to Entity collisions (*)
 	- Polish trajectory (*)
 	- Make all objects dynamic on map. (*)
-	- Figure when bread collides with entity, why random collision
-	- Fix collisions
+	- Figure when bread collides with entity, why random collision (*)
+	- Fix collisions (*)
+	- Design anpan power. Be aware if baker when swapped gets trapped. Have safeguards
+	- Think about implementing switch of raising platform, look at how to do it so baker doesn't teleport (setSubRect maybe?).
+	- 
 
-
-	
-GENERAL:
-	FIX RANDOM DROP BUG!
-	DEBUG
-	DEBUG
-	DEBUG
+EXTRAS (ppl who figure these out get a cookie):
+	- Circle to Circle collision. Refer to http://stackoverflow.com/questions/1736734/circle-circle-collision for basic guide
+	- Particle Collision (momemntum-impulse theorm)
+	- Come up with idea to fix frame problem when objects pass through walls.
