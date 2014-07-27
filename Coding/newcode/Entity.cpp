@@ -34,6 +34,7 @@ struct Entity
 	float gCurrent;
 	
 	virtual void create(){};
+	virtual void power(){};
 
 
 };
@@ -76,8 +77,8 @@ struct Line : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 300;
-		eStartPos.y = 400-eTextureSize.y/2;
+		eStartPos.x = 1000;
+		eStartPos.y = 800-eTextureSize.y/2;
 
 		eSprite.setPosition(eStartPos);
 
@@ -224,8 +225,12 @@ struct Anpan : public Entity
 
 		//isCreated = true;
 		gCurrent = 0.6;
-
 		weight =0.5;
+	}
+	void power()
+	{
+		NULL;
+
 	}
 
 };
