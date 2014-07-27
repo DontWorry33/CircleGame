@@ -29,10 +29,11 @@ class Game
 		void Arrow(Entity* entities[ENTITIES_MAX]);
 		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities
 		bool checkHitting(Entity* entities[ENTITIES_MAX]);
+		void activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
 		void activateAnpanPower(Entity* entities[ENTITIES_MAX]);
 
 
-		void processEvents(Entity* entities[ENTITIES_MAX]);
+		void processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
 		void update(sf::Time elapsedTime,Entity* entities[ENTITIES_MAX]);
 		void render(Entity* entities[ENTITIES_MAX]);
 
@@ -194,7 +195,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 		if (mResetGame) break;
 
 		
-		//processEvents(entities);
+		//processEvents(elapsedTime, entities);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
 
@@ -356,7 +357,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 					mouseLock=false;
 					positionLock=false;
 				}
-			processEvents(entities);
+			processEvents(elapsedTime, entities);
 
 			update(TimePerFrame,entities);
 		}
@@ -414,7 +415,49 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 }
 
-//power is swapping.
+	//Power: Attracting Baker towards it.
+void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1)
+	{
+		std::cout << "activating ATTRACT" << std::endl;
+		sf::Vector2f attract_direction(0.f, 0.f);
+
+		//If Roti is Right of Baker (Greater)
+		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
+		{
+			attract_direction.x += 150.0;
+			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		
+		}
+
+		//If Roti is Left of Baker (Less)
+		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
+		{
+			attract_direction.x -= 150.0;
+			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		}
+		
+
+		//If Roti is Above of Baker (Less)
+		if (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y)
+		{
+			attract_direction.y -= 150.0;
+			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+	
+		}
+		
+		//If Roti is Beneath of Baker (More)
+		if (entities[1]->cCircle.getPosition().y > entities[0]->cCircle.getPosition().y)
+		{
+			attract_direction.y += 150.0;
+			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+	
+		}
+	}
+}
+
+	//Power: Swapping places with Baker
 void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX])
 {
 
@@ -578,13 +621,14 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 
 
-void Game::processEvents(Entity* entities[ENTITIES_MAX])
+void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	entitySelector(entities);
 	sf::Event event;
 	
 	while (mWindow.pollEvent(event))
 	{
+		activateRotiPower(elapsedTime, entities);
 		switch (event.type)
 		{
 			case sf::Event::KeyPressed:
@@ -610,6 +654,7 @@ void Game::processEvents(Entity* entities[ENTITIES_MAX])
 
 			case sf::Event::MouseButtonPressed:
 				activateAnpanPower(entities);
+				//activateRotiPower(elapsedTime, entities);
 				break;
 
 
