@@ -420,16 +420,39 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1)
 	{
-		std::cout << "activating ATTRACT" << std::endl;
+	//	std::cout << "activating ATTRACT" << std::endl;
+		std::cout << "Baker is here: " << entities[0]->cCircle.getPosition().x << std::endl;
+		std::cout << "Baker boundary is: " << entities[0]->eBounds.x << std::endl;
 		sf::Vector2f attract_direction(0.f, 0.f);
+		int rotateangle = 0;
+		bool canMoveRight = true;
 
 		//If Roti is Right of Baker (Greater)
 		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
 		{
-			attract_direction.x += 150.0;
-			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+			bool canMoveRight =  true;
+			if (
+				((entities[0]->eBounds.x + entities[0]->eTextureSize.x >= entities[5]->eBounds.x) &&
+			 	(entities[0]->eBounds.x + entities[0]->eTextureSize.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x)) &&
+				((entities[0]->eBounds.y + entities[0]->eTextureSize.y >= entities[5]->eBounds.y+8) &&
+			 	(entities[0]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y-8))
+			   ) canMoveRight = false;
+
+				if( !canMoveRight) NULL;
+			
+				else
+				{	
+					attract_direction.x += 150.0;
+					rotateangle = 150.0;
+				}
+
+			}
+			//attract_direction.x += 150.0;
+			//rotateangle = 150.0;
+		//	entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		//	entities[0]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
 		
-		}
+		
 
 		//If Roti is Left of Baker (Less)
 		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
@@ -438,7 +461,7 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
 		}
 		
-
+/*
 		//If Roti is Above of Baker (Less)
 		if (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y)
 		{
@@ -454,6 +477,9 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
 	
 		}
+*/
+		entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		entities[0]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
 	}
 }
 
@@ -624,11 +650,11 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	entitySelector(entities);
+	activateRotiPower(elapsedTime, entities);
 	sf::Event event;
 	
 	while (mWindow.pollEvent(event))
 	{
-		activateRotiPower(elapsedTime, entities);
 		switch (event.type)
 		{
 			case sf::Event::KeyPressed:
