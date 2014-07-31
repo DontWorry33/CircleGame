@@ -261,24 +261,22 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 				}
 
 				//std::cout << "PM : " << powerMetre << std::endl;
-	//---------------------Trajectory Force Parameters	
-				//sf::Time initialShot = shotClock.getElapsedTime();
-	
-				if (repulsionReady)
+
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1 && abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200)
 				{
-					std::cout << "Roti's gCurrent: " << entities[1]->gCurrent << std::endl;
+					entities[currentEntityIndex]->gCurrent = 0;
 					entities[0]->gCurrent = 0;
-					entities[1]->gCurrent = -5;
 				}
 
+
+	//--------------TRAJECTORY PARAMETERS
 				if ( (mIsLaunched)) 
 				{
-					//std::cout << "SC : " << shotChooser << std::endl;
 					positionLock = true;
 					mouseLock=true;
 
 					trajectory(elapsedTime, entities);
-					//std::cout <<"Position: " << entities[1]->cCircle.getPosition().x << std::endl;
 				
 				//Right Border Collision Check	
 					if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
@@ -431,17 +429,16 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 	//If Roti is Right of Baker (Greater)
 		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
 		{
-			bool canMoveRight =  true;
-			for ( int x = 4 ; x < ENTITIES_MAX; x++ )
+			for ( int x = 5 ; x < ENTITIES_MAX; x++ )
 			{
 				if (
-					((entities[0]->eBounds.x + entities[0]->eTextureSize.x >= entities[5]->eBounds.x) &&
-			 		(entities[0]->eBounds.x + entities[0]->eTextureSize.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x)) &&
-					((entities[0]->eBounds.y + entities[0]->eTextureSize.y >= entities[5]->eBounds.y+8) &&
-			 		(entities[0]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y-8))
-			   	) canMoveRight = false; 
+					((entities[0]->eBounds.x + entities[0]->eTextureSize.x >= entities[x]->eBounds.x) &&
+			 		(entities[0]->eBounds.x + entities[0]->eTextureSize.x <= entities[x]->eBounds.x+entities[5]->eTextureSize.x)) &&
+					((entities[0]->eBounds.y + entities[0]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
+			 		(entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
+			   	) entities[0]->canMoveRight = false; 
 
-				if( !canMoveRight) NULL;
+				if( !entities[0]->canMoveRight) NULL;
 			
 				else
 				{	
@@ -456,17 +453,16 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 	//If Roti is Left of Baker (Less)
 		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
 		{
-			bool canMoveLeft = true;
-			for (int x = 4; x < ENTITIES_MAX; x++)
+			for (int x = 5; x < ENTITIES_MAX; x++)
 			{
 				if (
-					((entities[0]->eBounds.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x) &&
-					 (entities[0]->eBounds.x >= entities[5]->eBounds.x)) && 
-					((entities[0]->eBounds.y+entities[0]->eTextureSize.y >= entities[5]->eBounds.y+8) && //+8 is give/take value
-					 (entities[0]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y-8))
-					) canMoveLeft = false;
+					((entities[0]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
+					 (entities[0]->eBounds.x >= entities[x]->eBounds.x)) && 
+					((entities[0]->eBounds.y+entities[0]->eTextureSize.y >= entities[x]->eBounds.y+8) && //+8 is give/take value
+					 (entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
+					) entities[0]->canMoveLeft = false;
 	
-				if (!canMoveLeft) NULL;
+				if (!entities[0]->canMoveLeft) NULL;
 			
 				else 
 				{
@@ -796,7 +792,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
 				((entities[currentEntityIndex]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
 				 (entities[currentEntityIndex]->eBounds.y >= entities[x]->eBounds.y))
-				) entities[currentEntityIndex]->canMoveUp = false;
+				) entities[currentEntityIndex]->canMoveUp = true;//false;
 
 		}
 		if ( !entities[currentEntityIndex]->canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
