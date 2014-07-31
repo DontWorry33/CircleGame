@@ -266,8 +266,9 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 	
 				if (repulsionReady)
 				{
+					std::cout << "Roti's gCurrent: " << entities[1]->gCurrent << std::endl;
 					entities[0]->gCurrent = 0;
-					entities[1]->gCurrent = 0;
+					entities[1]->gCurrent = -5;
 				}
 
 				if ( (mIsLaunched)) 
@@ -420,20 +421,13 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 	{
 		sf::Vector2f attract_direction(0.f, 0.f);
 		int rotateangle = 0;
+/*
+		else if ( abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) > 200 )
+		{
+			repulsionReady = false;
+		}
+ */
 
-		if ( abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) <= 200 )
-		{
-			std::cout << "RepulsionReady" << std::endl;
-			//entities[0]->gCurrent = 0;
-			//entities[1]->gCurrent = 0;
-			repulsionReady = true;
-		}
-		
-		else if ( abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) <= 200 )
-		{
-			NULL;
-		}
- 
 	//If Roti is Right of Baker (Greater)
 		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
 		{
@@ -463,21 +457,23 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
 		{
 			bool canMoveLeft = true;
-			if (
-				((entities[0]->eBounds.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x) &&
-				 (entities[0]->eBounds.x >= entities[5]->eBounds.x)) && 
-				((entities[0]->eBounds.y+entities[0]->eTextureSize.y >= entities[5]->eBounds.y+8) && //+8 is give/take value
-				 (entities[0]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y-8))
-				) canMoveLeft = false;
-
-			if (!canMoveLeft) NULL;
-			
-			else 
+			for (int x = 4; x < ENTITIES_MAX; x++)
 			{
-				attract_direction.x -= 150.0;
-				rotateangle = -150.0;
+				if (
+					((entities[0]->eBounds.x <= entities[5]->eBounds.x+entities[5]->eTextureSize.x) &&
+					 (entities[0]->eBounds.x >= entities[5]->eBounds.x)) && 
+					((entities[0]->eBounds.y+entities[0]->eTextureSize.y >= entities[5]->eBounds.y+8) && //+8 is give/take value
+					 (entities[0]->eBounds.y <= entities[5]->eBounds.y+entities[5]->eTextureSize.y-8))
+					) canMoveLeft = false;
+	
+				if (!canMoveLeft) NULL;
+			
+				else 
+				{
+					attract_direction.x -= 150.0;
+					rotateangle = -150.0;
+				}
 			}
-		
 		}
 		
 /*
@@ -750,6 +746,13 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 			}
 	}
 
+	for (int x=0; x<4; x++)
+	{
+		entities[x]->canMoveRight = true;
+		entities[x]->canMoveLeft = true;
+		entities[x]->canMoveUp = true;
+		entities[x]->canMoveDown = true;
+	}
 
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
@@ -784,7 +787,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	}
 	if (mIsMovingUp)
 	{	
-		bool canMoveUp = true;
+		//bool canMoveUp = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
 			if (currentEntityIndex == x || entities[x]->isCircle) continue;
@@ -793,10 +796,10 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
 				((entities[currentEntityIndex]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
 				 (entities[currentEntityIndex]->eBounds.y >= entities[x]->eBounds.y))
-				) canMoveUp = false;
+				) entities[currentEntityIndex]->canMoveUp = false;
 
 		}
-		if ( !canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
+		if ( !entities[currentEntityIndex]->canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
@@ -806,7 +809,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		
 	if (mIsMovingDown)
 	{
-		bool canMoveDown = true;
+		//bool canMoveDown = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
 			if (currentEntityIndex == x || entities[x]->isCircle) continue;
@@ -817,12 +820,12 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 entities[currentEntityIndex]->eBounds.y+entities[currentEntityIndex]->eTextureSize.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y)
 				) 
 				{
-					canMoveDown = false;
+					entities[currentEntityIndex]->canMoveDown = false;
 				}
 		}
 		
 
-		if  ( !canMoveDown  || (entities[currentEntityIndex]->cCircle.getPosition().y >= 785-entities[currentEntityIndex]->cRadius))  NULL;  //bottom of screen
+		if  ( !entities[currentEntityIndex]->canMoveDown  || (entities[currentEntityIndex]->cCircle.getPosition().y >= 785-entities[currentEntityIndex]->cRadius))  NULL;  //bottom of screen
 		else
 		{
 			movement.y += PlayerSpeed;
@@ -834,7 +837,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsMovingLeft && !positionLock)
 	{
-		bool canMoveLeft = true;
+		//bool canMoveLeft = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
 			if (currentEntityIndex == x || entities[x]->isCircle) continue;
@@ -843,9 +846,9 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x >= entities[x]->eBounds.x)) && 
 				((entities[currentEntityIndex]->eBounds.y+entities[currentEntityIndex]->eTextureSize.y >= entities[x]->eBounds.y+8) && //+8 is give/take value
 				 (entities[currentEntityIndex]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
-				) canMoveLeft = false;
+				) entities[currentEntityIndex]->canMoveLeft = false;
 		}	
-		if ( !canMoveLeft || (entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius)) NULL;
+		if ( !entities[currentEntityIndex]->canMoveLeft || (entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius)) NULL;
 
 		else 
 		{
@@ -860,7 +863,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mIsMovingRight && !positionLock)
 	{	
-		bool canMoveRight = true;
+		//bool canMoveRight = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
 		{
 			if (currentEntityIndex == x || entities[x]->isCircle) continue;
@@ -870,10 +873,10 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x + entities[currentEntityIndex]->eTextureSize.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
 				((entities[currentEntityIndex]->eBounds.y + entities[currentEntityIndex]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
 				 (entities[currentEntityIndex]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
-				) canMoveRight = false;
+				) entities[currentEntityIndex]->canMoveRight = false;
 
 		}
-		if (!canMoveRight || (entities[currentEntityIndex]->cCircle.getPosition().x >= 1200-entities[currentEntityIndex]->cRadius)) NULL;
+		if (!entities[currentEntityIndex]->canMoveRight || (entities[currentEntityIndex]->cCircle.getPosition().x >= 1200-entities[currentEntityIndex]->cRadius)) NULL;
 		else 
 		{
 			movement.x += PlayerSpeed;
