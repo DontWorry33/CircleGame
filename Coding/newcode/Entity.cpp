@@ -31,6 +31,11 @@ struct Entity
 	bool isCircle;
 	bool isCreated;
 
+	bool canMoveRight;
+	bool canMoveLeft;
+	bool canMoveUp;
+	bool canMoveDown;
+	
 	float gCurrent;
 	
 	virtual void create(){};
@@ -49,7 +54,7 @@ struct PortalBox : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 600;
+		eStartPos.x = 800;
 		eStartPos.y = 400-eTextureSize.y/2;
 
 		eSprite.setPosition(eStartPos);
@@ -121,6 +126,12 @@ struct Baker : public Entity
 		isCircle = true;
 		isClickable = true;
 		isCreated = true;
+		
+		canMoveUp = true;
+		canMoveDown = true;
+		canMoveRight = true;
+		canMoveLeft = true;
+
 
 		gCurrent = 0.6;
 
@@ -139,6 +150,12 @@ struct Roti : public Entity
 		isCircle = true;
 		isClickable = true;
 		
+		canMoveUp = true;
+		canMoveDown = true;
+		canMoveRight = true;
+		canMoveLeft = true;
+
+
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Roti_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
@@ -190,6 +207,12 @@ struct Anpan : public Entity
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+		
+		canMoveUp = true;
+		canMoveDown = true;
+		canMoveRight = true;
+		canMoveLeft = true;
+
 		
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Anpan_Selected.png");
@@ -244,6 +267,12 @@ struct Boule : public Entity
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+		
+		canMoveUp = true;
+		canMoveDown = true;
+		canMoveRight = true;
+		canMoveLeft = true;
+
 		
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Boule_Selected.png");
