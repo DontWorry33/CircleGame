@@ -19,15 +19,15 @@ class Game
 		
 		//functions
 		int run(Entity* entities[ENTITIES_MAX]);
-		void checkGravity(Entity* entities[ENTITIES_MAX], int character); //D: Now takes two arguments. Second for iteration
+		void checkGravity(Entity* entities[ENTITIES_MAX], int character);
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
-		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int character);//D: extra argument. Same reason
+		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int character);
 
-		void breadSelector(sf::Keyboard::Key key, int selectedEntity); //D: new function to update Tab selection.
+		void breadSelector(sf::Keyboard::Key key, int selectedEntity); 
 		void powerMetreUpdate(sf::Keyboard::Key key);	
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
 		void Arrow(Entity* entities[ENTITIES_MAX]);
-		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); //D: Function for firing Entities
+		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); 
 		bool checkHitting(Entity* entities[ENTITIES_MAX]);
 		void activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
 		void activateAnpanPower(Entity* entities[ENTITIES_MAX]);
@@ -87,7 +87,7 @@ class Game
 		sf::Texture mPowerGaugeMetreTexture;
 
 
-		//
+	
 		float powerMetre;
 
 		//Gravity
@@ -98,11 +98,12 @@ class Game
 	
 	
 		int currentEntityIndex;
-		int currentlySelected; //D: added currentlySelected int
+		int currentlySelected; 
 		int shotChooser;
 
 		bool mouseLock;
-		bool repulsionReady;
+		bool repulsionReady; //D: For Roti power. Yet to be implemented, though.
+		bool rotiActivated;
 
 		bool positionLock;
 
@@ -124,9 +125,9 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), repulsionReady(false),
+			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), repulsionReady(false), rotiActivated(false),
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(10000.0), shotChooser(1)	
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1)	
 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -254,19 +255,36 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 				{
 					for (int x=0; x<ENTITIES_MAX; x++)	
 					{
-						if (entities[x]->gCurrent < G_MAX) entities[x]->gCurrent+=g;
+						if (entities[x]->gCurrent < G_MAX && !rotiActivated) entities[x]->gCurrent+=g;
+						else if (rotiActivated && ( x == 0 || x == 1)) continue; 
 						else entities[x]->gCurrent = G_MAX;
 					}
 					updateGravity = gravityClock.restart();
 				}
-
+	//-----------------
 				//std::cout << "PM : " << powerMetre << std::endl;
 
+				sf::Time applyRepulsion = shotClock.getElapsedTime();
 
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1 && abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200)
 				{
+					rotiActivated = true;
 					entities[currentEntityIndex]->gCurrent = 0;
 					entities[0]->gCurrent = 0;
+
+				}
+				
+
+				else
+				{
+					rotiActivated = false;
+
+					if ( (!entities[0]->canMoveRight) && (!entities[1]->canMoveLeft) && applyRepulsion.asSeconds() <= timePerShot )
+					{
+						entities[0]->cCircle.move( (-310.f * elapsedTime.asSeconds()), 100.f );	
+					}
+				
+					applyRepulsion = shotClock.restart(); 
 				}
 
 
@@ -419,12 +437,6 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 	{
 		sf::Vector2f attract_direction(0.f, 0.f);
 		int rotateangle = 0;
-/*
-		else if ( abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) > 200 )
-		{
-			repulsionReady = false;
-		}
- */
 
 	//If Roti is Right of Baker (Greater)
 		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
@@ -476,19 +488,38 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 		//If Roti is Above of Baker (Less)
 		if (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y)
 		{
-			attract_direction.y -= 150.0;
-			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
-	
+			for (int x = 5; x < ENTITIES_MAX; x++)
+			{
+				if (
+					((entities[0]->eBounds.x+entities[0]->eTextureSize.x >= entities[x]->eBounds.x+8) &&
+					 (entities[0]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
+					((entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
+				 	(entities[0]->eBounds.y >= entities[x]->eBounds.y))
+				) entities[0]->canMoveUp = false;
+				
+				if (!entities[0]->canMoveUp || entities[0]->cCircle.getPosition().y = 0) NULL;
+			
+				else
+				{
+					attract_direction += 150.0;
+					rotateangle = 150.0; 
+				}
+
+			}
 		}
+*/	
 		
-		//If Roti is Beneath of Baker (More)
-		if (entities[1]->cCircle.getPosition().y > entities[0]->cCircle.getPosition().y)
+
+		//If Roti is Above Baker (Less) SIMPLER
+		if ( (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y ) && ( abs (entities[1]->cCircle.getPosition().y - entities[0]->cCircle.getPosition().y) <= 50 ) )
 		{
-			attract_direction.y += 150.0;
+			attract_direction.y -= 150.0;
+			rotateangle = 30.0;
 			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
 	
 		}
-*/
+
+
 		entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
 		entities[0]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
 	}
@@ -586,8 +617,7 @@ void Game::checkBounds(Entity* entities[ENTITIES_MAX])
 void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 {
 	bool isOnGround = true;
-	//for (int x=0; x<4; x++) { entities[x]->isOnGround = true; }
-
+	
 	if (entities[character]->isCircle)
 	{
 		//need this to reset gravity if touching a surface
@@ -792,14 +822,14 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
 				((entities[currentEntityIndex]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
 				 (entities[currentEntityIndex]->eBounds.y >= entities[x]->eBounds.y))
-				) entities[currentEntityIndex]->canMoveUp = true;//false;
+				) entities[currentEntityIndex]->canMoveUp = false;
 
 		}
-		if ( !entities[currentEntityIndex]->canMoveUp || entities[currentEntityIndex]->cCircle.getPosition().y >=0 ) NULL; //top of screen
+		if ( !entities[currentEntityIndex]->canMoveUp || !rotiActivated/*entities[currentEntityIndex]->cCircle.getPosition().y >=0*/ ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
-			rotateangle = PlayerSpeed;
+			rotateangle = -PlayerSpeed;
 		}
 	}	
 		
@@ -825,7 +855,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		else
 		{
 			movement.y += PlayerSpeed;
-			rotateangle = -PlayerSpeed;
+			rotateangle = PlayerSpeed;
 		}
 	}	
 		
