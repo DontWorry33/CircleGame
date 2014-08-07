@@ -29,11 +29,15 @@ class Game
 		void Arrow(Entity* entities[ENTITIES_MAX]);
 		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); 
 		bool checkHitting(Entity* entities[ENTITIES_MAX]);
-		void activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
+		
+		void activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
+		void activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
 		void activateAnpanPower(Entity* entities[ENTITIES_MAX]);
 
 
 		void processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
+		
+		void motionCheck(int character, Entity* entities[ENTITIES_MAX]);
 		void update(sf::Time elapsedTime,Entity* entities[ENTITIES_MAX]);
 		void render(Entity* entities[ENTITIES_MAX]);
 
@@ -102,8 +106,11 @@ class Game
 		int shotChooser;
 
 		bool mouseLock;
-		bool repulsionReady; //D: For Roti power. Yet to be implemented, though.
 		bool rotiActivated;
+		
+		bool repulsionReadyA; //Baker pushed Leftwards
+		bool repulsionReadyB; //Baker pushed Rightwards
+		bool repulsionReadyC; //Baker pushed Downwards
 
 		bool positionLock;
 
@@ -125,7 +132,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 //instantiates most objects and sets starting values
 Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), repulsionReady(false), rotiActivated(false),
+			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1)	
 
@@ -263,30 +270,8 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 				}
 	//-----------------
 				//std::cout << "PM : " << powerMetre << std::endl;
-
-				sf::Time applyRepulsion = shotClock.getElapsedTime();
-
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1 && abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200)
-				{
-					rotiActivated = true;
-					entities[currentEntityIndex]->gCurrent = 0;
-					entities[0]->gCurrent = 0;
-
-				}
-				
-
-				else
-				{
-					rotiActivated = false;
-
-					if ( (!entities[0]->canMoveRight) && (!entities[1]->canMoveLeft) && applyRepulsion.asSeconds() <= timePerShot )
-					{
-						entities[0]->cCircle.move( (-310.f * elapsedTime.asSeconds()), 100.f );	
-					}
-				
-					applyRepulsion = shotClock.restart(); 
-				}
-
+			
+				activateRotiPowerBeta(elapsedTime, entities);
 
 	//--------------TRAJECTORY PARAMETERS
 				if ( (mIsLaunched)) 
@@ -431,33 +416,28 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 }
 
 	//Power: Attracting Baker towards it.
-void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1)
 	{
 		sf::Vector2f attract_direction(0.f, 0.f);
 		int rotateangle = 0;
 
+		motionCheck(0, entities);
+
+
 	//If Roti is Right of Baker (Greater)
 		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
 		{
-			for ( int x = 5 ; x < ENTITIES_MAX; x++ )
-			{
-				if (
-					((entities[0]->eBounds.x + entities[0]->eTextureSize.x >= entities[x]->eBounds.x) &&
-			 		(entities[0]->eBounds.x + entities[0]->eTextureSize.x <= entities[x]->eBounds.x+entities[5]->eTextureSize.x)) &&
-					((entities[0]->eBounds.y + entities[0]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
-			 		(entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
-			   	) entities[0]->canMoveRight = false; 
+			//motionCheck(0, entities);
+			if( !entities[0]->canMoveRight) NULL;// || (entities[0]->cCircle.getPosition().x <= 0+entities[0]->cRadius)) NULL;
 
-				if( !entities[0]->canMoveRight) NULL;
-			
-				else
-				{	
-					attract_direction.x += 150.0;
-					rotateangle = 150.0;
-				}
+			else
+			{	
+				attract_direction.x += 150.0;
+				rotateangle = 150.0;
 			}
+
 		}
 		
 		
@@ -465,63 +445,128 @@ void Game::activateRotiPower(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX
 	//If Roti is Left of Baker (Less)
 		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
 		{
-			for (int x = 5; x < ENTITIES_MAX; x++)
-			{
-				if (
-					((entities[0]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
-					 (entities[0]->eBounds.x >= entities[x]->eBounds.x)) && 
-					((entities[0]->eBounds.y+entities[0]->eTextureSize.y >= entities[x]->eBounds.y+8) && //+8 is give/take value
-					 (entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
-					) entities[0]->canMoveLeft = false;
-	
-				if (!entities[0]->canMoveLeft) NULL;
+			//motionCheck(0, entities);
+			if (!entities[0]->canMoveLeft) NULL;
 			
-				else 
-				{
-					attract_direction.x -= 150.0;
-					rotateangle = -150.0;
-				}
+
+			else 
+			{
+				attract_direction.x -= 150.0;
+				rotateangle = -150.0;
 			}
 		}
 		
-/*
+
 		//If Roti is Above of Baker (Less)
-		if (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y)
+		if (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y
+		   	&& (abs (entities[0]->cCircle.getPosition().y - entities[1]->cCircle.getPosition().y <= 200) )
+		   	&& (abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x <= 200) )
+		   )
 		{
-			for (int x = 5; x < ENTITIES_MAX; x++)
-			{
-				if (
-					((entities[0]->eBounds.x+entities[0]->eTextureSize.x >= entities[x]->eBounds.x+8) &&
-					 (entities[0]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
-					((entities[0]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
-				 	(entities[0]->eBounds.y >= entities[x]->eBounds.y))
-				) entities[0]->canMoveUp = false;
-				
-				if (!entities[0]->canMoveUp || entities[0]->cCircle.getPosition().y = 0) NULL;
+			//motionCheck(0, entities);
+			if (!entities[0]->canMoveUp || entities[0]->cCircle.getPosition().y == 0) NULL;
 			
-				else
-				{
-					attract_direction += 150.0;
-					rotateangle = 150.0; 
-				}
-
+			else
+			{
+				attract_direction.y -= 500.0;
+				rotateangle = 30.0; 
+				//entities[0]->gCurrent = 0;
 			}
-		}
-*/	
-		
 
-		//If Roti is Above Baker (Less) SIMPLER
-		if ( (entities[1]->cCircle.getPosition().y < entities[0]->cCircle.getPosition().y ) && ( abs (entities[1]->cCircle.getPosition().y - entities[0]->cCircle.getPosition().y) <= 50 ) )
-		{
-			attract_direction.y -= 150.0;
-			rotateangle = 30.0;
-			entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		}
 	
-		}
-
+		
 
 		entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
 		entities[0]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
+	}
+}
+
+
+
+void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+	sf::Time applyRepulsion = shotClock.getElapsedTime();
+	sf::Vector2f repulsion(0.f, 0.f);
+	const float pushValue = 1000.f;
+	
+	motionCheck(0, entities);
+	motionCheck(1, entities);
+
+
+//repulsionReadyA
+	if (	sf::Mouse::isButtonPressed(sf::Mouse::Right) 
+		&& currentEntityIndex == 1 
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) >= 100 //Up negation pending
+		&& ( (!entities[0]->canMoveRight && !entities[1]->canMoveLeft) )
+	   ) 
+	{
+		rotiActivated = true;
+		repulsionReadyA = true;
+		entities[currentEntityIndex]->gCurrent = 0;
+		entities[0]->gCurrent = 0;
+
+	}
+				
+
+	else if ( !sf::Mouse::isButtonPressed(sf::Mouse::Right) && repulsionReadyA )
+	{
+		rotiActivated = false;
+		repulsion.x -= pushValue;
+		repulsionReadyA = false;
+		entities[1]->cCircle.move( -repulsion * elapsedTime.asSeconds());
+		entities[0]->cCircle.move( repulsion * elapsedTime.asSeconds());	
+	}
+
+
+//repulsionReadyB
+	if (	sf::Mouse::isButtonPressed(sf::Mouse::Right) 
+		&& currentEntityIndex == 1 
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) >= 100 //Up negation pending
+		&& ( (!entities[0]->canMoveLeft && !entities[1]->canMoveRight) )
+	   ) 
+	{
+		rotiActivated = true;
+		repulsionReadyB = true;
+		repulsion.x = pushValue;
+		entities[currentEntityIndex]->gCurrent = 0;
+		entities[0]->gCurrent = 0;
+	}
+
+	else if ( !sf::Mouse::isButtonPressed(sf::Mouse::Right) && repulsionReadyB)
+	{
+		rotiActivated = false;
+		repulsion.x = pushValue;
+		repulsionReadyB = false;
+		entities[1]->cCircle.move( -repulsion * elapsedTime.asSeconds());
+		entities[0]->cCircle.move( repulsion * elapsedTime.asSeconds());	
+	}
+
+
+//repulsionReadyC
+	if (	sf::Mouse::isButtonPressed(sf::Mouse::Right) 
+		&& currentEntityIndex == 1 
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) < 200
+		&& abs (entities[0]->cCircle.getPosition().x - entities[1]->cCircle.getPosition().x) >= 100 //Up negation pending
+		&& ( (!entities[0]->canMoveUp && !entities[1]->canMoveDown) )
+	   ) 
+	{
+		rotiActivated = true;
+		repulsionReadyC = true;
+		repulsion.x = pushValue;
+		entities[currentEntityIndex]->gCurrent = 0;
+		entities[0]->gCurrent = 0;
+	}
+
+	else if ( !sf::Mouse::isButtonPressed(sf::Mouse::Right) && repulsionReadyC)
+	{
+		rotiActivated = false;
+		repulsion.y = pushValue;
+		repulsionReadyC = false;
+		entities[1]->cCircle.move( -repulsion * elapsedTime.asSeconds());
+		entities[0]->cCircle.move( repulsion * elapsedTime.asSeconds());	
 	}
 }
 
@@ -692,7 +737,7 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	entitySelector(entities);
-	activateRotiPower(elapsedTime, entities);
+	activateRotiPowerAlpha(elapsedTime, entities);
 	sf::Event event;
 	
 	while (mWindow.pollEvent(event))
@@ -722,7 +767,6 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 			case sf::Event::MouseButtonPressed:
 				activateAnpanPower(entities);
-				//activateRotiPower(elapsedTime, entities);
 				break;
 
 
@@ -756,6 +800,51 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		}
 }
 
+void Game::motionCheck( int character, Entity* entities[ENTITIES_MAX])
+{
+	for (int x=4; x < ENTITIES_MAX; x++)
+	{
+
+	//canMoveUp Check
+		if (
+			((entities[character]->eBounds.x+entities[character]->eTextureSize.x >= entities[x]->eBounds.x+8) &&
+			 (entities[character]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x-8)) &&
+			((entities[character]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y) &&
+			 (entities[character]->eBounds.y >= entities[x]->eBounds.y))
+		) entities[character]->canMoveUp = false;
+			
+
+	//canMoveDown Check
+		if (
+			((entities[character]->eBounds.x+entities[character]->eTextureSize.x >= entities[x]->eBounds.x) &&
+			 (entities[character]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
+			((entities[character]->eBounds.y+entities[character]->eTextureSize.x >= entities[x]->eBounds.y) &&
+			 entities[character]->eBounds.y+entities[character]->eTextureSize.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y)
+			) entities[character]->canMoveDown = false;
+		
+
+	//canMoveLeft Check
+			if (
+				((entities[character]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
+				 (entities[character]->eBounds.x >= entities[x]->eBounds.x)) && 
+				((entities[character]->eBounds.y+entities[character]->eTextureSize.y >= entities[x]->eBounds.y+8) && //+8 is give/take value
+				 (entities[character]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
+				) entities[character]->canMoveLeft = false;
+			
+
+
+	//canMoveRight Check
+			if (
+				((entities[character]->eBounds.x + entities[character]->eTextureSize.x >= entities[x]->eBounds.x) &&
+				 (entities[character]->eBounds.x + entities[character]->eTextureSize.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
+				((entities[character]->eBounds.y + entities[character]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
+				 (entities[character]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
+				) entities[character]->canMoveRight = false;
+
+		
+		}	
+
+}
 
 void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
@@ -844,10 +933,8 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				 (entities[currentEntityIndex]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
 				((entities[currentEntityIndex]->eBounds.y+entities[currentEntityIndex]->eTextureSize.x >= entities[x]->eBounds.y) &&
 				 entities[currentEntityIndex]->eBounds.y+entities[currentEntityIndex]->eTextureSize.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y)
-				) 
-				{
-					entities[currentEntityIndex]->canMoveDown = false;
-				}
+				) entities[currentEntityIndex]->canMoveDown = false;
+
 		}
 		
 
@@ -861,7 +948,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 		
 
 
-	if (mIsMovingLeft && !positionLock)
+	if ( mIsMovingLeft && !positionLock)
 	{
 		//bool canMoveLeft = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
@@ -875,7 +962,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				) entities[currentEntityIndex]->canMoveLeft = false;
 		}	
 		if ( !entities[currentEntityIndex]->canMoveLeft || (entities[currentEntityIndex]->cCircle.getPosition().x <= 0+entities[currentEntityIndex]->cRadius)) NULL;
-
+			
 		else 
 		{
 			movement.x -= PlayerSpeed;
@@ -887,7 +974,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	}
 	
 
-	if (mIsMovingRight && !positionLock)
+	if ( mIsMovingRight && !positionLock)
 	{	
 		//bool canMoveRight = true;
 		for (int x=0; x<ENTITIES_MAX; x++)
