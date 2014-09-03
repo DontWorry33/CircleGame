@@ -28,7 +28,15 @@ GAME FEATURES:
 	- If all bread is used, player can choose to restart game
 	- Internal time limit - depends on stage
 	- Pause / Reset
+	- The Box Formulae
+		• Total Charge starts at 3. Increments by 1 for every switch hit.
+		• Inert Charge == current switch hit. 1, 2 or 3.
+
+		Charge Placement Formula: [(Total•1)-Inert]%9, [(Total•2)-Inert]%9, [(Total•3)-Inert]%9
+		Baker Placement Formula: [Current Position+Inert]%9
  
+
+
 GAME BREAD ABILITIES:
 	- The Baker: Basic motion. Reaches 'oven' to complete stage. Interacts with each bread in different ways to solve puzzles and progress. 
 	- Roti: Power of attraction/repulsion. Can push or pull The Baker away from it. Only means of moving upwards in game.
