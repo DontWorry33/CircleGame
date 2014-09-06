@@ -67,17 +67,39 @@ struct PortalBox : public Entity
 		isCircle = false;
 		isCreated = true;
 		gCurrent = 0;
-
-
 	}
+
+	PortalBox(const char* filename)
+	{
+		eTexture.loadFromFile(filename);
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eStartPos.x = 800;
+		eStartPos.y = 400-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+	}
+
+
 };
 
 
 struct Line : public Entity
 {
-	Line()
+	Line(const char* filepath)
 	{
-		eTexture.loadFromFile("../../Stage_Images/Standing_Border.png");
+		eTexture.loadFromFile(filepath);
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
@@ -135,7 +157,7 @@ struct Baker : public Entity
 
 		gCurrent = 0.6;
 
-		weight = 10.f;
+		weight = 0.5;
 	}
 
 

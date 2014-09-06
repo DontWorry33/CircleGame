@@ -8,7 +8,7 @@
 #include "Entity.cpp"
 
 #define PI 3.14159265
-#define ENTITIES_MAX 6
+#define ENTITIES_MAX 9
 #define G_MAX 160.0
 
 class Game
@@ -28,7 +28,7 @@ class Game
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
 		void Arrow(Entity* entities[ENTITIES_MAX]);
 		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); 
-		bool checkHitting(Entity* entities[ENTITIES_MAX]);
+		int checkHitting(Entity* entities[ENTITIES_MAX], int airborneEntity);
 		
 		void activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
 		void activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]);
@@ -117,15 +117,25 @@ class Game
 		bool mResetGame;
 
 		bool mDrawMetre;
+		bool mDrawNull;
 
+
+		sf::Texture mNullSignTexture;
+		sf::Sprite mNullSign;
 
 		//stores position of baker so we can manipulate  positionLock.
 		sf::Vector2f traj_pos;
 
+		sf::Clock nullSignTime;
+
+
+		bool negateGravity;
+
+
 };
 
 
-const float Game::PlayerSpeed = 150.f;
+const float Game::PlayerSpeed = 50.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
@@ -134,7 +144,7 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1)	
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime()
 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -163,6 +173,8 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 	mPowerGaugeMetre.setTexture(mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
 
+	mNullSignTexture.loadFromFile("../../Stage_Images/Stage_NullSign.png");
+	mNullSign.setTexture(mNullSignTexture);
 
 	//current entity index is the bread which is clicked
 	currentEntityIndex = 0;
@@ -188,6 +200,10 @@ Game::Game() : mBackgroundTexture(), mBackground(),
 
 	//Only draws meter when we hit space
 	mDrawMetre = false;
+
+	mDrawNull = false;
+
+	negateGravity = false;
 }
 
 
@@ -210,7 +226,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
-
+			//std::cout << entities[2]->cCircle.getPosition().x << ", " << entities[2]->cCircle.getPosition().y << std::endl;
 			timeSinceLastUpdate -= TimePerFrame;
 
 			//if mouse lock is not active, get the curr pos, same with position
@@ -246,7 +262,12 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 				}
 			}
 
-			for (int x = 0; x<ENTITIES_MAX; x++) { if (entities[x]->isCircle) checkGravity(entities, x); } //D: Loops per character. Separating gravity effects for each
+			for (int x = 0; x<ENTITIES_MAX; x++) 
+			{ 
+				if (entities[x]->isCircle && !negateGravity) checkGravity(entities, x); 
+
+			} //D: Loops per character. Separating gravity effects for each
+
 
 	//---------------------GRAVITY
 				sf::Time updateGravity = gravityClock.getElapsedTime();
@@ -262,8 +283,8 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 				{
 					for (int x=0; x<ENTITIES_MAX; x++)	
 					{
-						if (entities[x]->gCurrent < G_MAX && !rotiActivated) entities[x]->gCurrent+=g;
-						else if (rotiActivated && ( x == 0 || x == 1)) continue; 
+						if (entities[x]->gCurrent < G_MAX && !negateGravity) entities[x]->gCurrent+=g;
+						else if (negateGravity && ( x == 0 || x == 1)) continue; 
 						else entities[x]->gCurrent = G_MAX;
 					}
 					updateGravity = gravityClock.restart();
@@ -271,7 +292,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 	//-----------------
 				//std::cout << "PM : " << powerMetre << std::endl;
 			
-				activateRotiPowerBeta(elapsedTime, entities);
+				//activateRotiPowerBeta(elapsedTime, entities);
 
 	//--------------TRAJECTORY PARAMETERS
 				if ( (mIsLaunched)) 
@@ -311,7 +332,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
 					
 						entities[shotChooser]->gCurrent = 0;	
-						entities[shotChooser]->isCreated = true;
+						entities[shotChooser	]->isCreated = true;
 					}
 
 				//Bottom Border Collision Check
@@ -325,7 +346,7 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 						entities[shotChooser]->gCurrent = 0;	
 					}
 					
-					if (checkHitting(entities))
+					if (checkHitting(entities,shotChooser))
 					{
 						mIsLaunched = false;
 						mDrawMetre = false;
@@ -343,6 +364,26 @@ int Game::run(Entity* entities[ENTITIES_MAX])
 					}
 
 					if (isTouchingSurface(entities, 5, shotChooser))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						entities[shotChooser]->isCreated = true;
+					}	
+
+
+					if (isTouchingSurface(entities, 6, shotChooser))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						entities[shotChooser]->isCreated = true;
+					}	
+					if (isTouchingSurface(entities, 7, shotChooser))
+					{
+						mIsLaunched = false;
+						mDrawMetre = false;
+						entities[shotChooser]->isCreated = true;
+					}	
+					if (isTouchingSurface(entities, 8, shotChooser))
 					{
 						mIsLaunched = false;
 						mDrawMetre = false;
@@ -414,7 +455,7 @@ void Game::entitySelector(Entity* entities[ENTITIES_MAX])
 
 
 }
-
+/*
 	//Power: Attracting Baker towards it.
 void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
@@ -438,10 +479,7 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 				rotateangle = 150.0;
 			}
 
-		}
-		
-		
-
+		}		
 	//If Roti is Left of Baker (Less)
 		if (entities[1]->cCircle.getPosition().x < entities[0]->cCircle.getPosition().x)
 		{
@@ -468,7 +506,7 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 			
 			else
 			{
-				attract_direction.y -= 500.0;
+				attract_direction.y -= 800.0;
 				rotateangle = 30.0; 
 				//entities[0]->gCurrent = 0;
 			}
@@ -482,8 +520,89 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 	}
 }
 
+*/
+void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1)
+	{
+		sf::Vector2f attract_direction(150.0,0.f);
+		int rotateangle = 150;
 
 
+		motionCheck(0,entities);
+		
+		//If Roti is Right of Baker (Greater)
+		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
+		{
+			if (!entities[0]->canMoveRight)
+			{
+				attract_direction.x = 0;
+			}
+		}
+
+		else
+		{
+			if (!entities[0]->canMoveLeft)
+			{
+				attract_direction.x = 0;
+			}
+
+			attract_direction.x = -attract_direction.x;
+			rotateangle = -rotateangle;
+		}
+		int bakerHitting = checkHitting(entities,0);
+		int rotiHitting = checkHitting(entities,1);
+		if (bakerHitting > 1 && rotiHitting > 1 && bakerHitting!=rotiHitting) //checks if both touching a surface, now we need to check if touching opposite sides && saftey check for length of surface.
+		{
+			negateGravity = true;
+			if (entities[1]->cCircle.getPosition().y <= entities[0]->cCircle.getPosition().y)
+			{
+				//motionCheck(0, entities);
+				attract_direction.y = -150.f;
+				//entities[0]->gCurrent = 0;
+			}
+
+		}
+		else negateGravity = false;
+	
+
+
+		entities[0]->cCircle.move(attract_direction * elapsedTime.asSeconds());
+		entities[0]->cCircle.rotate(rotateangle*elapsedTime.asSeconds());
+
+	}
+
+
+}
+
+void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
+{
+	negateGravity = false;
+	int bakerHitting = checkHitting(entities,0);
+	int rotiHitting = checkHitting(entities,1);
+	std::cout << "baker: " << bakerHitting << ", " << "roti: " << rotiHitting << std::endl;
+
+	//const float pushValue = 1000.f;
+
+	sf::Vector2f bakerRepulsion(5000.f,0.f);
+	sf::Vector2f rotiRepulsion(1000.f,0.f);
+	sf::Time applyRepulsion = shotClock.getElapsedTime();
+
+	if (bakerHitting == 2 && rotiHitting == 3)
+	{
+		bakerRepulsion = -bakerRepulsion;
+	}
+
+	if (rotiHitting == 2 && bakerHitting == 3)
+	{
+		rotiRepulsion = -rotiRepulsion;
+	}
+
+	entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
+	entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());	
+} 	
+/*
 void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
 	sf::Time applyRepulsion = shotClock.getElapsedTime();
@@ -570,26 +689,33 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 	}
 }
 
-
+*/
 	//Power: Swapping places with Baker
 void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX])
 {
 
-	//Need to check if able to fit first, refer to bugs.txt
-
-	//currentEntityIndex 2 = Boule. Check main.cpp for indicies.
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 2)
-	{
-		std::cout << "activating SWAP" << std::endl;	
+	{	
+		//std::cout << "activating SWAP" << std::endl;	
 		sf::Vector2f temp_pos = entities[0]->cCircle.getPosition();
-		entities[0]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
-		entities[currentEntityIndex]->cCircle.setPosition(temp_pos);
-		entities[currentEntityIndex]->isCurrentEntity = false;
-		currentEntityIndex = 0;
-		entities[0]->isCurrentEntity = true;
-
+		entities[0]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,entities[currentEntityIndex]->cCircle.getPosition().y-42 );
+		entities[0]->eBounds.x = entities[0]->cCircle.getPosition().x - entities[0]->cRadius;
+		entities[0]->eBounds.y = entities[0]->cCircle.getPosition().y - entities[0]->cRadius;
+		motionCheck(0,entities);
+		if (!entities[0]->canMoveRight || !entities[0]->canMoveLeft)
+		{
+			//std::cout << "could not swap " << std::endl;
+			entities[0]->cCircle.setPosition(temp_pos);
+			mDrawNull = true;
+		}
+		else 
+		{
+			entities[currentEntityIndex]->cCircle.setPosition(temp_pos);
+			entities[currentEntityIndex]->isCurrentEntity = false;
+			currentEntityIndex = 0;
+			entities[0]->isCurrentEntity = true;
+		}
 	}
-
 }
 
 
@@ -616,8 +742,6 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 			mDrawMetre=false;
 			if (!mIsLaunched) powerMetre=0;
 		}
-
-
 }
 
 //stage id is index of entities which you need to apply the gravity check on
@@ -630,7 +754,7 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x
 			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x) &&
 			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x)) &&
 			((entities[x]->eBounds.y+entities[x]->eTextureSize.y >= entities[stage_id]->eBounds.y) &&
-			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+25)
+			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+10)
 			)
 			{
 				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius);
@@ -640,7 +764,6 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x
 	}
 	
 	return false;
-
 }
 
 void Game::checkBounds(Entity* entities[ENTITIES_MAX])
@@ -653,9 +776,6 @@ void Game::checkBounds(Entity* entities[ENTITIES_MAX])
 			if (entities[x]->cCircle.getPosition().y >= 785-entities[x]->cRadius) entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x,785-entities[x]->cRadius);
 		}
 	}
-
-
-
 }
 
 
@@ -669,6 +789,9 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 		if ( (entities[character]->cCircle.getPosition().y >=  785-entities[character]->cRadius) )  NULL;
 		else if (isTouchingSurface(entities,4, character)) NULL; //4 is portal box
 		else if (isTouchingSurface(entities,5, character)) NULL; //5 is line
+		else if (isTouchingSurface(entities,6, character)) NULL; //5 is line
+		else if (isTouchingSurface(entities,7, character)) NULL; //5 is line
+		else if (isTouchingSurface(entities,8, character)) NULL; //5 is line
 		else 
 		{
 			isOnGround = false;
@@ -677,11 +800,14 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], int character)
 	}
 	if (isOnGround) entities[character]->gCurrent = g;
 	checkBounds(entities);
-
 }
 
 
-bool Game::checkHitting(Entity* entities[ENTITIES_MAX])
+//left side return = 2;
+//right side return = 3;
+//ambiguous return = 1;
+//not touching return = 0;
+int Game::checkHitting(Entity* entities[ENTITIES_MAX], int airborneEntity)
 {
 	
 	for (int x=0; x<ENTITIES_MAX; x++)
@@ -690,31 +816,35 @@ bool Game::checkHitting(Entity* entities[ENTITIES_MAX])
 		{
 			if (				
 				(
-				((entities[shotChooser]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
-				 (entities[shotChooser]->eBounds.x >= entities[x]->eBounds.x)) && 
-				((entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= entities[x]->eBounds.y) && //+8 is give/take value
-				 (entities[shotChooser]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y))
+				((entities[airborneEntity]->eBounds.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x) &&
+				 (entities[airborneEntity]->eBounds.x >= entities[x]->eBounds.x)) && 
+				((entities[airborneEntity]->eBounds.y+entities[airborneEntity]->eTextureSize.y >= entities[x]->eBounds.y) && //+8 is give/take value
+				 (entities[airborneEntity]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y))
+				))
+			{
+				return 3;
+			}
+
+				
+
+			if	(
+				((entities[airborneEntity]->eBounds.x + entities[airborneEntity]->eTextureSize.x >= entities[x]->eBounds.x) &&
+				 (entities[airborneEntity]->eBounds.x + entities[airborneEntity]->eTextureSize.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
+				((entities[airborneEntity]->eBounds.y + entities[airborneEntity]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
+				 (entities[airborneEntity]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
 				)
 
-				||
-
-				(
-				((entities[shotChooser]->eBounds.x + entities[shotChooser]->eTextureSize.x >= entities[x]->eBounds.x) &&
-				 (entities[shotChooser]->eBounds.x + entities[shotChooser]->eTextureSize.x <= entities[x]->eBounds.x+entities[x]->eTextureSize.x)) &&
-				((entities[shotChooser]->eBounds.y + entities[shotChooser]->eTextureSize.y >= entities[x]->eBounds.y+8) &&
-				 (entities[shotChooser]->eBounds.y <= entities[x]->eBounds.y+entities[x]->eTextureSize.y-8))
-				)
-
-			   )
+			   
 
 				{
-					std::cout << x << "  IS TOUCHING STAGE PART" << std::endl;
-					return true;
+					return 2;
 				}
 		}
 	}
-	return false;
+	return 0;
 }
+
+
 
 void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
@@ -769,6 +899,9 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				activateAnpanPower(entities);
 				break;
 
+			case sf::Event::MouseButtonReleased:
+    			if (event.mouseButton.button == sf::Mouse::Right) activateRotiPowerBeta(elapsedTime,entities);
+				break;
 
 			case sf::Event::Closed:
 				mWindow.close();
@@ -914,7 +1047,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 				) entities[currentEntityIndex]->canMoveUp = false;
 
 		}
-		if ( !entities[currentEntityIndex]->canMoveUp || !rotiActivated/*entities[currentEntityIndex]->cCircle.getPosition().y >=0*/ ) NULL; //top of screen
+		if ( !entities[currentEntityIndex]->canMoveUp || !negateGravity /*entities[currentEntityIndex]->cCircle.getPosition().y >=0*/ ) NULL; //top of screen
 		else 
 		{
 			movement.y -= PlayerSpeed;
@@ -999,7 +1132,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 
 	if (mTeleportation)
 	{
-		entities[currentEntityIndex]->cCircle.setPosition(0,785-entities[currentEntityIndex]->cRadius);
+		entities[2]->cCircle.setPosition(340,100);
 	}
 	
 	
@@ -1072,6 +1205,27 @@ void Game::render(Entity* entities[ENTITIES_MAX])
 		mWindow.draw(mPowerGaugeShell);
 		mWindow.draw(mPowerGaugeMetre);
 	}
+	for (int x=7; x<ENTITIES_MAX; x++) mWindow.draw(entities[x]->eSprite);
+
+
+	sf::Time removeNullSign = nullSignTime.getElapsedTime();
+	if (!mDrawNull) removeNullSign = nullSignTime.restart();
+
+	//if the current time is less than our update time
+	if (removeNullSign.asSeconds() <= 2.0)
+	{
+		//keep getting the time until it is greater
+		removeNullSign = nullSignTime.getElapsedTime();
+		//std::cout << removeNullSign.asSeconds() << std::endl;
+	}
+	else 
+	{
+		mDrawNull = false;
+		removeNullSign = nullSignTime.restart();
+	}
+
+	if (mDrawNull) mWindow.draw(mNullSign);
+
 	mWindow.draw(mArrow);
 	mWindow.display();
 }
