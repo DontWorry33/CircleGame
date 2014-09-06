@@ -135,7 +135,7 @@ class Game
 };
 
 
-const float Game::PlayerSpeed = 50.f;
+const float Game::PlayerSpeed = 150.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
