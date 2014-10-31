@@ -36,26 +36,66 @@ struct Entity
 	bool canMoveUp;
 	bool canMoveDown;
 	
+	bool activatePlatform;
+	bool nextStage;
+
+	int maxHeight;
+
 	float gCurrent;
+
+	int platformToActivate;
 	
 	virtual void create(){};
 	virtual void power(){};
+	//virtual void swapTexture(sf::Texture){};
 
 
 };
 
 
-struct PortalBox : public Entity
+struct Switch : public Entity
 {
-	PortalBox()
+	Switch(int startPosX, int startPosY, int platformNumber)
 	{
-		eTexture.loadFromFile("../../Stage_Images/Portal_Box.png");
+		eTexture.loadFromFile("../../Stage_Images/Switch_Up.png");
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 800;
-		eStartPos.y = 400-eTextureSize.y/2;
+		eTexture2.loadFromFile("../../Stage_Images/Switch_Down.png");
+
+		eStartPos.x = startPosX;
+		eStartPos.y = startPosY-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+
+		platformToActivate = platformNumber;
+
+	}
+
+};
+
+
+
+struct Oven : public Entity
+{
+	Oven(int startPosX, int startPosY)
+	{
+		eTexture.loadFromFile("../../Stage_Images/Oven.png");
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eStartPos.x = startPosX;
+		eStartPos.y = startPosY-eTextureSize.y/2;
 
 		eSprite.setPosition(eStartPos);
 
@@ -69,15 +109,21 @@ struct PortalBox : public Entity
 		gCurrent = 0;
 	}
 
-	PortalBox(const char* filename)
+
+};
+
+struct Platform : public Entity
+{
+
+	Platform(const char* filename)
 	{
 		eTexture.loadFromFile(filename);
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 800;
-		eStartPos.y = 400-eTextureSize.y/2;
+		eStartPos.x = 700;
+		eStartPos.y = 750;
 
 		eSprite.setPosition(eStartPos);
 
@@ -89,6 +135,37 @@ struct PortalBox : public Entity
 		isCircle = false;
 		isCreated = true;
 		gCurrent = 0;
+
+		activatePlatform = false;
+		maxHeight=300;
+	}
+
+
+
+	Platform(const char* filename, int startPosX, int startPosY, int maxHeight)
+	{
+		eTexture.loadFromFile(filename);
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eStartPos.x = startPosX;
+		eStartPos.y = startPosY-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+
+		activatePlatform = false;
+
+		this->maxHeight = maxHeight;
 	}
 
 
@@ -104,7 +181,7 @@ struct Line : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 1000;
+		eStartPos.x = 900;
 		eStartPos.y = 800-eTextureSize.y/2;
 
 		eSprite.setPosition(eStartPos);
@@ -117,16 +194,63 @@ struct Line : public Entity
 		isCircle = false;
 		isCreated = true;
 		gCurrent = 0;
-
-
+		nextStage = false;
 	}
+
+	Line(const char* filepath, int start_x, int start_y)
+	{
+		eTexture.loadFromFile(filepath);
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eStartPos.x = start_x;
+		eStartPos.y = start_y-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+		nextStage = false;
+	}
+
+
+	Line(const char* filepath, int start_x, int start_y, bool oven)
+	{
+		eTexture.loadFromFile(filepath);
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eStartPos.x = start_x;
+		eStartPos.y = start_y-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+
+		nextStage = oven;
+	}
+
 };
 
 struct Baker : public Entity
 {
 	Baker()
 	{
-
 		eTexture.loadFromFile("../../Character_Images/TheBaker.png");
 
 		eTextureSize = eTexture.getSize();
@@ -165,8 +289,8 @@ struct Baker : public Entity
 
 struct Roti : public Entity
 {
-
-	Roti(){
+	Roti()
+	{
 		isCreated = false;
 		isCurrentEntity = false;
 		isCircle = true;
@@ -176,7 +300,6 @@ struct Roti : public Entity
 		canMoveDown = true;
 		canMoveRight = true;
 		canMoveLeft = true;
-
 
 		//BreadSelector Initialisation
 		eTexture2.loadFromFile("../../Stage_Images/Roti_Selected.png");
