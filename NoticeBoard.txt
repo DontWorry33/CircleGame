@@ -1,0 +1,52 @@
+THIS IS THE NOTICE BOARD. POST WITH DATE AND NAME OF POSTER. DO NOT DELETE EARLIER POSTS. SCROLL TO BOTTOM TO FIND THE LATEST POST.
+
+DATE - month/day/year
+
+
+07/26/14 (hussain):
+	-	Reset kind of implemented. Not as I like it but it does the job for now. Press 'r' to reset game at any time.
+	-	Anpan power basis works. Select anpan after shooting him and right click to swap places.
+		- Also changed it so that when you right click, Baker is selected instead of Anpan after the swap
+
+	- 	Added positionLock. This means we can not move baker until the trajectory is out of the air. This is not ideal but it will have to do for now.
+	-	Powerbar only shows after you start pressing spacebar and stops showing when the thing you shot hits anything.
+
+
+11/02/14 (Dedie)
+Complete revamp of Repository.
+1. Character_Images:
+	- Removed obsolete files
+2. Coding
+	- Got rid of folder “newcode”
+	- All code files now directly accessible within “Coding”
+	- Removed obsolete files
+3. Noticeboard
+	- New text file for logging any changes, as well as the intent for each change made.
+4. Stage_Images
+	- Created specific files for each Stage:
+		• Stage1
+		• Stage2
+		• Stage3
+		• Stage4
+		• Stage5 (still empty)
+		• Stage6 (still empty)
+
+	- Created file for images that appear in all stages. Those images are:
+		• Anpan_Selected.png
+		• Boule_Selected.png
+		• Portal_Anpan.png
+		• Portal_Baker.png
+		• Portal_Roti.png
+		• Roti_Selected.png
+		• Stage_NullSign.png
+		• Stage_Oven_Default.png
+		• Stage_Oven_Small.png
+	- Created file for mapping of stages. Allows for unambiguous placement of all 
+stage elements.
+	- Created StageNotes.rtf, tells which switches activate which switches in the stage.
+5. Text_Files
+	- Bound_ReadMe.txt, talks about the premise of our game, “Bound”
+	- Game_Bugs.txt, is where to jot down any addressable bugs. Also date when bugs were first encountered. (If one was unable to fix them in the same day the bug was discovered.
+	- Todo_List.txt, still not sure if this is necessary. Remains for now.
+6. Miscellaneous
+	- Switches have been uniformly created. All stages have their specific switches within their “Stage” files.
