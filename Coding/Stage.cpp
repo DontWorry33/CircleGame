@@ -50,17 +50,17 @@ struct Stage1 : public Stage
 		//Line blue("../../Stage_Images/Blue_Line_Test.png",375,260);
 		//Line green("../../Stage_Images/Green_Line_Test.png",450,200);
 		lines[0] = new Line (tex_filename);
-		lines[1] = new Line ("../../Stage_Images/Red_Line_Test.png",285,200);
-		lines[2] = new Line ("../../Stage_Images/Blue_Line_Test.png",375,260);
-		lines[3] = new Line ("../../Stage_Images/Green_Line_Test.png",450,200);
-		lines[4] = new Line ("../../Stage_Images/Oven.png", 1000, 780, true);
+		lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",285,200);
+		lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",375,260);
+		lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",450,200);
+		lines[4] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
 
 
 		switches[0] = new Switch(300,780,0);
 
 		//Platform p1("../../Stage_Images/ActivatedPlatform.png");
 		//Platform oven("../../Stage_Images/Oven.png",400,750,300);
-		platforms[0] = new Platform ("../../Stage_Images/ActivatedPlatform.png");
+		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png");
 	}
 
 
@@ -81,13 +81,13 @@ struct Stage2 : public Stage
 		backgroundTexture.loadFromFile(bkg_filename);
 		background.setTexture(backgroundTexture);
 
-		lines[0] = new Line("../../Stage_Images/Red_Line_Test.png",800,650);
-		lines[1] = new Line("../../Stage_Images/Blue_Line_Test.png",550,200);
-		lines[2] = new Line("../../Stage_Images/Green_Line_Test.png",700,400);
-		lines[3] = new Line ("../../Stage_Images/Oven.png", 300, 780, true);
+		lines[0] = new Line("../Stage_Images/Red_Line_Test.png",800,650);
+		lines[1] = new Line("../Stage_Images/Blue_Line_Test.png",550,200);
+		lines[2] = new Line("../Stage_Images/Green_Line_Test.png",700,400);
+		lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 300, 780, true);
 
 
-		platforms[0] = new Platform ("../../Stage_Images/ActivatedPlatform.png");
+		platforms[0] = new Platform ("../Stage_Images/quad3HorPlatform1.png");
 
 	}
 

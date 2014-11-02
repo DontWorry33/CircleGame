@@ -57,12 +57,12 @@ struct Switch : public Entity
 {
 	Switch(int startPosX, int startPosY, int platformNumber)
 	{
-		eTexture.loadFromFile("../../Stage_Images/Switch_Up.png");
+		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eTexture2.loadFromFile("../../Stage_Images/Switch_Down.png");
+		eTexture2.loadFromFile("../Stage_Images/Stage1/Switch_Hit.png");
 
 		eStartPos.x = startPosX;
 		eStartPos.y = startPosY-eTextureSize.y/2;
@@ -89,7 +89,7 @@ struct Oven : public Entity
 {
 	Oven(int startPosX, int startPosY)
 	{
-		eTexture.loadFromFile("../../Stage_Images/Oven.png");
+		eTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png");
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
@@ -251,7 +251,7 @@ struct Baker : public Entity
 {
 	Baker()
 	{
-		eTexture.loadFromFile("../../Character_Images/TheBaker.png");
+		eTexture.loadFromFile("../Character_Images/TheBaker.png");
 
 		eTextureSize = eTexture.getSize();
 		cRadius=eTextureSize.x/2;
@@ -302,7 +302,7 @@ struct Roti : public Entity
 		canMoveLeft = true;
 
 		//BreadSelector Initialisation
-		eTexture2.loadFromFile("../../Stage_Images/Roti_Selected.png");
+		eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Roti_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
 		eSprite2.setTexture(eTexture2);
 		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
@@ -317,7 +317,7 @@ struct Roti : public Entity
 	{
 	
 
-		eTexture.loadFromFile("../../Character_Images/Roti.png");		
+		eTexture.loadFromFile("../Character_Images/Roti.png");		
 
 		eTextureSize = eTexture.getSize();
 		cRadius = eTextureSize.x/2;
@@ -360,7 +360,7 @@ struct Anpan : public Entity
 
 		
 		//BreadSelector Initialisation
-		eTexture2.loadFromFile("../../Stage_Images/Anpan_Selected.png");
+		eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Anpan_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
 		eSprite2.setTexture(eTexture2);
 		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
@@ -374,7 +374,7 @@ struct Anpan : public Entity
 	void create()
 	{
 
-		eTexture.loadFromFile("../../Character_Images/Anpan.png");
+		eTexture.loadFromFile("../Character_Images/Anpan.png");
 
 		eTextureSize = eTexture.getSize();
 		cRadius = eTextureSize.x/2;
@@ -420,7 +420,7 @@ struct Boule : public Entity
 
 		
 		//BreadSelector Initialisation
-		eTexture2.loadFromFile("../../Stage_Images/Boule_Selected.png");
+		eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Boule_Selected.png");
 		eTextureSize2 = eTexture2.getSize();
 		eSprite2.setTexture(eTexture2);
 		eSprite2.setOrigin(eTextureSize2.x/2,eTextureSize2.y/2);
@@ -436,7 +436,7 @@ struct Boule : public Entity
 	void create()
 	{
 
-		eTexture.loadFromFile("../../Character_Images/Boule.png");
+		eTexture.loadFromFile("../Character_Images/Boule.png");
 
 		eTextureSize = eTexture.getSize();
 		cRadius=eTextureSize.x/2;

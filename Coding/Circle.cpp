@@ -167,18 +167,18 @@ Game::Game() :
 	mStatisticsText.setColor(sf::Color::White);
 	
 	//set arrow stuff
-	mArrowTexture.loadFromFile("../../Character_Images/Arrowhead.png");
+	mArrowTexture.loadFromFile("../Character_Images/Arrowhead.png");
 	mArrow.setTexture(mArrowTexture);
 	mArrow.setPosition(490+45,600-55);
 	mArrow.setOrigin(45,55);
 
 	//set powergauge stuff
-	mPowerGaugeMetreTexture.loadFromFile("../../Character_Images/PowerGauge_Metre.png");
-	mPowerGaugeShellTexture.loadFromFile("../../Character_Images/PowerGauge_Shell.png");
+	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre.png");
+	mPowerGaugeShellTexture.loadFromFile("../Character_Images/PowerGauge_Shell.png");
 	mPowerGaugeMetre.setTexture(mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
 
-	mNullSignTexture.loadFromFile("../../Stage_Images/Stage_NullSign.png");
+	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
 
 	//current entity index is the bread which is clicked
