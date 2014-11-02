@@ -1,7 +1,0 @@
-07/26/14 (hussain):
-	-	Reset kind of implemented. Not as I like it but it does the job for now. Press 'r' to reset game at any time.
-	-	Anpan power basis works. Select anpan after shooting him and right click to swap places.
-		- Also changed it so that when you right click, Baker is selected instead of Anpan after the swap
-
-	- 	Added positionLock. This means we can not move baker until the trajectory is out of the air. This is not ideal but it will have to do for now.
-	-	Powerbar only shows after you start pressing spacebar and stops showing when the thing you shot hits anything.
