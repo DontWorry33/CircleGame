@@ -26,7 +26,7 @@ int main()
 
 		Stage1 stage1(
 						"../Stage_Images/Stage1/IntroStage.png",
-				  	 	"../Stage_Images/quad4Ver1.png"
+				  	 	"../Stage_Images/Stage1/quad4Ver1.png"
 					 );
 		Stage2 stage2(
 					"../Stage_Images/Stage2/StageTwo.png");
