@@ -82,13 +82,20 @@ struct Stage2 : public Stage
 		backgroundTexture.loadFromFile(bkg_filename);
 		background.setTexture(backgroundTexture);
 
-		lines[0] = new Line("../Stage_Images/Red_Line_Test.png",800,650);
-		lines[1] = new Line("../Stage_Images/Blue_Line_Test.png",550,200);
-		lines[2] = new Line("../Stage_Images/Green_Line_Test.png",700,400);
+		//lines[0] = new Line("../Stage_Images/Red_Line_Test.png",800,650);
+		//lines[1] = new Line("../Stage_Images/Blue_Line_Test.png",550,200);
+		//lines[2] = new Line("../Stage_Images/Green_Line_Test.png",700,400);
 		lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 300, 780, true);
+        lines[0] = new Line("../Stage_Images/Stage2/quad1Hor1.png", 218, 400);
+        lines[1] = new Line("../Stage_Images/Stage2/quad2Hor1.png", 861, 394);
+        lines[2] = new Line("../Stage_Images/Stage2/quad2Hor2.png", 784,179);
+        lines[4] = new Line("../Stage_Images/Stage2/quad3Hor1.png", 600, 400);
+        
 
 
-		platforms[0] = new Platform ("../Stage_Images/quad3HorPlatform1.png");
+
+		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png");
+        //platforms[1] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png");
 
 	}
 
