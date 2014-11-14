@@ -77,7 +77,8 @@ struct Stage2 : public Stage
 		platformCount = 1;
 		platforms = new Entity* [platformCount];
 
-
+		switchCount = 0;
+		
 		backgroundTexture.loadFromFile(bkg_filename);
 		background.setTexture(backgroundTexture);
 

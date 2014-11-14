@@ -50,3 +50,10 @@ stage elements.
 	- Todo_List.txt, still not sure if this is necessary. Remains for now.
 6. Miscellaneous
 	- Switches have been uniformly created. All stages have their specific switches within their “Stage” files.
+
+
+11/14/14 (Hussain)
+BUG FIXES!
+1) Fixed bug where sometimes the bread wouldn't shoot
+2) Fixed bug where bread would bounce off surfaces
+3) Fixed bug where swapping stages would crash

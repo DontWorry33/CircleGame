@@ -221,7 +221,7 @@ struct Line : public Entity
 	}
 
 
-	Line(const char* filepath, int start_x, int start_y, bool oven)
+	Line(const char* filepath, int start_x, int start_y, bool t)
 	{
 		eTexture.loadFromFile(filepath);
 		eTextureSize = eTexture.getSize();
@@ -242,7 +242,7 @@ struct Line : public Entity
 		isCreated = true;
 		gCurrent = 0;
 
-		nextStage = oven;
+		nextStage = t;
 	}
 
 };
@@ -295,7 +295,7 @@ struct Roti : public Entity
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
-		
+
 		canMoveUp = true;
 		canMoveDown = true;
 		canMoveRight = true;
@@ -326,8 +326,8 @@ struct Roti : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x = 900;
-		eStartPos.y = 600;
+		eStartPos.x=-100;
+		eStartPos.y=-100;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -353,6 +353,8 @@ struct Anpan : public Entity
 		isCircle = true;
 		isClickable = true;
 		
+		
+
 		canMoveUp = true;
 		canMoveDown = true;
 		canMoveRight = true;
@@ -383,8 +385,8 @@ struct Anpan : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x = 1000;
-		eStartPos.y = 600;
+		eStartPos.x=-100;
+		eStartPos.y=-100;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -412,6 +414,9 @@ struct Boule : public Entity
 		isCurrentEntity = false;
 		isCircle = true;
 		isClickable = true;
+
+		
+
 		
 		canMoveUp = true;
 		canMoveDown = true;
@@ -445,8 +450,8 @@ struct Boule : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=1100;
-		eStartPos.y=400;
+		eStartPos.x=-100;
+		eStartPos.y=-100;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
