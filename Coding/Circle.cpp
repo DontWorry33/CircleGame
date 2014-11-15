@@ -158,7 +158,9 @@ Game::Game() :
 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
-
+    mWindow.setFramerateLimit(60);
+    
+    
 	//set all statistics
 	mStatisticsNumFrames = 0;
 	mFont.loadFromFile("Sansation.ttf");
