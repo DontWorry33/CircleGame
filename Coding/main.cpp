@@ -1,6 +1,7 @@
 #include <iostream>
-#include "Circle.cpp"
+#include <cmath>
 #include "Entity.cpp"
+#include "Bound.cpp"
 #include "Stage.cpp"
 
 using namespace std;
@@ -19,8 +20,9 @@ int main()
 	entities[1] = roti;
 	entities[2] = anpan;
 	entities[3] = boule;
-	//cout << sizeof(entities) << endl;
-
+	cout << sizeof(entities) << endl;
+	//Baker b2;
+	//cout << sizeof(b2) << endl;
 	Stage1* stage1 = new Stage1(
 					"../Stage_Images/Stage1/IntroStage.png",
 			  	 	"../Stage_Images/Stage1/quad4Ver1.png"

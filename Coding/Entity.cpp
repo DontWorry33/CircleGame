@@ -4,6 +4,7 @@
 
 #ifndef ENTITY_H
 #define ENTITY_H
+#define PI 3.14159265
 
 
 struct Entity
@@ -44,6 +45,11 @@ struct Entity
 	float gCurrent;
 
 	int platformToActivate;
+
+	int* topCircle;
+	int* rightCircle;
+	int* bottomCircle;
+	int* leftCircle;
 	
 	virtual void create(){};
 	virtual void power(){};
@@ -278,10 +284,26 @@ struct Baker : public Entity
 		canMoveRight = true;
 		canMoveLeft = true;
 
-
 		gCurrent = 0.6;
 
 		weight = 0.5;
+
+		topCircle = new int[2];
+		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
+		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
+
+		rightCircle = new int[2];
+		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
+		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
+
+		bottomCircle = new int[2];
+		bottomCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/2));		
+		bottomCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/2));
+
+		leftCircle = new int[2];
+		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
+		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
+
 	}
 
 
@@ -311,6 +333,12 @@ struct Roti : public Entity
 		eStartPos2.y = 70-eTextureSize2.y/2;
 
 		eSprite2.setPosition(eStartPos2);
+		topCircle = new int[2];
+		rightCircle = new int[2];
+		bottomCircle = new int[2];
+		leftCircle = new int[2];
+
+
 		//---------------------------- 
 	}
 	void create() //blank constructor, same for other 2
@@ -339,6 +367,18 @@ struct Roti : public Entity
 
 		weight = 1.f;
 
+
+		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
+		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
+
+		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
+		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
+
+		bottomCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/2));		
+		bottomCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/2));
+
+		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
+		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
 	}
 
 };
@@ -371,6 +411,10 @@ struct Anpan : public Entity
 		eStartPos2.y = 70-eTextureSize2.y/2;
 
 		eSprite2.setPosition(eStartPos2);
+		topCircle = new int[2];
+		rightCircle = new int[2];
+		bottomCircle = new int[2];
+		leftCircle = new int[2];
 		//----------------------------
 	}
 	void create()
@@ -396,6 +440,19 @@ struct Anpan : public Entity
 		//isCreated = true;
 		gCurrent = 0.6;
 		weight =0.5;
+
+
+		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
+		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
+
+		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
+		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
+
+		bottomCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/2));		
+		bottomCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/2));
+
+		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
+		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
 	}
 	void power()
 	{
@@ -435,6 +492,10 @@ struct Boule : public Entity
 
 		eSprite2.setPosition(eStartPos2);
 		//----------------------------
+		topCircle = new int[2];
+		rightCircle = new int[2];
+		bottomCircle = new int[2];
+		leftCircle = new int[2];
 	}
 
 
@@ -462,6 +523,18 @@ struct Boule : public Entity
 		gCurrent = 0.6;
 
 		weight = 0.4;
+
+		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
+		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
+
+		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
+		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
+
+		bottomCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/2));		
+		bottomCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/2));
+
+		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
+		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
 	}
 };
 
