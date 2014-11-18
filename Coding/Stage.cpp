@@ -50,7 +50,7 @@ struct Stage1 : public Stage
 		//Line blue("../../Stage_Images/Blue_Line_Test.png",375,260);
 		//Line green("../../Stage_Images/Green_Line_Test.png",450,200);
 		lines[0] = new Line (tex_filename);
-		lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",285,200);
+		lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",285,750);
 		lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,550);
 		lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",450,200);
 		lines[4] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
