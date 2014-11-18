@@ -64,3 +64,6 @@ Started work on Stage Creation
     - Baker falls through the top stage parts of Stage2. (Might be other bread as well)
     - Clicking on Baker while Roti's power is active allows Baker to fly at will
 2. Put in framerate cap, in Circle.cpp, so Xcode works.
+
+11/17/14 (Dedie)
+1. Updated Stage2 Horizontal Platforms. Hitbox was a tad too big. Trimmed.
