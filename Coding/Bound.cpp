@@ -24,6 +24,7 @@ class Game
 		
 		//functions
 		void run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		bool bottomCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		void checkGravity(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int character);
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
@@ -284,6 +285,14 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 				entities[x]->leftCircle[0] = entities[x]->cCircle.getPosition().x + (entities[x]->cRadius*cos(PI));
 				entities[x]->leftCircle[1] = entities[x]->cCircle.getPosition().y + (entities[x]->cRadius*sin(PI));
+
+				entities[x]->bottomRCircle[0] = entities[x]->cCircle.getPosition().x + (entities[x]->cRadius*cos(PI/4));
+				entities[x]->bottomRCircle[1] = entities[x]->cCircle.getPosition().y + (entities[x]->cRadius*sin(PI/4));
+
+				entities[x]->bottomLCircle[0] = entities[x]->cCircle.getPosition().x + (entities[x]->cRadius*cos(3*PI/4));
+				entities[x]->bottomLCircle[1] = entities[x]->cCircle.getPosition().y + (entities[x]->cRadius*sin(3*PI/4));	
+
+
 			}
 		if (mResetGame) resetLevel(entities,stages);
 
@@ -336,7 +345,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				//Right Border Collision Check	
 					if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
 					{
-						std::cout << "rb stopped trag" << std::endl;
+						//std::cout << "rb stopped trag" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
@@ -348,7 +357,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				//Left Border Collision Check	
 					if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
 					{
-						std::cout << "lb stopped trag" << std::endl;
+						//std::cout << "lb stopped trag" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
@@ -360,7 +369,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				//Top Border Collision Check
 					if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
 					{
-						std::cout << "tb stopped trag" << std::endl;
+						//std::cout << "tb stopped trag" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
@@ -370,10 +379,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 					}
 
 				//Bottom Border Collision Check
-					std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
+					//std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
 					if (entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= 785)
 					{
-						std::cout << "bb stopped trag" << std::endl;
+						//std::cout << "bb stopped trag" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
@@ -384,16 +393,16 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 					if (isTouchingSurface(entities, stages, shotChooser))
 					{
-						std::cout << "touching da surf stopped trajectory" << std::endl;
+						//std::cout << "touching da surf stopped trajectory" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->isCreated = true;
 					}
 					
 					
-					else if (checkHitting(entities,stages,shotChooser,false))
+					if (checkHitting(entities,stages,shotChooser,false))
 					{
-						std::cout << "check hitting stopped trajectory" << std::endl;
+						//std::cout << "check hitting stopped trajectory" << std::endl;
 						mIsLaunched = false;
 						mDrawMetre = false;
 						entities[shotChooser]->gCurrent = 0;	
@@ -511,6 +520,7 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		entities[x]->cCircle.setPosition(entities[x]->eStartPos);
 		entities[x]->isCreated = false;
+		entities[x]->isCurrentEntity = false;
 	}
 
 	for (int x=0; x<stages[currentStage]->platformCount; x++)
@@ -521,10 +531,6 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	for (int x=0; x<stages[currentStage]->switchCount; x++)
 	{
 		stages[currentStage]->switches[x]->eSprite.setTexture(stages[currentStage]->switches[x]->eTexture);
-	}
-	for (int x=1; x<ENTITIES_MAX; x++)
-	{
-		entities[x]->isCurrentEntity = false;
 	}
 	currentEntityIndex = 0;
 	powerMetre = 3;
@@ -685,30 +691,6 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 		}
 }
 
-//stage id is index of entities which you need to apply the gravity check on
-/*
-bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], int stage_id, int x)
-{
-	
-	if (entities[x]->isCircle)
-	{		
-		if (
-			((entities[x]->eBounds.x+entities[x]->eTextureSize.x >= entities[stage_id]->eBounds.x) &&
-			 (entities[x]->eBounds.x <= entities[stage_id]->eBounds.x+entities[stage_id]->eTextureSize.x)) &&
-			((entities[x]->eBounds.y+entities[x]->eTextureSize.y >= entities[stage_id]->eBounds.y) &&
-			 entities[x]->eBounds.y+entities[x]->eTextureSize.y <= entities[stage_id]->eBounds.y+10)
-			)
-			{
-				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , entities[stage_id]->eBounds.y-entities[x]->cRadius);	
-				//std::cout << "touchin da surf" << std::endl;
-				return true;	
-			}		
-	}
-	
-	return false;
-}
-*/
-
 bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x)
 {
 	/*	
@@ -757,45 +739,25 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGE
 
 	}
 */
-	for (int a=0; a<stages[currentStage]->lineCount; a++)
-	{
-		if (entities[x]->rightCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
-			entities[x]->rightCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
-			entities[x]->rightCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
-			entities[x]->rightCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
-			{
-				entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
-				return false;
-			}
 
-		else if (entities[x]->leftCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
-			entities[x]->leftCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
-			entities[x]->leftCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
-			entities[x]->leftCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
-			{
-				entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x+stages[currentStage]->lines[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
-				return false;
-			}
-
-		else if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
-			entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
-			entities[x]->bottomCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
-			entities[x]->bottomCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
-			{
-				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-entities[x]->cRadius);
-				return true;
-			}
-	}
 
 	for (int a=0; a<stages[currentStage]->platformCount; a++)
 	{
-		if (entities[x]->rightCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+		if (entities[x]->bottomCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+			entities[x]->bottomCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+			entities[x]->bottomCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+			entities[x]->bottomCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y-entities[x]->cRadius);
+				return true;
+			}
+		else if (entities[x]->rightCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
 			entities[x]->rightCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
 			entities[x]->rightCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
 			entities[x]->rightCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
 			{
 				entities[x]->cCircle.setPosition(stages[currentStage]->platforms[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
-				return false;
+				return true;
 			}
 
 		else if (entities[x]->leftCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
@@ -804,18 +766,76 @@ bool Game::isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGE
 			entities[x]->leftCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
 			{
 				entities[x]->cCircle.setPosition(stages[currentStage]->platforms[a]->eBounds.x+stages[currentStage]->platforms[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
-				return false;
+				return true;
 			}
-
-		else if (entities[x]->bottomCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
-			entities[x]->bottomCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
-			entities[x]->bottomCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
-			entities[x]->bottomCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+		else if (entities[x]->topCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+			entities[x]->topCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+			entities[x]->topCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+			entities[x]->topCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
 			{
-				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y-entities[x]->cRadius);
+
+				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y+entities[x]->cRadius);
+				entities[x]->gCurrent = 0;	
 				return true;
 			}
 	}
+
+	for (int a=0; a<stages[currentStage]->lineCount; a++)
+	{
+		if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->bottomRCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->bottomRCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+				return true;
+			}
+		if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->bottomLCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->bottomLCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+				return true;
+			}
+
+		if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->bottomCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->bottomCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-entities[x]->cRadius);
+				return true;
+			}
+		else if (entities[x]->rightCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->rightCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->rightCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->rightCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
+				return true;
+			}
+
+		else if (entities[x]->leftCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->leftCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->leftCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->leftCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+				entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x+stages[currentStage]->lines[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
+				return true;
+			}
+		else if (entities[x]->topCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->topCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->topCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->topCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+
+				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y+entities[x]->cRadius);
+				entities[x]->gCurrent = 0;	
+				return true;
+			}
+	}
+
 
 	/*
 	for (int b=0; b<stages[currentStage]->platformCount ; b++)
@@ -866,16 +886,83 @@ void Game::checkBounds(Entity* entities[ENTITIES_MAX])
 }
 
 
+//returns true if bottom of circle is touching stuff.
+//NEED +2 so it doesn't "mini bounce"
+bool Game::bottomCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x)
+{
+	for (int a=0; a<stages[currentStage]->lineCount; a++)
+		{
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+				entities[x]->bottomCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+				entities[x]->bottomCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-entities[x]->cRadius);
+					return true;
+				}
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+				entities[x]->bottomRCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+				entities[x]->bottomRCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					return true;
+				}
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+				entities[x]->bottomLCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+				entities[x]->bottomLCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					return true;
+				}
+		}
+
+	for (int a=0; a<stages[currentStage]->platformCount; a++)
+		{
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+				entities[x]->bottomCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+				entities[x]->bottomCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y-entities[x]->cRadius+2);
+					//std::cout << "ON PLAT BOT TOUCH" << std::endl;
+					return true;
+				}
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+				entities[x]->bottomRCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+				entities[x]->bottomRCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y-entities[x]->cRadius+2);
+					return true;
+				}
+			if (entities[x]->bottomCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+				entities[x]->bottomCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+				entities[x]->bottomLCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+				entities[x]->bottomLCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+				{
+					entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y-entities[x]->cRadius+2);
+					return true;
+				}
+		}
+
+	return false;
+}
+
+
 void Game::checkGravity(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int character)
 {
 	bool isOnGround = true;
 	
 	//need this to reset gravity if touching a surface
 	if ( (entities[character]->cCircle.getPosition().y >=  785-entities[character]->cRadius) )  NULL;
-	else if (isTouchingSurface(entities, stages, character)) NULL;
+	//else if (isTouchingSurface(entities, stages, character)) NULL;
+	else if (bottomCircleCollision(entities,stages,character)) NULL;
 	else 
 	{
 		isOnGround = false;
+		//std::cout << "gravity at work on: " << character << std::endl;
 		entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
 	}
 
@@ -922,6 +1009,15 @@ int Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]
 	}
 	for (int x=0; x< stages[currentStage]->lineCount; x++)
 	{
+		if (
+			entities[airborneEntity]->eBounds.x >= stages[currentStage]->lines[x]->eBounds.x &&
+			entities[airborneEntity]->eBounds.x + entities[airborneEntity]->eTextureSize.x <= stages[currentStage]->lines[x]->eBounds.x + stages[currentStage]->lines[x]->eTextureSize.x &&
+			entities[airborneEntity]->eBounds.y <= stages[currentStage]->lines[x]->eBounds.y + stages[currentStage]->lines[x]->eTextureSize.y &&
+			entities[airborneEntity]->eBounds.y >= stages[currentStage]->lines[x]->eBounds.y )
+		{
+			//std::cout<< "ts" << std::endl;
+			return 8;
+		}
 		if (				
 			(((entities[airborneEntity]->eBounds.x <= stages[currentStage]->lines[x]->eBounds.x+stages[currentStage]->lines[x]->eTextureSize.x) &&
 			 (entities[airborneEntity]->eBounds.x >= stages[currentStage]->lines[x]->eBounds.x)) && 
@@ -929,7 +1025,7 @@ int Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]
 			 (entities[airborneEntity]->eBounds.y <= stages[currentStage]->lines[x]->eBounds.y+stages[currentStage]->lines[x]->eTextureSize.y)))
 			)
 		{
-			std::cout << "rs" <<std::endl;
+			//std::cout << "rs" <<std::endl;
 			return 3;
 		}			
 
@@ -940,7 +1036,7 @@ int Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]
 			 (entities[airborneEntity]->eBounds.y <= stages[currentStage]->lines[x]->eBounds.y+stages[currentStage]->lines[x]->eTextureSize.y))
 			)	   
 		{
-			std::cout << "ls" << std::endl;
+			//std::cout << "ls" << std::endl;
 			return 2;
 		}
 	}
@@ -954,6 +1050,7 @@ int Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]
 			 (entities[airborneEntity]->eBounds.y <= stages[currentStage]->platforms[x]->eBounds.y+stages[currentStage]->platforms[x]->eTextureSize.y)))
 			)
 		{
+			//std::cout << "rs" <<std::endl;
 			return 3;
 		}			
 
@@ -964,9 +1061,11 @@ int Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]
 			 (entities[airborneEntity]->eBounds.y <= stages[currentStage]->platforms[x]->eBounds.y+stages[currentStage]->platforms[x]->eTextureSize.y))
 			)	   
 		{
+			//std::cout << "ls" << std::endl;
 			return 2;
 		}
 	}
+
 
 	return 0;
 }
@@ -1162,21 +1261,21 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
 		//std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
-		if (currentlySelected%3 == 1 && !entities[1]->isCreated)
+		if (currentlySelected%3 == 1 && !entities[1]->isCreated && !positionLock)
 		{
 			entities[1]->create();
 			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition().x, entities[0]->cCircle.getPosition().y);
 			shotChooser = 1;
 		}
 
-		else if (currentlySelected%3 == 2 && !entities[2]->isCreated)
+		else if (currentlySelected%3 == 2 && !entities[2]->isCreated && !positionLock)
 		{
 			entities[2]->create();
 			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 			shotChooser = 2;
 		}
 		
-		else if (currentlySelected%3 == 0 && !entities[3]->isCreated)
+		else if (currentlySelected%3 == 0 && !entities[3]->isCreated && !positionLock)
 		{
 			entities[3]->create();
 			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
@@ -1408,6 +1507,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 		if (stages[currentStage]->platforms[x]->eSprite.getPosition().y <= stages[currentStage]->platforms[x]->maxHeight) stages[currentStage]->platforms[x]->activatePlatform = false;
 		if (stages[currentStage]->platforms[x]->activatePlatform)
 		{
+			//std::cout << "plat actvated" << std::endl;
 			stages[currentStage]->platforms[x]->eSprite.move(0,-100*elapsedTime.asSeconds());
 		}	
 

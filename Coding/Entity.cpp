@@ -50,7 +50,8 @@ struct Entity
 	int* rightCircle;
 	int* bottomCircle;
 	int* leftCircle;
-	
+	int* bottomRCircle;
+	int* bottomLCircle;
 	virtual void create(){};
 	virtual void power(){};
 	//virtual void swapTexture(sf::Texture){};
@@ -128,7 +129,7 @@ struct Platform : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-		eStartPos.x = 700;
+		eStartPos.x = 750;
 		eStartPos.y = 750;
 
 		eSprite.setPosition(eStartPos);
@@ -304,6 +305,13 @@ struct Baker : public Entity
 		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
 		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
 
+		bottomRCircle = new int[2];
+		bottomRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/4));
+		bottomRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/4));
+
+		bottomLCircle = new int[2];
+		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
+		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
 	}
 
 
@@ -337,6 +345,8 @@ struct Roti : public Entity
 		rightCircle = new int[2];
 		bottomCircle = new int[2];
 		leftCircle = new int[2];
+		bottomRCircle = new int[2];
+		bottomLCircle = new int[2];
 
 
 		//---------------------------- 
@@ -354,8 +364,8 @@ struct Roti : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=-100;
-		eStartPos.y=-100;
+		eStartPos.x=-1000;
+		eStartPos.y=-1000;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -379,6 +389,13 @@ struct Roti : public Entity
 
 		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
 		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
+//pi/4 = top right
+//3pi/4 = top left
+		bottomRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/4));
+		bottomRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/4));
+
+		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
+		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
 	}
 
 };
@@ -415,6 +432,8 @@ struct Anpan : public Entity
 		rightCircle = new int[2];
 		bottomCircle = new int[2];
 		leftCircle = new int[2];
+		bottomRCircle = new int[2];
+		bottomLCircle = new int[2];
 		//----------------------------
 	}
 	void create()
@@ -429,8 +448,8 @@ struct Anpan : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=-100;
-		eStartPos.y=-100;
+		eStartPos.x=-1000;
+		eStartPos.y=-1000;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -453,6 +472,13 @@ struct Anpan : public Entity
 
 		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
 		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
+
+
+		bottomRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/4));
+		bottomRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/4));
+
+		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
+		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));	
 	}
 	void power()
 	{
@@ -496,6 +522,8 @@ struct Boule : public Entity
 		rightCircle = new int[2];
 		bottomCircle = new int[2];
 		leftCircle = new int[2];
+		bottomRCircle = new int[2];
+		bottomLCircle = new int[2];
 	}
 
 
@@ -511,8 +539,8 @@ struct Boule : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=-100;
-		eStartPos.y=-100;
+		eStartPos.x=-1000;
+		eStartPos.y=-1000;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -535,6 +563,12 @@ struct Boule : public Entity
 
 		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
 		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
+
+		bottomRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/4));
+		bottomRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/4));
+
+		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
+		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));	
 	}
 };
 
