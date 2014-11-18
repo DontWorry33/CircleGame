@@ -57,3 +57,10 @@ BUG FIXES!
 1) Fixed bug where sometimes the bread wouldn't shoot
 2) Fixed bug where bread would bounce off surfaces
 3) Fixed bug where swapping stages would crash
+
+11/14/14 (Dedie)
+Started work on Stage Creation
+1. Discovered some new issues.
+    - Baker falls through the top stage parts of Stage2. (Might be other bread as well)
+    - Clicking on Baker while Roti's power is active allows Baker to fly at will
+2. Put in framerate cap, in Circle.cpp, so Xcode works.
