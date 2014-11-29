@@ -67,3 +67,11 @@ Started work on Stage Creation
 
 11/17/14 (Dedie)
 1. Updated Stage2 Horizontal Platforms. Hitbox was a tad too big. Trimmed.
+
+11/28/14 (Dedie)
+1. Updated bunch of things:
+	- Stage5 and Stage6 have been fully uploaded. 
+	- Updated the Grids pictures to show a visually mapping of switches to platforms.
+	- StageNotes updated with the mappings for Stage5 and Stage6. As well as a definition of a Snap switch.
+	- ReadMe updated to include the Boule’s power in a little bit more detail.
+	- *Still have to update Portals. I’m not feeling the current design.
