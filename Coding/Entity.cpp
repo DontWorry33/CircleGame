@@ -39,6 +39,7 @@ struct Entity
 	
 	bool activatePlatform;
 	bool nextStage;
+	bool switchType;
 
 	int maxHeight;
 
@@ -46,12 +47,14 @@ struct Entity
 
 	int platformToActivate;
 
-	int* topCircle;
-	int* rightCircle;
-	int* bottomCircle;
-	int* leftCircle;
-	int* bottomRCircle;
-	int* bottomLCircle;
+	int portalType;
+
+	float* topCircle;
+	float* rightCircle;
+	float* bottomCircle;
+	float* leftCircle;
+	float* bottomRCircle;
+	float* bottomLCircle;
 	virtual void create(){};
 	virtual void power(){};
 	//virtual void swapTexture(sf::Texture){};
@@ -62,7 +65,8 @@ struct Entity
 
 struct Switch : public Entity
 {
-	Switch(int startPosX, int startPosY, int platformNumber)
+	//type is 0 for touch switch, 1 for hold switch
+	Switch(int startPosX, int startPosY, int platformNumber, int type)
 	{
 		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
 		eTextureSize = eTexture.getSize();
@@ -85,6 +89,7 @@ struct Switch : public Entity
 		gCurrent = 0;
 
 		platformToActivate = platformNumber;
+		switchType = type;
 
 	}
 
@@ -117,6 +122,49 @@ struct Oven : public Entity
 	}
 
 
+};
+
+struct Portal : public Entity 
+{
+	//type refers to either baker, roti or anpan (0, 1 or 2)
+	//this makes it easier so we don't have to put the filename as argument
+	//as they are the same 3 files.
+	Portal(int startPosX, int startPosY, int type)
+	{
+		if (type==0)
+		{
+			portalType = 0;
+			eTexture.loadFromFile("../Stage_Images/Portal_Baker.png");
+		}
+		if (type==1)
+		{
+			portalType = 1;
+			eTexture.loadFromFile("../Stage_Images/Portal_Roti.png");
+		}
+		if (type==2) 
+		{
+			portalType = 2;
+			eTexture.loadFromFile("../Stage_Images/Portal_Anpan.png");
+		}
+
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2, eTextureSize.y/2);
+
+		eStartPos.x = startPosX;
+		eStartPos.y = startPosY-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+	}
 };
 
 struct Platform : public Entity
@@ -289,32 +337,41 @@ struct Baker : public Entity
 
 		weight = 0.5;
 
-		topCircle = new int[2];
+		topCircle = new float[2];
 		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
 		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
 
-		rightCircle = new int[2];
+		rightCircle = new float[2];
 		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
 		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
 
-		bottomCircle = new int[2];
+		bottomCircle = new float[2];
 		bottomCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/2));		
 		bottomCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/2));
 
-		leftCircle = new int[2];
+		leftCircle = new float[2];
 		leftCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI));
 		leftCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI));
 
-		bottomRCircle = new int[2];
+		bottomRCircle = new float[2];
 		bottomRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/4));
 		bottomRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/4));
 
-		bottomLCircle = new int[2];
+		bottomLCircle = new float[2];
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
 	}
 
-
+	~Baker()
+	{
+		std::cout << "destructing baker" << std::endl;
+		delete[] topCircle;
+		delete[] rightCircle;
+		delete[] bottomCircle;
+		delete[] leftCircle;
+		delete[] bottomRCircle;
+		delete[] bottomLCircle;
+	}
 };
 
 struct Roti : public Entity
@@ -341,12 +398,12 @@ struct Roti : public Entity
 		eStartPos2.y = 70-eTextureSize2.y/2;
 
 		eSprite2.setPosition(eStartPos2);
-		topCircle = new int[2];
-		rightCircle = new int[2];
-		bottomCircle = new int[2];
-		leftCircle = new int[2];
-		bottomRCircle = new int[2];
-		bottomLCircle = new int[2];
+		topCircle = new float[2];
+		rightCircle = new float[2];
+		bottomCircle = new float[2];
+		leftCircle = new float[2];
+		bottomRCircle = new float[2];
+		bottomLCircle = new float[2];
 
 
 		//---------------------------- 
@@ -397,7 +454,16 @@ struct Roti : public Entity
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
 	}
-
+	~Roti()
+	{
+		std::cout << "destructing roti" << std::endl;
+		delete[] topCircle;
+		delete[] rightCircle;
+		delete[] bottomCircle;
+		delete[] leftCircle;
+		delete[] bottomRCircle;
+		delete[] bottomLCircle;
+	}
 };
 
 
@@ -428,12 +494,12 @@ struct Anpan : public Entity
 		eStartPos2.y = 70-eTextureSize2.y/2;
 
 		eSprite2.setPosition(eStartPos2);
-		topCircle = new int[2];
-		rightCircle = new int[2];
-		bottomCircle = new int[2];
-		leftCircle = new int[2];
-		bottomRCircle = new int[2];
-		bottomLCircle = new int[2];
+		topCircle = new float[2];
+		rightCircle = new float[2];
+		bottomCircle = new float[2];
+		leftCircle = new float[2];
+		bottomRCircle = new float[2];
+		bottomLCircle = new float[2];
 		//----------------------------
 	}
 	void create()
@@ -486,6 +552,16 @@ struct Anpan : public Entity
 
 	}
 
+	~Anpan()
+	{
+		std::cout << "destructing Anpan" << std::endl;
+		delete[] topCircle;
+		delete[] rightCircle;
+		delete[] bottomCircle;
+		delete[] leftCircle;
+		delete[] bottomRCircle;
+		delete[] bottomLCircle;
+	}
 };
 
 
@@ -518,12 +594,12 @@ struct Boule : public Entity
 
 		eSprite2.setPosition(eStartPos2);
 		//----------------------------
-		topCircle = new int[2];
-		rightCircle = new int[2];
-		bottomCircle = new int[2];
-		leftCircle = new int[2];
-		bottomRCircle = new int[2];
-		bottomLCircle = new int[2];
+		topCircle = new float[2];
+		rightCircle = new float[2];
+		bottomCircle = new float[2];
+		leftCircle = new float[2];
+		bottomRCircle = new float[2];
+		bottomLCircle = new float[2];
 	}
 
 
@@ -569,6 +645,17 @@ struct Boule : public Entity
 
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));	
+	}
+
+	~Boule()
+	{
+		std::cout << "destructing roti" << std::endl;
+		delete[] topCircle;
+		delete[] rightCircle;
+		delete[] bottomCircle;
+		delete[] leftCircle;
+		delete[] bottomRCircle;
+		delete[] bottomLCircle;
 	}
 };
 
