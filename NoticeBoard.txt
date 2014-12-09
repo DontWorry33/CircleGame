@@ -75,3 +75,11 @@ Started work on Stage Creation
 	- StageNotes updated with the mappings for Stage5 and Stage6. As well as a definition of a Snap switch.
 	- ReadMe updated to include the Boule’s power in a little bit more detail.
 	- *Still have to update Portals. I’m not feeling the current design.
+
+12/09/14 (Dedie)
+1. Updated Stage6 and Stage6_Boule. Now have zippers instead of odd ball thingies. And Stage6_Boule has motion blur to replicate sunlight. Looks awesome.
+
+2. Updated Bound_ReadMe. Will need to touch up once I finalize the plot. Expect it to double in size when that happens. Also, Hussain, could you look into the ReadMe and update the notes. I started it off so you know what goes in there. Also, all characters are called by their official title within the ReadMe. So don’t go writing “Baker”.
+
+3. Updated StageNotes.txt to include ‘The Box Formulae’ directly under Stage5, rather than have it tucked away in the ReadMe.
+

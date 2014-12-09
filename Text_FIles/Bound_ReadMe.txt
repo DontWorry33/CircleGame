@@ -1,44 +1,55 @@
-"baker" = big circle
-"oven" = end portal
-"bread" = little guys
+							Bound™
 
-OBJECTIVE:
-	Get the "baker" to the "oven" using bread to complete the stage and move onto the next
+		Narrative
 
-HOW TO PLAY:
-	- Cursor automatically starts on baker
-	- Since baker is useless alone, he needs the bread to help him reach the oven
-	- Each piece of bread has different abilities to help the baker across each stage
-	- Baker can choose which size of bread he wants to use. 
+- PREMISE
+	A broken promise has recently awakened. No clear memories of how or why it is here. Only a longing, to return home. For glory? Honour? Or just to say goodnight?
 
 
-CONTROLS:
-	- Moving : w/a/s/d
-	- Shooting bread : spacebar 
-	- To cycle between bread : tab
-	- Pause - p
-	- Reset - r
-	- Switch characters - left click
-	- Move around cursor - mouse position
-	- Abilitiy activation - right click (hold/press)
-
-GAME FEATURES:
-	- Power bar for firing power of bread (either hold space or toggle)
-	- Trajectory is based on position of arrow + power of powerbar 
-	- If all bread is used, player can choose to restart game
-	- Internal time limit - depends on stage
-	- Pause / Reset
-	- The Box Formulae
-		• Total Charge starts at 3. Increments by 1 for every switch hit.
-		• Inert Charge == current switch hit. 1, 2 or 3.
-
-		Charge Placement Formula: [(Total•1)-Inert]%9, [(Total•2)-Inert]%9, [(Total•3)-Inert]%9
-		Baker Placement Formula: [Current Position+Inert]%9
+- PLOT
+	A mother passes away. Leaving her four-year old son alone and wondering where she went. Even in another life, however, she does everything to return, and to say goodbye. As she promised to. 
+These tulips she collects along the way are for exactly that reason. One reason. To kiss her baby and let him know it will all be okay.
  
 
 
-GAME BREAD ABILITIES:
-	- The Baker: Basic motion. Reaches 'oven' to complete stage. Interacts with each bread in different ways to solve puzzles and progress. 
-	- Roti: Power of attraction/repulsion. Can push or pull The Baker away from it. Only means of moving upwards in game.
-	- Anpan: Power of displacement. Can switch positions with the Baker. *To implement, programming-wise, check to make sure parallel sides of The Baker's new position are not colliding. If they are, then displacement does not occur.
-	- Boule: Power of Distortion. Can enter ‘negative zone’ when the right click is pressed. In the negative zone, portals appear which can teleport Boule between the portal and the corresponding character (Baker inclusive). Can see - and thus activate - switches that are in negative zone. Teleports to portals by touching other characters while in negative zone. Teleports to characters by touching other portals while in the negative zone.
+		Gameplay
+
+- CHARACTERS
+	The Broken Promise: Main character. Silver rim with a cracked middle.
+	The Dream: Second largest. Yellow rim, with a white band through it. 
+	The Lie: Third largest character. Brown rim. With a purple shard at its centre.
+	The Wish: Smallest. Red and blue. And most vital too.
+
+
+- CHARACTER ABILITIES
+	• The Broken Promise: No abilities. Must come in contact with the Tulips to progress. Can interact with all other characters to reach the Tulips.
+	• The Dream: Magnetic. Can attract The Promise towards it and traverse vertical platforms that way. 
+	• The Lie: Swaps places with The Promise. Permitted there’s enough room.
+	• The Wish: May warp the stage into revealing switches and portals. These switches and portals are necessary to reach and activate platforms to progress. And The Wish is the only one to do it.
+
+
+- OBJECTIVE
+	The main objective is to use the various powers of the smaller characters to aid The Broken Promise in reaching the Tulips. Once a Tulip is reached on any stage, the level is completed. 
+	If all characters have been fired, and no further viable moves present themselves, player can restart and try again.
+
+
+- CONTROLS
+	• Motion: W/A/S/D
+	• Firing characters: Spacebar
+	• Cycle between characters: Tab
+	• Pause: P
+	• Reset: R
+	• Choose characters: Left Mouse Button
+	• Ability activation: Right Mouse Button
+
+
+- GAME FEATURES
+	• Stage Timer. Higher score if complete in shorter time. (Tentative)
+	• Character Selector. In top middle of each stage.
+	• Power Bar. Shows how far the character will fly when fired.
+	• Negative Stages. What the stage becomes when The Wish’s power is activated.
+
+
+- NOTES
+	• The Promise locks while a character is in flight.
+

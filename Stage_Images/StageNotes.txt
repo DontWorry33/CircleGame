@@ -36,6 +36,16 @@ Stage 5
 7. quad4Switch2 activates quad3VerPlatform1
 8. quad4Switch3 activates quad4HorPlatform1
 
+The Box Formulae
+	The box contains three different charges, each in a different box. The objective is to get the Baker to hit any of those charges and become ‘charged’. At which point, you have two* tries to make it to box 7. If you fail, the charge is lost.
+
+	• Total Charge starts at 3. Increments by 1 for every switch hit.
+	• Inert Charge == current switch hit. 1, 2 or 3.
+	
+	• Charge Placement Formula: [(Total•1)-Inert]%9, [(Total•2)-Inert]%9, [(Total•3)-Inert]%9
+	• Baker Placement Formula: [Current Position + Inert]%9
+
+
 Stage 6
 1. quad1Switch1 activates quad1HorPlatform1
 2. quad2Switch1 snaps Characters
