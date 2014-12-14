@@ -3,7 +3,7 @@ THIS IS THE NOTICE BOARD. POST WITH DATE AND NAME OF POSTER. DO NOT DELETE EARLI
 DATE - month/day/year
 
 
-07/26/14 (hussain):
+ - 07/26/14 (hussain):
 	-	Reset kind of implemented. Not as I like it but it does the job for now. Press 'r' to reset game at any time.
 	-	Anpan power basis works. Select anpan after shooting him and right click to swap places.
 		- Also changed it so that when you right click, Baker is selected instead of Anpan after the swap
@@ -12,7 +12,7 @@ DATE - month/day/year
 	-	Powerbar only shows after you start pressing spacebar and stops showing when the thing you shot hits anything.
 
 
-11/02/14 (Dedie)
+ - 11/02/14 (Dedie)
 Complete revamp of Repository.
 1. Character_Images:
 	- Removed obsolete files
@@ -52,23 +52,23 @@ stage elements.
 	- Switches have been uniformly created. All stages have their specific switches within their “Stage” files.
 
 
-11/14/14 (Hussain)
+ - 11/14/14 (Hussain)
 BUG FIXES!
 1) Fixed bug where sometimes the bread wouldn't shoot
 2) Fixed bug where bread would bounce off surfaces
 3) Fixed bug where swapping stages would crash
 
-11/14/14 (Dedie)
+ - 11/14/14 (Dedie)
 Started work on Stage Creation
 1. Discovered some new issues.
     - Baker falls through the top stage parts of Stage2. (Might be other bread as well)
     - Clicking on Baker while Roti's power is active allows Baker to fly at will
 2. Put in framerate cap, in Circle.cpp, so Xcode works.
 
-11/17/14 (Dedie)
+ - 11/17/14 (Dedie)
 1. Updated Stage2 Horizontal Platforms. Hitbox was a tad too big. Trimmed.
 
-11/28/14 (Dedie)
+ - 11/28/14 (Dedie)
 1. Updated bunch of things:
 	- Stage5 and Stage6 have been fully uploaded. 
 	- Updated the Grids pictures to show a visually mapping of switches to platforms.
@@ -76,10 +76,12 @@ Started work on Stage Creation
 	- ReadMe updated to include the Boule’s power in a little bit more detail.
 	- *Still have to update Portals. I’m not feeling the current design.
 
-12/09/14 (Dedie)
+ - 12/09/14 (Dedie)
 1. Updated Stage6 and Stage6_Boule. Now have zippers instead of odd ball thingies. And Stage6_Boule has motion blur to replicate sunlight. Looks awesome.
 
 2. Updated Bound_ReadMe. Will need to touch up once I finalize the plot. Expect it to double in size when that happens. Also, Hussain, could you look into the ReadMe and update the notes. I started it off so you know what goes in there. Also, all characters are called by their official title within the ReadMe. So don’t go writing “Baker”.
 
 3. Updated StageNotes.txt to include ‘The Box Formulae’ directly under Stage5, rather than have it tucked away in the ReadMe.
 
+ - 12/13/14 (Dedie)
+1. Modified ToDo_List.txt and Bound_ReadMe.txt. Now has what the hell Hussain has to do. And ReadMe now includes the types of switches.

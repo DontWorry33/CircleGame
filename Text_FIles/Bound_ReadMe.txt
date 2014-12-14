@@ -48,6 +48,7 @@ These tulips she collects along the way are for exactly that reason. One reason.
 	• Character Selector. In top middle of each stage.
 	• Power Bar. Shows how far the character will fly when fired.
 	• Negative Stages. What the stage becomes when The Wish’s power is activated.
+	• Switches. There are Hold, Touch, Reset and Displacement Switches.
 
 
 - NOTES

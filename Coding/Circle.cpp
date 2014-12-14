@@ -157,7 +157,7 @@ Game::Game() :
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime()
 
 {
-	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
+    mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
     mWindow.setFramerateLimit(60);
     
     
