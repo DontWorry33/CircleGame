@@ -8,49 +8,42 @@ Stage 2
 2. quad4Switch1 activates quad1VerPlatform1
 
 Stage 3
-1. quad1Switch1 activates quad1HorPlatform1
-2. quad1Switch2 activates quad4VerPlatform1
-3. quad3Switch1 activates quad1VerPlatform1
-4. quad1Switch2 activates quad4VerPlatform2
-5. quad4Switch1 activates quad4VerPlatform1 and quad2VerPlatform1
+1. quad1Switch1 displaces Roti quad3VerPlatform1 (Right Side)
+2. quad1Switch2 lowers quad1HorPlatform1
+3. quad1Switch3 activates quad2HorPlatform1
+4. quad2Switch1 activates quad2VerPlatform2
+5. quad2Switch2 activates quad2VerPlatform1
+6. quad3Switch1 resets Characters to quad3Hor1
+7. quad4Switch1 displaces Roti to quad1Hor1
+8. quad4Switch2 activates quad3VerPlatform1
 
 Stage 4
 1. quad1Switch1 activates quad1HorPlatform2
-2. quad1Switch2 teleports Roti quad4 (opposite Anpan)
-3. quad2Switch1 teleports Roti quad2 (to itself)
+2. quad1Switch2 displaces Roti quad4 (opposite Anpan)
+3. quad2Switch1 displaces Roti quad2 (to itself)
 4. quad2Switch2 activates quad3HorPlatform1
 5. quad3Switch1 activates quad4HorPlatform1
 6. quad3Switch2 activates quad4VerPlatform1
 7. quad3Switch3 activates quad3HorPlatform2
 8. quad4Switch1 activates quad1HorPlatform1 and quad2HorPlatform1
-9. quad4Switch2 teleports Roti quad3 (Where Anpan is)
+9. quad4Switch2 displaces Roti quad3 (Where Anpan is)
 10. quad4Switch3 activates quad3VerPlatform1
 
 Stage 5
 1. quad2Switch1 interacts with The Box
 2. quad2Switch2 interacts with The Box
 3. quad2Switch3 interacts with The Box
-4. quad3Switch1 snaps Characters/ activates quad2VerPlatform2
-5. quad3Switch2 snaps Characters/ activates quad2VerPlatform1
+4. quad3Switch1 resets Characters/ activates quad2VerPlatform2
+5. quad3Switch2 resets Characters/ activates quad2VerPlatform1
 6. quad4Switch1 activates quad4VerPlatform1
 7. quad4Switch2 activates quad3VerPlatform1
 8. quad4Switch3 activates quad4HorPlatform1
 
-The Box Formulae
-	The box contains three different charges, each in a different box. The objective is to get the Baker to hit any of those charges and become ‘charged’. At which point, you have two* tries to make it to box 7. If you fail, the charge is lost.
-
-	• Total Charge starts at 3. Increments by 1 for every switch hit.
-	• Inert Charge == current switch hit. 1, 2 or 3.
-	
-	• Charge Placement Formula: [(Total•1)-Inert]%9, [(Total•2)-Inert]%9, [(Total•3)-Inert]%9
-	• Baker Placement Formula: [Current Position + Inert]%9
-
-
 Stage 6
 1. quad1Switch1 activates quad1HorPlatform1
-2. quad2Switch1 snaps Characters
+2. quad2Switch1 resets Characters
 3. quad3Switch1 activates quad3HorPlatform1
 4. quad3Switch2 activates quad3HorPlatform2
 5. quad3Switch3 activates quad4VerPlatform1
-6. quad4Switch snaps Characters/ activates quad4HorPlatform1 (invisible)
+6. quad4Switch resets Characters/ activates quad4HorPlatform1 (invisible)
 	
