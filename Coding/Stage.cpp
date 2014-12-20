@@ -84,7 +84,7 @@ struct Stage1 : public Stage
 		portals[1] = new Portal(900,780,1);
 		portals[2] = new Portal(1110,780,2);
 
-		oven = new Oven(1000,10);	
+		oven = new Oven(1000,780);	
 	}
 
 	~Stage1()
