@@ -95,6 +95,8 @@ struct Switch : public Entity
 		platformToActivate = platformNumber;
 		switchType = type;
 
+		switchUsed = false;
+
 
 	}
 	//this constructor is for type 2 (reset) switch and type 3 (displacement) switch.

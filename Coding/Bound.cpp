@@ -163,6 +163,7 @@ class Game
 		bool displaced;
 
 		int currentStage;
+		int tSwitch;
 
 };
 
@@ -250,6 +251,8 @@ Game::Game() :
 	bLock = false;
 
 	displaced = false;
+
+	tSwitch = 0;
 	//INCORRECt. LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
@@ -734,7 +737,6 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 		if (bouleActivated)
 		{
 			int currentSwitch[1];
-			int tSwitch = 0;
 			checkHitting(entities,stages,3,true, currentSwitch);
 
 			//if (currentSwitch[0] >= 0 && (stages[currentStage]->switches[currentSwitch[0]]->switchType == 1 || stages[currentStage]->switches[currentSwitch[0]]->switchType == 0))
@@ -748,15 +750,49 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 					if (currentSwitch[0] >= 0 && stages[currentStage]->switches[currentSwitch[0]]->switchType == 1)
 					{
 						//entities[9]->activatePlatform = true;
-						int tSwitch = currentSwitch[0];
+						tSwitch = currentSwitch[0];
+						if (tSwitch > 0 && stages[currentStage]->switches[tSwitch-1]->switchUsed)
+						{
+							for (int sw = 0; sw <= tSwitch; sw++)
+							{
+								if (sw<tSwitch)
+								{
+									std::cout << "within" << std::endl;
+									if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
+									if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y <= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
+									stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->activatePlatform = false;
+								}
+							}
+						}
+						if (tSwitch+1 <= stages[currentStage]->switchCount-1 )
+						{
+							if (stages[currentStage]->switches[tSwitch+1]->switchUsed)
+							{
+								for (int sw=tSwitch; sw<=tSwitch+1; sw++)
+								{
+									if (sw>tSwitch)
+									{
+										if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
+										if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y<= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
+										else stages[currentStage]->switches[sw]->switchUsed = false;
+									}
+								}
+							}
+						}
+
+						std::cout << "TSWITCH: " << tSwitch << std::endl;
 						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture2);
 						if (stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.getPosition().y <= stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->maxHeight) stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = false;
 						else stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = true;
-						if (stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform) stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.move(0, -20*elapsedTime.asSeconds());
+						if (stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform && stages[currentStage]->switches[currentSwitch[0]]->switchUsed) stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.move(0, -20*elapsedTime.asSeconds());
+						stages[currentStage]->switches[currentSwitch[0]]->switchUsed = true;
 					}
 					else if (stages[currentStage]->switches[tSwitch]->switchType == 1)
 						{
-							stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
+							std::cout << "SWAPPING TEXTURE BACK ON: " << tSwitch << std::endl;
+								stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
+								stages[currentStage]->switches[tSwitch]->switchUsed = false;					
+
 							stages[currentStage]->platforms[x]->activatePlatform = false;
 							if (stages[currentStage]->platforms[x]->eSprite.getPosition().y<= stages[currentStage]->platforms[x]->eStartPos.y)  stages[currentStage]->platforms[x]->eSprite.move(0, 100*elapsedTime.asSeconds());
 						}
