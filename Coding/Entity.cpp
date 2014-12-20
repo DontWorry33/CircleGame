@@ -39,7 +39,9 @@ struct Entity
 	
 	bool activatePlatform;
 	bool nextStage;
-	bool switchType;
+	int switchType;
+	bool switchUsed;
+	sf::Vector2f displacement;
 
 	int maxHeight;
 
@@ -65,6 +67,8 @@ struct Entity
 
 struct Switch : public Entity
 {
+
+	//this constructor is for type 0 and type 1 switch
 	//type is 0 for touch switch, 1 for hold switch
 	Switch(int startPosX, int startPosY, int platformNumber, int type)
 	{
@@ -91,7 +95,40 @@ struct Switch : public Entity
 		platformToActivate = platformNumber;
 		switchType = type;
 
+
 	}
+	//this constructor is for type 2 (reset) switch and type 3 (displacement) switch.
+	//When type 2 is chosen, the displacement moves ROTI.
+	//When type 3 is chosen, the displacement moves BAKER.
+	Switch(int startPosX, int startPosY, int type, int displacementX, int displacementY)
+	{
+		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
+		eTextureSize = eTexture.getSize();
+		eSprite.setTexture(eTexture);
+		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
+
+		eTexture2.loadFromFile("../Stage_Images/Stage1/Switch_Hit.png");
+
+		eStartPos.x = startPosX;
+		eStartPos.y = startPosY-eTextureSize.y/2;
+
+		eSprite.setPosition(eStartPos);
+		eBounds.x = eSprite.getPosition().x - eTextureSize.x/2;
+		eBounds.y = eSprite.getPosition().y - eTextureSize.y/2;
+
+		isCurrentEntity = false;
+		isClickable = false;
+		isCircle = false;
+		isCreated = true;
+		gCurrent = 0;
+		switchType = type;
+		switchUsed = false;
+		displacement.x = displacementX;
+		displacement.y = displacementY;
+	}
+
+	//this constructor is for type 3 (displacement) switch. 2 additional arguments
+
 
 };
 
@@ -118,7 +155,6 @@ struct Oven : public Entity
 		isClickable = false;
 		isCircle = false;
 		isCreated = true;
-		gCurrent = 0;
 	}
 
 
@@ -134,17 +170,17 @@ struct Portal : public Entity
 		if (type==0)
 		{
 			portalType = 0;
-			eTexture.loadFromFile("../Stage_Images/Portal_Baker.png");
+			eTexture.loadFromFile("../Stage_Images/Universal_StageParts/Portal_Baker.png");
 		}
 		if (type==1)
 		{
 			portalType = 1;
-			eTexture.loadFromFile("../Stage_Images/Portal_Roti.png");
+			eTexture.loadFromFile("../Stage_Images/Universal_StageParts/Portal_Roti.png");
 		}
 		if (type==2) 
 		{
 			portalType = 2;
-			eTexture.loadFromFile("../Stage_Images/Portal_Anpan.png");
+			eTexture.loadFromFile("../Stage_Images/Universal_StageParts/Portal_Anpan.png");
 		}
 
 		eTextureSize = eTexture.getSize();

@@ -18,12 +18,13 @@ struct Stage
 	Entity** switches;
 	Entity** portals;
 
+
 	int lineCount;
 	int platformCount;
 	int switchCount;
 	int portalCount;
 
-	//Oven* oven;
+	Oven* oven;
 };
 
 
@@ -36,7 +37,7 @@ struct Stage1 : public Stage
 
 		//oven = new Oven(200,780);
 
-		lineCount = 5;
+		lineCount = 3;
 		lines = new Entity* [lineCount];
 
 		platformCount = 1;
@@ -61,11 +62,19 @@ struct Stage1 : public Stage
 		lines[0] = new Line (tex_filename);
 		lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
 		lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-		lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",410,780);
-		lines[4] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
+		//lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",410,780);
+		//lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
 
 
-		switches[0] = new Switch(300,780,0,1);
+		switches[0] = new Switch(300,780,3,1000,300);
+		//EXAMPLE SWITCHES:
+		//switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
+		//switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
+		//switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
+		//switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
+		//std::cout << switches[0]->switchType << std::endl;
+
+
 
 		//Platform p1("../../Stage_Images/ActivatedPlatform.png");
 		//Platform oven("../../Stage_Images/Oven.png",400,750,300);
@@ -73,7 +82,9 @@ struct Stage1 : public Stage
 
 		portals[0] = new Portal (100,780,0);
 		portals[1] = new Portal(900,780,1);
-		portals[2] = new Portal(1110,780,2);	
+		portals[2] = new Portal(1110,780,2);
+
+		oven = new Oven(1000,10);	
 	}
 
 	~Stage1()
@@ -95,7 +106,7 @@ struct Stage2 : public Stage
 
 	Stage2(const char* bkg_filename)
 	{
-		lineCount = 6;
+		lineCount = 5;
 		lines = new Entity* [lineCount];
 
 		platformCount = 1;
@@ -111,12 +122,12 @@ struct Stage2 : public Stage
 		//lines[0] = new Line("../Stage_Images/Red_Line_Test.png",800,650);
 		//lines[1] = new Line("../Stage_Images/Blue_Line_Test.png",550,200);
 		//lines[2] = new Line("../Stage_Images/Green_Line_Test.png",700,400);
-		lines[0] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 780, 165, true);
-        lines[1] = new Line("../Stage_Images/Stage2/quad1Hor1.png", 218, 400);
-        lines[2] = new Line("../Stage_Images/Stage2/quad2Hor1.png", 861, 394);
-        lines[3] = new Line("../Stage_Images/Stage2/quad2Hor2.png", 784,179);
-        lines[4] = new Line("../Stage_Images/Stage2/quad3Hor1.png", 78, 682);
-        lines[5] = new Line("../Stage_Images/Stage2/quad3Ver1.png", 178, 700);
+		//lines[0] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 780, 165, true);
+        lines[0] = new Line("../Stage_Images/Stage2/quad1Hor1.png", 218, 400);
+        lines[1] = new Line("../Stage_Images/Stage2/quad2Hor1.png", 861, 394);
+        lines[2] = new Line("../Stage_Images/Stage2/quad2Hor2.png", 784,179);
+        lines[3] = new Line("../Stage_Images/Stage2/quad3Hor1.png", 78, 682);
+        lines[4] = new Line("../Stage_Images/Stage2/quad3Ver1.png", 178, 700);
         //lines[6] = new Line("../Stage_Images/Stage2/quad4Hor1.png", 776, 750);
         
 
@@ -124,6 +135,9 @@ struct Stage2 : public Stage
 
 		//platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png");
         platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png");
+
+		oven = new Oven(780,165);	
+
 
 	}
 
