@@ -60,7 +60,7 @@ struct Stage1 : public Stage
 		lines[1] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,780);
 
 
-		switches[0] = new Switch(300,730,0,1000,300);
+		switches[0] = new Switch(300,730,0,0);
 		//switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
 		//switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
 		//switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
