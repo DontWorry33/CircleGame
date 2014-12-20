@@ -85,3 +85,9 @@ Started work on Stage Creation
 
  - 12/13/14 (Dedie)
 1. Modified ToDo_List.txt and Bound_ReadMe.txt. Now has what the hell Hussain has to do. And ReadMe now includes the types of switches.
+
+ - 12/19/14 (Dedie)
+1. Updated Portals.
+2. Created the ‘Not-Created’ Error images
+
+Screenshots will be updated once I finish redesigning Stage3.
