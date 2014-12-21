@@ -35,7 +35,7 @@ struct Stage1 : public Stage
 	Stage1(const char* bkg_filename, const char* tex_filename)
 	{
 
-		//oven = new Oven(200,780);
+        //Dedie: I may need to redesign Stage1. As a platform moves, it doesn't move the Baker with it. No other stage has this feature, though, so the cheapest fix would be for a revamp. We'll see what happens. Gravity will need to be fixed for me, at least. Mac seems to have heavier objects.... And lastly, I need to increase the repulsion force of Roti's second activation. Because right now, Baker and Roti can't clear even the smallest gaps.
 
 		lineCount = 2;
 		lines = new Entity* [lineCount];
@@ -55,22 +55,13 @@ struct Stage1 : public Stage
 
 
 
-		//Line standing_border(tex_filename);
 		lines[0] = new Line ("../Stage_Images/Stage1/quad3Hor1.png", 260, 790);
 		lines[1] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,780);
 
 
 		switches[0] = new Switch(300,730,0,0);
-		//switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
-		//switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
-		//switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
-		//switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
-		//std::cout << switches[0]->switchType << std::endl;
 
 
-
-		//Platform p1("../../Stage_Images/ActivatedPlatform.png");
-		//Platform oven("../../Stage_Images/Oven.png",400,750,300);
 		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 600, 890, 765);
 
 		portals[0] = new Portal (100,780,0);
@@ -99,6 +90,9 @@ struct Stage2 : public Stage
 
 	Stage2(const char* bkg_filename)
 	{
+        
+        //Dedie: There's a bug in here that Hussain's taking care of. When Roti's power is activated on the platform[0], everyone shoots to the top. ): Other than that, things are looking good.
+        
 		lineCount = 6;
 		lines = new Entity* [lineCount];
 
@@ -127,8 +121,8 @@ struct Stage2 : public Stage
         switches[0] = new Switch(760,700,0,1);
         switches[1] = new Switch(840,700,1,1);
 
-        platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png", 530, 360, 0);
-        platforms[1] = new Platform ("../Stage_Images/Stage2/quad2VerPlatform1.png", 710, 160, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png", 530, 360, -30);
+        platforms[1] = new Platform ("../Stage_Images/Stage2/quad2VerPlatform1.png", 710, 160, -50);
         
         portals[0] = new Portal (995,740,0);
 
@@ -152,14 +146,13 @@ struct Stage2 : public Stage
 };
 
 
-/*
+
 struct Stage3 : public Stage
 {
     
     Stage3(const char* bkg_filename, const char* tex_filename)
     {
-        
-        //oven = new Oven(200,780);
+
         
         lineCount = 3;
         lines = new Entity* [lineCount];
@@ -185,12 +178,6 @@ struct Stage3 : public Stage
         
         
         switches[0] = new Switch(300,780,3,1000,300);
-        //EXAMPLE SWITCHES:
-        //switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
-        //switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
-        //switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
-        //switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
-        //std::cout << switches[0]->switchType << std::endl;
         
         
         platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
@@ -215,15 +202,13 @@ struct Stage3 : public Stage
     
     
 };
-*/
+
 
 struct Stage4 : public Stage
 {
     
     Stage4(const char* bkg_filename, const char* tex_filename)
     {
-        
-        //oven = new Oven(200,780);
         
         lineCount = 3;
         lines = new Entity* [lineCount];
@@ -242,30 +227,15 @@ struct Stage4 : public Stage
         background.setTexture(backgroundTexture);
         
         
-        
-        //Line standing_border(tex_filename);
-        //Line red("../../Stage_Images/Red_Line_Test.png",285,200);
-        //Line blue("../../Stage_Images/Blue_Line_Test.png",375,260);
-        //Line green("../../Stage_Images/Green_Line_Test.png",450,200);
         lines[0] = new Line (tex_filename);
         lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
         lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-        //lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",410,780);
-        //lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
+  
         
         
         switches[0] = new Switch(300,780,3,1000,300);
-        //EXAMPLE SWITCHES:
-        //switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
-        //switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
-        //switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
-        //switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
-        //std::cout << switches[0]->switchType << std::endl;
+
         
-        
-        
-        //Platform p1("../../Stage_Images/ActivatedPlatform.png");
-        //Platform oven("../../Stage_Images/Oven.png",400,750,300);
         platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
         
         portals[0] = new Portal (100,780,0);
@@ -289,14 +259,12 @@ struct Stage4 : public Stage
     
 };
 
-/*
+
 struct Stage5 : public Stage
 {
     
     Stage5(const char* bkg_filename, const char* tex_filename)
     {
-        
-        //oven = new Oven(200,780);
         
         lineCount = 3;
         lines = new Entity* [lineCount];
@@ -315,30 +283,15 @@ struct Stage5 : public Stage
         background.setTexture(backgroundTexture);
         
         
-        
-        //Line standing_border(tex_filename);
-        //Line red("../../Stage_Images/Red_Line_Test.png",285,200);
-        //Line blue("../../Stage_Images/Blue_Line_Test.png",375,260);
-        //Line green("../../Stage_Images/Green_Line_Test.png",450,200);
         lines[0] = new Line (tex_filename);
         lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
         lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-        //lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",410,780);
-        //lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
+     
         
         
         switches[0] = new Switch(300,780,3,1000,300);
-        //EXAMPLE SWITCHES:
-        //switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
-        //switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
-        //switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
-        //switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
-        //std::cout << switches[0]->switchType << std::endl;
         
         
-        
-        //Platform p1("../../Stage_Images/ActivatedPlatform.png");
-        //Platform oven("../../Stage_Images/Oven.png",400,750,300);
         platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
         
         portals[0] = new Portal (100,780,0);
@@ -369,8 +322,6 @@ struct Stage6 : public Stage
     Stage6(const char* bkg_filename, const char* tex_filename)
     {
         
-        //oven = new Oven(200,780);
-        
         lineCount = 3;
         lines = new Entity* [lineCount];
         
@@ -387,31 +338,15 @@ struct Stage6 : public Stage
         bouleTexture.loadFromFile("../Stage_Images/Stage1/IntroStage_Boule.png");
         background.setTexture(backgroundTexture);
         
-        
-        
-        //Line standing_border(tex_filename);
-        //Line red("../../Stage_Images/Red_Line_Test.png",285,200);
-        //Line blue("../../Stage_Images/Blue_Line_Test.png",375,260);
-        //Line green("../../Stage_Images/Green_Line_Test.png",450,200);
+  
         lines[0] = new Line (tex_filename);
         lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
         lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-        //lines[3] = new Line ("../Stage_Images/Green_Line_Test.png",410,780);
-        //lines[3] = new Line ("../Stage_Images/Universal_StageParts/Stage_Oven_Default.png", 1000, 780, true);
+
         
         
         switches[0] = new Switch(300,780,3,1000,300);
-        //EXAMPLE SWITCHES:
-        //switches[0] = new Switch(300,780,0,0); //type 0 switch, switch spawns at (300,780), moves platform 0
-        //switches[0] = new Switch(300,780,1,1); //type 1 switch, switch spawns at (300,780), moves platform 3
-        //switches[0] = new Switch(300,780,2,800,300); //type 2 switch. switch spawns at (300,780). Displaces baker to (800,300)
-        //switches[0] = new Switch(300,780,3,800,300); //type 3 switch. switch spawns at (300,780). Displaces roti to (800,300)
-        //std::cout << switches[0]->switchType << std::endl;
         
-        
-        
-        //Platform p1("../../Stage_Images/ActivatedPlatform.png");
-        //Platform oven("../../Stage_Images/Oven.png",400,750,300);
         platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
         
         portals[0] = new Portal (100,780,0);
@@ -435,5 +370,5 @@ struct Stage6 : public Stage
     
 };
 
-*/
+
 #endif
