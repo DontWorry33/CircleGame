@@ -596,7 +596,7 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 		motionCheck(0,entities,stages);
 		
 		//If Roti is Right of Baker (Greater)
-		if (entities[1]->cCircle.getPosition().x > entities[0]->cCircle.getPosition().x)
+		if (entities[1]->eBounds.x > entities[0]->eBounds.x)
 		{
 			if (!entities[0]->canMoveRight)
 			{
@@ -623,6 +623,7 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 
 		if (bakerHitting[1] > 1 && rotiHitting[1] > 1 && bakerHitting!=rotiHitting && bakerHitting[0] == rotiHitting[0]) //checks if both touching a surface, now we need to check if touching opposite sides && saftey check for length of surface.
 		{
+			std::cout << "hitting opposite sides of same surface";
 			negateGravity = true;
 			entities[0]->canMoveDown = true;
 			entities[0]->gCurrent = 0;
@@ -757,7 +758,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 							{
 								if (sw<tSwitch)
 								{
-									std::cout << "within" << std::endl;
+									//std::cout << "within" << std::endl;
 									if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 									if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y <= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
 									stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->activatePlatform = false;
@@ -780,7 +781,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 							}
 						}
 
-						std::cout << "TSWITCH: " << tSwitch << std::endl;
+						//std::cout << "TSWITCH: " << tSwitch << std::endl;
 						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture2);
 						if (stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.getPosition().y <= stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->maxHeight) stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = false;
 						else stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = true;
@@ -789,7 +790,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 					}
 					else if (stages[currentStage]->switches[tSwitch]->switchType == 1)
 						{
-							std::cout << "SWAPPING TEXTURE BACK ON: " << tSwitch << std::endl;
+							//std::cout << "SWAPPING TEXTURE BACK ON: " << tSwitch << std::endl;
 								stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
 								stages[currentStage]->switches[tSwitch]->switchUsed = false;					
 
@@ -1231,7 +1232,7 @@ bool Game::leftCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STA
 			entities[x]->leftCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
 			entities[x]->leftCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
 			{
-				entities[x]->cCircle.setPosition(stages[currentStage]->platforms[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
+				entities[x]->cCircle.setPosition(stages[currentStage]->platforms[a]->eBounds.x+stages[currentStage]->platforms[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
 				return true;
 			}
 	}
