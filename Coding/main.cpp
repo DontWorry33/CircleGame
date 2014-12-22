@@ -29,9 +29,14 @@ int main()
 				 );
 	Stage2* stage2 = new Stage2(
 				"../Stage_Images/Stage2/StageTwo.png");
-	Stage* stages[2];
+    
+    Stage3* stage3 = new Stage3(
+                                "../Stage_Images/Stage3/StageThree.png");
+    
+	Stage* stages[3];
 	stages[0] = stage1;
 	stages[1] = stage2;
+    stages[2] = stage3;
 
 	
 	Game* game = new Game;
