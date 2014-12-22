@@ -267,11 +267,11 @@ Game::Game() :
 	currSong = 0;
     
 
-	if (!music1.openFromFile("../Music/bossX.wav")) NULL; music.push_back(&music1);
-	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.wav")) NULL; music.push_back(&music2);
-	if (!music3.openFromFile("../Music/puzzlegametheme.wav")) NULL; music.push_back(&music3);
-	if (!music4.openFromFile("../Music/freneticpuzzlegame.wav")) NULL; music.push_back(&music4);
-	if (!music5.openFromFile("../Music/puzzlegamemusic.wav")) NULL; music.push_back(&music5);
+	if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
+	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
+	if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
+	if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
+	if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
     //LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
