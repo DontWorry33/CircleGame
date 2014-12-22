@@ -124,7 +124,8 @@ struct Stage2 : public Stage
         
         portals[0] = new Portal (995,740,0);
 
-		oven = new Oven(780, 165);
+		//oven = new Oven(780, 165);
+        oven = new Oven(300, 800);
 
 
 	}
@@ -148,11 +149,12 @@ struct Stage2 : public Stage
 struct Stage3 : public Stage
 {
     
-    Stage3(const char* bkg_filename, const char* tex_filename)
+    Stage3(const char* bkg_filename)
     {
 
+        //Dedie: Trying to get this puppy running. So far, pressing L doesn't get me to it.
         
-        lineCount = 3;
+        lineCount = 1;
         lines = new Entity* [lineCount];
         
         platformCount = 1;
@@ -169,12 +171,20 @@ struct Stage3 : public Stage
         background.setTexture(backgroundTexture);
         
         
-        lines[0] = new Line ("../Stage_Images/Stage3/quad1Hor1.png");
-        lines[1] = new Line ("../Stage_Images/Stage3/quad1Hor2.png");
-        lines[2] = new Line ("../Stage_Images/Stage3/quad1Ver1.png");
-        //lines[0] = new Line (tex_filename);
-        //lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
-        //lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
+        lines[0] = new Line ("../Stage_Images/Stage3/quad1Hor1.png", 263, 180);
+        //lines[1] = new Line ("../Stage_Images/Stage3/quad1Hor2.png");
+        //lines[2] = new Line ("../Stage_Images/Stage3/quad1Ver1.png");
+        //lines[3] = new Line ("../Stage_Images/Stage3/quad2Hor1.png");
+        //lines[4] = new Line ("../Stage_Images/Stage3/quad2Hor2.png");
+        //lines[5] = new Line ("../Stage_Images/Stage3/quad3Hor1.png");
+        //lines[6] = new Line ("../Stage_Images/Stage3/quad3Hor2.png");
+        //lines[7] = new Line ("../Stage_Images/Stage3/quad4Hor1.png");
+        //lines[8] = new Line ("../Stage_Images/Stage3/quad4Hor2.png");
+        //lines[9] = new Line ("../Stage_Images/Stage3/quad4Ver1.png");
+        //lines[10] = new Line ("../Stage_Images/Stage3/quad4Ver2.png");
+        //lines[11] = new Line ("../Stage_Images/Stage3/quad4Ver3.png");
+        //lines[12] = new Line ("../Stage_Images/Stage3/quad4Ver4.png");
+      
         
         
         switches[0] = new Switch(300,780,3,1000,300);
@@ -186,7 +196,8 @@ struct Stage3 : public Stage
         portals[1] = new Portal(900,780,1);
         portals[2] = new Portal(1110,780,2);
         
-        oven = new Oven(1000,10);
+        oven = new Oven(1000,500);
+        
     }
     
     ~Stage3()
@@ -203,7 +214,7 @@ struct Stage3 : public Stage
     
 };
 
-
+/*
 struct Stage4 : public Stage
 {
     
@@ -369,6 +380,6 @@ struct Stage6 : public Stage
     
     
 };
-
+*/
 
 #endif
