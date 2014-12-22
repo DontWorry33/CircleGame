@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -165,6 +166,15 @@ class Game
 		int currentStage;
 		int tSwitch;
 
+		std::vector<sf::Music*> music;
+   		sf::Music music1;
+   		sf::Music music2;
+   		sf::Music music3;
+   		sf::Music music4;
+   		sf::Music music5;
+   		sf::Music music6;
+
+   		int currSong;
 };
 
 
@@ -177,7 +187,8 @@ Game::Game() :
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime()
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(),
+			   music1(), music2(), music3(), music4(), music5()
 
 {
 	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -253,7 +264,15 @@ Game::Game() :
 	displaced = false;
 
 	tSwitch = 0;
-	//INCORRECt. LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
+	currSong = 0;
+    
+
+	if (!music1.openFromFile("../Music/bossX.wav")) NULL; music.push_back(&music1);
+	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.wav")) NULL; music.push_back(&music2);
+	if (!music3.openFromFile("../Music/puzzlegametheme.wav")) NULL; music.push_back(&music3);
+	if (!music4.openFromFile("../Music/freneticpuzzlegame.wav")) NULL; music.push_back(&music4);
+	if (!music5.openFromFile("../Music/puzzlegamemusic.wav")) NULL; music.push_back(&music5);
+    //LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
 	//retValS = new int[1];
@@ -276,6 +295,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		//processEvents(elapsedTime, entities);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
+		if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
@@ -621,15 +641,18 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 		checkHitting(entities,stages,1,false,rotiHitting);
 
 
-		if (bakerHitting[1] > 1 && rotiHitting[1] > 1 && bakerHitting!=rotiHitting && bakerHitting[0] == rotiHitting[0]) //checks if both touching a surface, now we need to check if touching opposite sides && saftey check for length of surface.
+		if (bakerHitting[1] > 1 && rotiHitting[1] > 1 && bakerHitting[1]!=rotiHitting[1] && bakerHitting[0] == rotiHitting[0]) //checks if both touching a surface, now we need to check if touching opposite sides && saftey check for length of surface.
 		{
-			std::cout << "hitting opposite sides of same surface";
+			//std::cout << "hitting opposite sides of same surface";
+			//std::cout << "baker: " << bakerHitting[1] << ", " << "roti: " << rotiHitting[1] << std::endl;
+			//std::cout << "bakerstage: " << bakerHitting[0] << ", " << "rotistage: " << rotiHitting[0] << std::endl;
+
 			negateGravity = true;
 			entities[0]->canMoveDown = true;
 			entities[0]->gCurrent = 0;
 			entities[1]->canMoveDown = true;
 			entities[1]->gCurrent = 0;
-			if (entities[1]->cCircle.getPosition().y <= entities[0]->cCircle.getPosition().y)
+			if (entities[1]->eBounds.y <= entities[0]->eBounds.y)
 			{
 				//motionCheck(0, entities);
 				isBeingAttracted = true;
@@ -678,11 +701,14 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 			bakerRepulsion = -bakerRepulsion;
 		}
 
-		if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
+		else if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
 		{
 			rotiRepulsion = -rotiRepulsion;
 		}
-		
+		else
+		{
+			std::cout << "I KNOW THIS IS A BUG." << std::endl;
+		} 
 		//need to restrict movement as it can currently move "through" a wall.
 		entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
 		entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
@@ -775,7 +801,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 									{
 										if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 										if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y<= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
-										else stages[currentStage]->switches[sw]->switchUsed = false;
+										stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->activatePlatform = false;
 									}
 								}
 							}
@@ -1518,6 +1544,12 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		{
 			currentStage = 1;
 		}
+	if (key == sf::Keyboard::M)
+	{
+		music[currSong]->stop();
+		currSong+=1;
+		if (currSong >= 5) currSong = 0;
+	}
 }
 
 void Game::motionCheck( int character, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])

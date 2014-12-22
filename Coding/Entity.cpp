@@ -354,7 +354,7 @@ struct Baker : public Entity
 		cCircle.setOrigin(cRadius,cRadius);
 
 		eStartPos.x=490;
-		eStartPos.y=600;
+		eStartPos.y=700;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
