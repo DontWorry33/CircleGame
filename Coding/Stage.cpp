@@ -233,11 +233,12 @@ struct Stage4 : public Stage
     
     Stage4(const char* bkg_filename)
     {
+        //Dedie: Nearly done. Switches have not been added, because this staeg relies heavily on one of the last types of switches to be made.
         
-        lineCount = 1;
+        lineCount = 26;
         lines = new Entity* [lineCount];
         
-        platformCount = 1;
+        platformCount = 8;
         platforms = new Entity* [platformCount];
         
         switchCount = 1;
@@ -251,32 +252,32 @@ struct Stage4 : public Stage
         background.setTexture(backgroundTexture);
         
         
-        lines[0] = new Line ("../Stage_Images/Stage4/quad1Hor1.png", 200, 200);
-        //lines[1] = new Line ("../Stage_Images/Stage4/quad1Hor2.png");
-        //lines[2] = new Line ("../Stage_Images/Stage4/quad1Hor3.png");
-        //lines[3] = new Line ("../Stage_Images/Stage4/quad1Hor4.png");
-        //lines[4] = new Line ("../Stage_Images/Stage4/quad1Hor5.png");
-        //lines[5] = new Line ("../Stage_Images/Stage4/quad2Hor1.png");
-        //lines[6] = new Line ("../Stage_Images/Stage4/quad2Hor2.png");
-        //lines[7] = new Line ("../Stage_Images/Stage4/quad2Hor3.png");
-        //lines[8] = new Line ("../Stage_Images/Stage4/quad2Hor2.png");
-        //lines[9] = new Line ("../Stage_Images/Stage4/quad2Ver1.png");
-        //lines[10] = new Line ("../Stage_Images/Stage4/quad2Ver2.png");
-        //lines[11] = new Line ("../Stage_Images/Stage4/quad3Hor1.png");
-        //lines[12] = new Line ("../Stage_Images/Stage4/quad3Hor2.png");
-        //lines[13] = new Line ("../Stage_Images/Stage4/quad3Hor3.png");
-        //lines[14] = new Line ("../Stage_Images/Stage4/quad3Ver1.png");
-        //lines[15] = new Line ("../Stage_Images/Stage4/quad3Ver2.png");
-        //lines[16] = new Line ("../Stage_Images/Stage4/quad3Ver3.png");
-        //lines[17] = new Line ("../Stage_Images/Stage4/quad4Hor1.png");
-        //lines[18] = new Line ("../Stage_Images/Stage4/quad4Hor2.png");
-        //lines[19] = new Line ("../Stage_Images/Stage4/quad4Hor3.png");
-        //lines[20] = new Line ("../Stage_Images/Stage4/quad4Hor4.png");
-        //lines[21] = new Line ("../Stage_Images/Stage4/quad4Hor5.png");
-        //lines[22] = new Line ("../Stage_Images/Stage4/quad4Hor6.png");
-        //lines[23] = new Line ("../Stage_Images/Stage4/quad4Ver1.png");
-        //lines[24] = new Line ("../Stage_Images/Stage4/quad4Ver2.png");
-        //lines[25] = new Line ("../Stage_Images/Stage4/quad4Ver3.png");
+        lines[0] = new Line ("../Stage_Images/Stage4/quad1Hor1.png", 65, 365);
+        lines[1] = new Line ("../Stage_Images/Stage4/quad1Hor2.png", 212, 164);
+        lines[2] = new Line ("../Stage_Images/Stage4/quad1Hor3.png", 212, 265);
+        lines[3] = new Line ("../Stage_Images/Stage4/quad1Hor4.png", 376, 402);
+        lines[4] = new Line ("../Stage_Images/Stage4/quad1Hor5.png", 549, 216);
+        lines[5] = new Line ("../Stage_Images/Stage4/quad2Hor1.png", 720, 410);
+        lines[6] = new Line ("../Stage_Images/Stage4/quad2Hor2.png", 913, 176);
+        lines[7] = new Line ("../Stage_Images/Stage4/quad2Hor3.png", 952, 348);
+        lines[8] = new Line ("../Stage_Images/Stage4/quad2Hor4.png", 1116, 260);
+        lines[9] = new Line ("../Stage_Images/Stage4/quad2Ver1.png", 784, 644);
+        lines[10] = new Line ("../Stage_Images/Stage4/quad2Ver2.png", 952, 399);
+        lines[11] = new Line ("../Stage_Images/Stage4/quad3Hor1.png", 201, 677);
+        lines[12] = new Line ("../Stage_Images/Stage4/quad3Hor2.png", 224, 563);
+        lines[13] = new Line ("../Stage_Images/Stage4/quad3Hor3.png", 384, 622);
+        lines[14] = new Line ("../Stage_Images/Stage4/quad3Ver1.png", 136, 563);
+        lines[15] = new Line ("../Stage_Images/Stage4/quad3Ver2.png", 312, 782);
+        lines[16] = new Line ("../Stage_Images/Stage4/quad3Ver3.png", 455, 621);
+        lines[17] = new Line ("../Stage_Images/Stage4/quad4Hor1.png", 713, 622);
+        lines[18] = new Line ("../Stage_Images/Stage4/quad4Hor2.png", 845, 641);
+        lines[19] = new Line ("../Stage_Images/Stage4/quad4Hor3.png", 936, 419);
+        lines[20] = new Line ("../Stage_Images/Stage4/quad4Hor4.png", 935, 477);
+        lines[21] = new Line ("../Stage_Images/Stage4/quad4Hor5.png", 1070, 477);
+        lines[22] = new Line ("../Stage_Images/Stage4/quad4Hor6.png", 1150, 616);
+        lines[23] = new Line ("../Stage_Images/Stage4/quad4Ver1.png", 642, 621);
+        lines[24] = new Line ("../Stage_Images/Stage4/quad4Ver2.png", 892, 477);
+        lines[25] = new Line ("../Stage_Images/Stage4/quad4Ver3.png", 899, 640);
 
   
         
@@ -295,18 +296,18 @@ struct Stage4 : public Stage
         
 
         
-        platforms[0] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform1.png", 400, 400, 300);
-        //platforms[1] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform2.png", 0, 0, 0);
-        //platforms[2] = new Platform ("../Stage_Images/Stage4/quad2HorPlatform1.png", 0, 0, 0);
-        //platforms[3] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform1.png", 0, 0, 0);
-        //platforms[4] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform2.png", 0, 0, 0);
-        //platforms[5] = new Platform ("../Stage_Images/Stage4/quad3VerPlatform1.png", 0, 0, 0);
-        //platforms[6] = new Platform ("../Stage_Images/Stage4/quad4HorPlatform1.png", 0, 0, 0);
-        //platforms[7] = new Platform ("../Stage_Images/Stage4/quad4VerPlatform1.png", 0, 0, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform1.png", 58, 162, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform2.png", 548, 328, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage4/quad2HorPlatform1.png", 1120, 173, 0);
+        platforms[3] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform1.png", 57, 560, 0);
+        platforms[4] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform2.png", 45, 672, 0);
+        platforms[5] = new Platform ("../Stage_Images/Stage4/quad3VerPlatform1.png", 162, 770, 0);
+        platforms[6] = new Platform ("../Stage_Images/Stage4/quad4HorPlatform1.png", 1003, 610, 0);
+        platforms[7] = new Platform ("../Stage_Images/Stage4/quad4VerPlatform1.png", 787, 768, 0);
         
-        portals[0] = new Portal (100,780,0);
-        portals[1] = new Portal(900,780,1);
-        portals[2] = new Portal(1110,780,2);
+        portals[0] = new Portal(550,174,0);
+        portals[1] = new Portal(545,765,1);
+        portals[2] = new Portal(373,766,2);
         
         oven = new Oven(300, 800);
     }
