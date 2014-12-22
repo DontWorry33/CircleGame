@@ -169,10 +169,12 @@ struct Stage3 : public Stage
         background.setTexture(backgroundTexture);
         
         
-        
-        lines[0] = new Line (tex_filename);
-        lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
-        lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
+        lines[0] = new Line ("../Stage_Images/Stage3/quad1Hor1.png");
+        lines[1] = new Line ("../Stage_Images/Stage3/quad1Hor2.png");
+        lines[2] = new Line ("../Stage_Images/Stage3/quad1Ver1.png");
+        //lines[0] = new Line (tex_filename);
+        //lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
+        //lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
         
         
         switches[0] = new Switch(300,780,3,1000,300);
