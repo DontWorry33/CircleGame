@@ -37,7 +37,7 @@ struct Stage1 : public Stage
 
         //Dedie: I may need to redesign Stage1. As a platform moves, it doesn't move the Baker with it. No other stage has this feature, though, so the cheapest fix would be for a revamp. We'll see what happens. Gravity will need to be fixed for me, at least. Mac seems to have heavier objects.... And lastly, I need to increase the repulsion force of Roti's second activation. Because right now, Baker and Roti can't clear even the smallest gaps.
 
-		lineCount = 2;
+		lineCount = 1;
 		lines = new Entity* [lineCount];
 
 		platformCount = 1;
@@ -54,21 +54,19 @@ struct Stage1 : public Stage
 		background.setTexture(backgroundTexture);
 
 
-
-		lines[0] = new Line ("../Stage_Images/Stage1/quad3Hor1.png", 260, 790);
-		lines[1] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,780);
+		lines[0] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,782);
 
 
-		switches[0] = new Switch(300,730,0,0);
+		switches[0] = new Switch(1000,780,0,0);
 
 
-		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 600, 890, 765);
+		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500);
 
-		portals[0] = new Portal (100,780,0);
-		portals[1] = new Portal(900,780,1);
-		portals[2] = new Portal(1110,780,2);
+		portals[0] = new Portal (100,600,0);
+		portals[1] = new Portal(900,600,1);
+		portals[2] = new Portal(1110,600,2);
 
-		oven = new Oven(1000,780);	
+		oven = new Oven(200,780);
 	}
 
 	~Stage1()
