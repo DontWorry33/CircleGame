@@ -692,8 +692,8 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 
 		//const float pushValue = 1000.f;
 
-		sf::Vector2f bakerRepulsion(5000,0.f);
-		sf::Vector2f rotiRepulsion(1000,0.f);
+		sf::Vector2f bakerRepulsion(5000.f,0.f);
+		sf::Vector2f rotiRepulsion(1000.f,0.f);
 		sf::Time applyRepulsion = shotClock.getElapsedTime();
 
 		if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
