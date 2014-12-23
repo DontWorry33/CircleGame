@@ -57,7 +57,7 @@ struct Stage1 : public Stage
 		lines[0] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,782);
 
 
-		switches[0] = new Switch(1000,780,0,0);
+		switches[0] = new Switch(1000,780,0,1);
 
 
 		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500);
@@ -78,6 +78,8 @@ struct Stage1 : public Stage
 		if (platformCount > 0) delete[] platforms;
 		for (int x=0; x<switchCount; x++) delete switches[x];
 		if (switchCount>0) delete[] switches;
+        for (int x=0; x<portalCount; x++) delete portals[x];
+        if (portalCount>0) delete[] portals;
 	}
 
 
@@ -89,7 +91,7 @@ struct Stage2 : public Stage
 	Stage2(const char* bkg_filename)
 	{
         
-        //Dedie: There's a bug in here that Hussain's taking care of. When Roti's power is activated on the platform[0], everyone shoots to the top. ): Other than that, things are looking good.
+        //Dedie: Switches need to be put in final position.
         
 		lineCount = 6;
 		lines = new Entity* [lineCount];
@@ -152,7 +154,278 @@ struct Stage3 : public Stage
     Stage3(const char* bkg_filename)
     {
 
-        //Dedie: Trying to get this puppy running. So far, pressing L doesn't get me to it.
+        //Dedie: Nearly done. Pressing L doesn't get me to here, though.
+        
+        lineCount = 12;
+        lines = new Entity* [lineCount];
+        
+        platformCount = 4;
+        platforms = new Entity* [platformCount];
+        
+        switchCount = 7;
+        switches = new Entity* [switchCount];
+        
+        portalCount = 3;
+        portals = new Entity* [portalCount];
+        backgroundTexture.loadFromFile(bkg_filename);
+        
+        bouleTexture.loadFromFile("../Stage_Images/Stage3/StageThree_Boule.png");
+        background.setTexture(backgroundTexture);
+        
+        
+        lines[0] = new Line ("../Stage_Images/Stage3/quad1Hor1.png", 263, 180);
+        lines[1] = new Line ("../Stage_Images/Stage3/quad1Hor2.png", 389, 380);
+        lines[2] = new Line ("../Stage_Images/Stage3/quad1Ver1.png", 513, 380);
+        lines[3] = new Line ("../Stage_Images/Stage3/quad2Hor1.png", 613, 380);
+        lines[4] = new Line ("../Stage_Images/Stage3/quad2Hor2.png", 1138, 220);
+        lines[5] = new Line ("../Stage_Images/Stage3/quad3Hor1.png", 78, 628);
+        lines[6] = new Line ("../Stage_Images/Stage3/quad4Hor1.png", 773, 582);
+        lines[7] = new Line ("../Stage_Images/Stage3/quad4Hor2.png", 951, 496);
+        lines[8] = new Line ("../Stage_Images/Stage3/quad4Ver1.png", 704, 553);
+        lines[9] = new Line ("../Stage_Images/Stage3/quad4Ver2.png", 704, 679);
+        lines[10] = new Line ("../Stage_Images/Stage3/quad4Ver3.png", 868, 582);
+        lines[11] = new Line ("../Stage_Images/Stage3/quad4Ver4.png", 1100, 723);
+      
+        
+        switches[0] = new Switch(95, 159,3,515, 705); //quad1Switch1
+        switches[1] = new Switch(417,159,2,0); //quad1Switch2
+        switches[2] = new Switch(995,363,1,1); //quad2Switch1
+        switches[3] = new Switch(1158,201,0,1); //quad2Switch2
+        switches[4] = new Switch(104, 778, 2, 67, 521); //quad3Switch1
+        switches[5] = new Switch(952, 462, 3, 454, 96); //quad4Switch1
+        switches[6] = new Switch(1164,781,3,1); //quad4Switch2
+       
+        
+        
+        platforms[0] = new Platform ("../Stage_Images/Stage3/quad2VerPlatform1.png", 691, 347, 100); //Should move down
+        platforms[1] = new Platform ("../Stage_Images/Stage3/quad2VerPlatform2.png", 865, 347, 100);
+        platforms[2] = new Platform ("../Stage_Images/Stage3/quad2HorPlatform1.png", 953, 379, 100); //Should disappear
+        platforms[3] = new Platform ("../Stage_Images/Stage3/quad3VerPlatform1.png", 353, 771, 400);
+        
+        portals[0] = new Portal (1145,359,0);
+        portals[1] = new Portal(1017,250,1);
+        portals[2] = new Portal(263,147,2);
+        
+        //oven = new Oven(470,351); Actual Oven Position. Below is just for testing.
+        oven = new Oven(590, 800);
+        
+    }
+    
+    ~Stage3()
+    {
+        std::cout << "destructing stg 3" << std::endl;
+        for (int x=0; x<lineCount; x++) delete lines[x];
+        if (lineCount>0) delete[] lines;
+        for (int x=0; x<platformCount; x++) delete platforms[x];
+        if (platformCount > 0) delete[] platforms;
+        for (int x=0; x<switchCount; x++) delete switches[x];
+        if (switchCount>0) delete[] switches;
+        for (int x=0; x<portalCount; x++) delete portals[x];
+        if (portalCount>0) delete[] portals;
+    }
+    
+    
+};
+
+
+struct Stage4 : public Stage
+{
+    
+    Stage4(const char* bkg_filename)
+    {
+        //Dedie: Nearly done. Switch functionality has not been added, because this stage relies heavily on one of the last types of switches to be made. Otherwise complete.
+        
+        lineCount = 26;
+        lines = new Entity* [lineCount];
+        
+        platformCount = 8;
+        platforms = new Entity* [platformCount];
+        
+        switchCount = 9;
+        switches = new Entity* [switchCount];
+        
+        portalCount = 3;
+        portals = new Entity* [portalCount];
+        backgroundTexture.loadFromFile(bkg_filename);
+        
+        bouleTexture.loadFromFile("../Stage_Images/Stage4/StageFour_Boule.png");
+        background.setTexture(backgroundTexture);
+        
+        
+        lines[0] = new Line ("../Stage_Images/Stage4/quad1Hor1.png", 65, 365);
+        lines[1] = new Line ("../Stage_Images/Stage4/quad1Hor2.png", 212, 164);
+        lines[2] = new Line ("../Stage_Images/Stage4/quad1Hor3.png", 212, 265);
+        lines[3] = new Line ("../Stage_Images/Stage4/quad1Hor4.png", 376, 402);
+        lines[4] = new Line ("../Stage_Images/Stage4/quad1Hor5.png", 549, 216);
+        lines[5] = new Line ("../Stage_Images/Stage4/quad2Hor1.png", 720, 410);
+        lines[6] = new Line ("../Stage_Images/Stage4/quad2Hor2.png", 913, 176);
+        lines[7] = new Line ("../Stage_Images/Stage4/quad2Hor3.png", 952, 348);
+        lines[8] = new Line ("../Stage_Images/Stage4/quad2Hor4.png", 1116, 260);
+        lines[9] = new Line ("../Stage_Images/Stage4/quad2Ver1.png", 784, 644);
+        lines[10] = new Line ("../Stage_Images/Stage4/quad2Ver2.png", 952, 399);
+        lines[11] = new Line ("../Stage_Images/Stage4/quad3Hor1.png", 201, 677);
+        lines[12] = new Line ("../Stage_Images/Stage4/quad3Hor2.png", 224, 563);
+        lines[13] = new Line ("../Stage_Images/Stage4/quad3Hor3.png", 384, 622);
+        lines[14] = new Line ("../Stage_Images/Stage4/quad3Ver1.png", 136, 563);
+        lines[15] = new Line ("../Stage_Images/Stage4/quad3Ver2.png", 312, 782);
+        lines[16] = new Line ("../Stage_Images/Stage4/quad3Ver3.png", 455, 621);
+        lines[17] = new Line ("../Stage_Images/Stage4/quad4Hor1.png", 713, 622);
+        lines[18] = new Line ("../Stage_Images/Stage4/quad4Hor2.png", 845, 641);
+        lines[19] = new Line ("../Stage_Images/Stage4/quad4Hor3.png", 936, 419);
+        lines[20] = new Line ("../Stage_Images/Stage4/quad4Hor4.png", 935, 477);
+        lines[21] = new Line ("../Stage_Images/Stage4/quad4Hor5.png", 1070, 477);
+        lines[22] = new Line ("../Stage_Images/Stage4/quad4Hor6.png", 1150, 616);
+        lines[23] = new Line ("../Stage_Images/Stage4/quad4Ver1.png", 642, 621);
+        lines[24] = new Line ("../Stage_Images/Stage4/quad4Ver2.png", 892, 477);
+        lines[25] = new Line ("../Stage_Images/Stage4/quad4Ver3.png", 899, 640);
+
+  
+        
+        
+        switches[0] = new Switch(225,145,3,0,0); //quad1Switch1
+        switches[1] = new Switch(474,190,3,0,0); //quad1Switch2
+        switches[2] = new Switch(632,190,3,0,0); //quad2Switch1
+        switches[3] = new Switch(916, 398,3,0,0); //quad2Switch2
+        switches[4] = new Switch(80,779,3,0,0); //quad3Switch1
+        switches[5] = new Switch(232,780,3,0,0); //quad3Switch2
+        switches[6] = new Switch(634,780,3,0,0); //quad4Switch1
+        switches[7] = new Switch(1156,589,3,0,0); //quad4Switch2
+        switches[8] = new Switch(1170,780,3,0,0); //quad4Switch3
+        
+        
+
+        
+        platforms[0] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform1.png", 58, 162, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage4/quad1HorPlatform2.png", 548, 328, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage4/quad2HorPlatform1.png", 1120, 173, 0);
+        platforms[3] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform1.png", 57, 560, 0);
+        platforms[4] = new Platform ("../Stage_Images/Stage4/quad3HorPlatform2.png", 45, 672, 0);
+        platforms[5] = new Platform ("../Stage_Images/Stage4/quad3VerPlatform1.png", 162, 770, 0);
+        platforms[6] = new Platform ("../Stage_Images/Stage4/quad4HorPlatform1.png", 1003, 610, 0);
+        platforms[7] = new Platform ("../Stage_Images/Stage4/quad4VerPlatform1.png", 787, 768, 0);
+        
+        portals[0] = new Portal(550,174,0);
+        portals[1] = new Portal(545,765,1);
+        portals[2] = new Portal(373,766,2);
+        
+        oven = new Oven(590, 800);
+    }
+    
+    ~Stage4()
+    {
+        std::cout << "destructing stg 4" << std::endl;
+        for (int x=0; x<lineCount; x++) delete lines[x];
+        if (lineCount>0) delete[] lines;
+        for (int x=0; x<platformCount; x++) delete platforms[x];
+        if (platformCount > 0) delete[] platforms;
+        for (int x=0; x<switchCount; x++) delete switches[x];
+        if (switchCount>0) delete[] switches;
+        for (int x=0; x<portalCount; x++) delete portals[x];
+        if (portalCount>0) delete[] portals;
+    }
+    
+    
+};
+
+
+struct Stage5 : public Stage
+{
+    
+    Stage5(const char* bkg_filename)
+    {
+        //Dedie: All placeholders have been implemented. Just need to quality check. And again, Baker needs to spawn at the specified location for this stage. Getting some issues with having just a sole Anpan portal. Will look into that.
+        
+        lineCount = 23;
+        lines = new Entity* [lineCount];
+        
+        platformCount = 5;
+        platforms = new Entity* [platformCount];
+        
+        switchCount = 8;
+        switches = new Entity* [switchCount];
+        
+        portalCount = 1;
+        portals = new Entity* [portalCount];
+        backgroundTexture.loadFromFile(bkg_filename);
+        
+        bouleTexture.loadFromFile("../Stage_Images/Stage5/StageFive_Boule.png");
+        background.setTexture(backgroundTexture);
+        
+        
+        lines[0] = new Line ("../Stage_Images/Stage5/quad1Hor1.png", 443, 135);
+        lines[1] = new Line ("../Stage_Images/Stage5/quad1Hor2.png", 195, 304);
+        lines[2] = new Line ("../Stage_Images/Stage5/quad1Hor3.png", 443, 304);
+        lines[3] = new Line ("../Stage_Images/Stage5/quad1Ver1.png", 102, 626);
+        lines[4] = new Line ("../Stage_Images/Stage5/quad1Ver2.png", 303, 259);
+        lines[5] = new Line ("../Stage_Images/Stage5/quad1Ver3.png", 303, 436);
+        lines[6] = new Line ("../Stage_Images/Stage5/quad1Ver4.png", 578, 259);
+        lines[7] = new Line ("../Stage_Images/Stage5/quad1Ver5.png", 578, 436);
+        lines[8] = new Line ("../Stage_Images/Stage5/quad2Hor1.png", 676, 304);
+        lines[9] = new Line ("../Stage_Images/Stage5/quad2Hor2.png", 895, 301);
+        lines[10] = new Line ("../Stage_Images/Stage5/quad2Hor3.png", 1092,185);
+        lines[11] = new Line ("../Stage_Images/Stage5/quad3Hor1.png", 434, 625);
+        lines[12] = new Line ("../Stage_Images/Stage5/quad3Hor2.png", 195, 470);
+        lines[13] = new Line ("../Stage_Images/Stage5/quad3Hor3.png", 443, 470);
+        lines[14] = new Line ("../Stage_Images/Stage5/quad3Ver1.png", 303, 610);
+        lines[15] = new Line ("../Stage_Images/Stage5/quad3Ver2.png", 443, 780);
+        lines[16] = new Line ("../Stage_Images/Stage5/quad3Ver3.png", 578, 610);
+        lines[17] = new Line ("../Stage_Images/Stage5/quad4Hor1.png", 676, 470);
+        lines[18] = new Line ("../Stage_Images/Stage5/quad4Hor2.png", 845, 692);
+        lines[19] = new Line ("../Stage_Images/Stage5/quad4Hor3.png", 1028, 465);
+        lines[20] = new Line ("../Stage_Images/Stage5/quad4Hor4.png", 1153, 577);
+        lines[21] = new Line ("../Stage_Images/Stage5/quad4Ver1.png", 774, 691);
+        lines[22] = new Line ("../Stage_Images/Stage5/quad4Ver2.png", 986, 545);
+        
+     
+        
+        
+        switches[0] = new Switch(807,284,3,0,0); //quad2Switch1
+        switches[1] = new Switch(870,284,3,0,0); //quad2Switch2
+        switches[2] = new Switch(935,284,3,0,0); //quad2Switch3
+        switches[3] = new Switch(159,610,3,0,0); //quad3Switch1
+        switches[4] = new Switch(495,782,3,0,0); //quad3Switch2
+        switches[5] = new Switch(688,782,3,0,0); //quad4Switch1
+        switches[6] = new Switch(1149,563,3,0,0); //quad4Switch2
+        switches[7] = new Switch(1150,783,3,0,0); //quad4Switch3
+        
+        
+        
+        platforms[0] = new Platform ("../Stage_Images/Stage5/quad2VerPlatform1.png", 773, 108, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage5/quad2VerPlatform2.png", 988, 273, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage5/quad3VerPlatform1.png", 10, 10, 0); //580, 740, 0);
+        platforms[3] = new Platform ("../Stage_Images/Stage5/quad4HorPlatform1.png", 875, 557, 0);
+        platforms[4] = new Platform ("../Stage_Images/Stage5/quad4VerPlatform1.png", 830, 772, 0);
+        
+        //portals[0] = new Portal (-50,-50,0);
+        //portals[1] = new Portal (-50,-50,1);
+        portals[0] = new Portal (100,780,2);
+        
+        
+        oven = new Oven(300, 800);
+    }
+    
+    ~Stage5()
+    {
+        std::cout << "destructing stg 5" << std::endl;
+        for (int x=0; x<lineCount; x++) delete lines[x];
+        if (lineCount>0) delete[] lines;
+        for (int x=0; x<platformCount; x++) delete platforms[x];
+        if (platformCount > 0) delete[] platforms;
+        for (int x=0; x<switchCount; x++) delete switches[x];
+        if (switchCount>0) delete[] switches;
+        for (int x=0; x<portalCount; x++) delete portals[x];
+        if (portalCount>0) delete[] portals;
+    }
+    
+    
+};
+
+
+struct Stage6 : public Stage
+{
+    
+    Stage6(const char* bkg_filename)
+    {
         
         lineCount = 1;
         lines = new Entity* [lineCount];
@@ -167,198 +440,51 @@ struct Stage3 : public Stage
         portals = new Entity* [portalCount];
         backgroundTexture.loadFromFile(bkg_filename);
         
-        bouleTexture.loadFromFile("../Stage_Images/Stage3/StageThree_Boule.png");
-        background.setTexture(backgroundTexture);
-        
-        
-        lines[0] = new Line ("../Stage_Images/Stage3/quad1Hor1.png", 263, 180);
-        //lines[1] = new Line ("../Stage_Images/Stage3/quad1Hor2.png");
-        //lines[2] = new Line ("../Stage_Images/Stage3/quad1Ver1.png");
-        //lines[3] = new Line ("../Stage_Images/Stage3/quad2Hor1.png");
-        //lines[4] = new Line ("../Stage_Images/Stage3/quad2Hor2.png");
-        //lines[5] = new Line ("../Stage_Images/Stage3/quad3Hor1.png");
-        //lines[6] = new Line ("../Stage_Images/Stage3/quad3Hor2.png");
-        //lines[7] = new Line ("../Stage_Images/Stage3/quad4Hor1.png");
-        //lines[8] = new Line ("../Stage_Images/Stage3/quad4Hor2.png");
-        //lines[9] = new Line ("../Stage_Images/Stage3/quad4Ver1.png");
-        //lines[10] = new Line ("../Stage_Images/Stage3/quad4Ver2.png");
-        //lines[11] = new Line ("../Stage_Images/Stage3/quad4Ver3.png");
-        //lines[12] = new Line ("../Stage_Images/Stage3/quad4Ver4.png");
-      
-        
-        
-        switches[0] = new Switch(300,780,3,1000,300);
-        
-        
-        platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
-        
-        portals[0] = new Portal (100,780,0);
-        portals[1] = new Portal(900,780,1);
-        portals[2] = new Portal(1110,780,2);
-        
-        oven = new Oven(1000,500);
-        
-    }
-    
-    ~Stage3()
-    {
-        std::cout << "destructing stg 1" << std::endl;
-        for (int x=0; x<lineCount; x++) delete lines[x];
-        if (lineCount>0) delete[] lines;
-        for (int x=0; x<platformCount; x++) delete platforms[x];
-        if (platformCount > 0) delete[] platforms;
-        for (int x=0; x<switchCount; x++) delete switches[x];
-        if (switchCount>0) delete[] switches;
-    }
-    
-    
-};
-
-/*
-struct Stage4 : public Stage
-{
-    
-    Stage4(const char* bkg_filename, const char* tex_filename)
-    {
-        
-        lineCount = 3;
-        lines = new Entity* [lineCount];
-        
-        platformCount = 1;
-        platforms = new Entity* [platformCount];
-        
-        switchCount = 1;
-        switches = new Entity* [switchCount];
-        
-        portalCount = 3;
-        portals = new Entity* [portalCount];
-        backgroundTexture.loadFromFile(bkg_filename);
-        
-        bouleTexture.loadFromFile("../Stage_Images/Stage1/IntroStage_Boule.png");
-        background.setTexture(backgroundTexture);
-        
-        
-        lines[0] = new Line (tex_filename);
-        lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
-        lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-  
-        
-        
-        switches[0] = new Switch(300,780,3,1000,300);
-
-        
-        platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
-        
-        portals[0] = new Portal (100,780,0);
-        portals[1] = new Portal(900,780,1);
-        portals[2] = new Portal(1110,780,2);
-        
-        oven = new Oven(1000,10);
-    }
-    
-    ~Stage4()
-    {
-        std::cout << "destructing stg 1" << std::endl;
-        for (int x=0; x<lineCount; x++) delete lines[x];
-        if (lineCount>0) delete[] lines;
-        for (int x=0; x<platformCount; x++) delete platforms[x];
-        if (platformCount > 0) delete[] platforms;
-        for (int x=0; x<switchCount; x++) delete switches[x];
-        if (switchCount>0) delete[] switches;
-    }
-    
-    
-};
-
-
-struct Stage5 : public Stage
-{
-    
-    Stage5(const char* bkg_filename, const char* tex_filename)
-    {
-        
-        lineCount = 3;
-        lines = new Entity* [lineCount];
-        
-        platformCount = 1;
-        platforms = new Entity* [platformCount];
-        
-        switchCount = 1;
-        switches = new Entity* [switchCount];
-        
-        portalCount = 3;
-        portals = new Entity* [portalCount];
-        backgroundTexture.loadFromFile(bkg_filename);
-        
-        bouleTexture.loadFromFile("../Stage_Images/Stage1/IntroStage_Boule.png");
-        background.setTexture(backgroundTexture);
-        
-        
-        lines[0] = new Line (tex_filename);
-        lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
-        lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
-     
-        
-        
-        switches[0] = new Switch(300,780,3,1000,300);
-        
-        
-        platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
-        
-        portals[0] = new Portal (100,780,0);
-        portals[1] = new Portal(900,780,1);
-        portals[2] = new Portal(1110,780,2);
-        
-        oven = new Oven(1000,10);
-    }
-    
-    ~Stage5()
-    {
-        std::cout << "destructing stg 1" << std::endl;
-        for (int x=0; x<lineCount; x++) delete lines[x];
-        if (lineCount>0) delete[] lines;
-        for (int x=0; x<platformCount; x++) delete platforms[x];
-        if (platformCount > 0) delete[] platforms;
-        for (int x=0; x<switchCount; x++) delete switches[x];
-        if (switchCount>0) delete[] switches;
-    }
-    
-    
-};
-
-
-struct Stage6 : public Stage
-{
-    
-    Stage6(const char* bkg_filename, const char* tex_filename)
-    {
-        
-        lineCount = 3;
-        lines = new Entity* [lineCount];
-        
-        platformCount = 1;
-        platforms = new Entity* [platformCount];
-        
-        switchCount = 1;
-        switches = new Entity* [switchCount];
-        
-        portalCount = 3;
-        portals = new Entity* [portalCount];
-        backgroundTexture.loadFromFile(bkg_filename);
-        
-        bouleTexture.loadFromFile("../Stage_Images/Stage1/IntroStage_Boule.png");
+        bouleTexture.loadFromFile("../Stage_Images/Stage6/StageSix_Boule.png");
         background.setTexture(backgroundTexture);
         
   
-        lines[0] = new Line (tex_filename);
-        lines[1] = new Line ("../Stage_Images/Red_Line_Test.png",250,780);
-        lines[2] = new Line ("../Stage_Images/Blue_Line_Test.png",350,150);
+        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 200, 200);
+        //lines[1] = new Line ("../Stage_Images/Stage6/quad1Hor2.png");
+        //lines[2] = new Line ("../Stage_Images/Stage6/quad1Hor3.png");
+        //lines[3] = new Line ("../Stage_Images/Stage6/quad1Hor4.png");
+        //lines[4] = new Line ("../Stage_Images/Stage6/quad1Hor5.png");
+        //lines[5] = new Line ("../Stage_Images/Stage6/quad1Hor6.png");
+        //lines[6] = new Line ("../Stage_Images/Stage6/quad1Ver1.png");
+        //lines[7] = new Line ("../Stage_Images/Stage6/quad1Ver2.png");
+        //lines[8] = new Line ("../Stage_Images/Stage6/quad2Hor1.png");
+        //lines[9] = new Line ("../Stage_Images/Stage6/quad2Hor2.png");
+        //lines[10] = new Line ("../Stage_Images/Stage6/quad2Hor3.png");
+        //lines[11] = new Line ("../Stage_Images/Stage6/quad2Ver1.png");
+        //lines[12] = new Line ("../Stage_Images/Stage6/quad2Ver2.png");
+        //lines[13] = new Line ("../Stage_Images/Stage6/quad2Ver3.png");
+        //lines[14] = new Line ("../Stage_Images/Stage6/quad3Hor1.png");
+        //lines[15] = new Line ("../Stage_Images/Stage6/quad3Hor2.png");
+        //lines[16] = new Line ("../Stage_Images/Stage6/quad3Hor3.png");
+        //lines[17] = new Line ("../Stage_Images/Stage6/quad3Hor4.png");
+        //lines[18] = new Line ("../Stage_Images/Stage6/quad3Hor5.png");
+        //lines[19] = new Line ("../Stage_Images/Stage6/quad3Hor6.png");
+        //lines[20] = new Line ("../Stage_Images/Stage6/quad3Ver1.png");
+        //lines[21] = new Line ("../Stage_Images/Stage6/quad3Ver2.png");
+        //lines[22] = new Line ("../Stage_Images/Stage6/quad4Hor1.png");
+        //lines[23] = new Line ("../Stage_Images/Stage6/quad4Ver1.png");
+        //lines[24] = new Line ("../Stage_Images/Stage6/quad4Ver2.png");
 
         
         
-        switches[0] = new Switch(300,780,3,1000,300);
+        switches[0] = new Switch(300,780,3,1000,300); //quad1Switch1
+        //switches[1] = new Switch(); //quad2Switch1
+        //switches[2] = new Switch(); //quad3Switch1
+        //switches[3] = new Switch(); //quad3Switch2
+        //switches[4] = new Switch(); //quad3Switch3
+        //switches[5] = new Switch(); //quad4Switch1
         
-        platforms[0] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 700, 780, 300);
+        platforms[0] = new Platform ("../Stage_Images/Stage1/quad1HorPlatform1.png", 700, 780, 300);
+        //platforms[1] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 0, 0, 0);
+        //platforms[2] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform2.png", 0, 0, 0);
+        //platforms[3] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform3.png", 0, 0, 0);
+        //platforms[4] = new Platform ("../Stage_Images/Stage1/quad4HorPlatform1.png", 0, 0, 0);
+        //platforms[5] = new Platform ("../Stage_Images/Stage1/quad4VerPlatform1.png", 0, 0, 0);
         
         portals[0] = new Portal (100,780,0);
         portals[1] = new Portal(900,780,1);
@@ -369,17 +495,19 @@ struct Stage6 : public Stage
     
     ~Stage6()
     {
-        std::cout << "destructing stg 1" << std::endl;
+        std::cout << "destructing stg 6" << std::endl;
         for (int x=0; x<lineCount; x++) delete lines[x];
         if (lineCount>0) delete[] lines;
         for (int x=0; x<platformCount; x++) delete platforms[x];
         if (platformCount > 0) delete[] platforms;
         for (int x=0; x<switchCount; x++) delete switches[x];
         if (switchCount>0) delete[] switches;
+        for (int x=0; x<portalCount; x++) delete portals[x];
+        if (portalCount>0) delete[] portals;
     }
     
     
 };
-*/
+
 
 #endif
