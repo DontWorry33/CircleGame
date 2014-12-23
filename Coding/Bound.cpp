@@ -267,11 +267,11 @@ Game::Game() :
 	currSong = 0;
     
 
-	//if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
-	//if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
-	//if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
-	//if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
-	//if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
+	if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
+	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
+	if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
+	if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
+	if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
     //LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
@@ -295,7 +295,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		//processEvents(elapsedTime, entities);
 		sf::Time elapsedTime = clock.restart();
 		timeSinceLastUpdate += elapsedTime;
-		//if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
+		if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
@@ -692,8 +692,8 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 
 		//const float pushValue = 1000.f;
 
-		sf::Vector2f bakerRepulsion(10500.f,0.f);
-		sf::Vector2f rotiRepulsion(5500.f,0.f);
+		sf::Vector2f bakerRepulsion(5000,0.f);
+		sf::Vector2f rotiRepulsion(1000,0.f);
 		sf::Time applyRepulsion = shotClock.getElapsedTime();
 
 		if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
