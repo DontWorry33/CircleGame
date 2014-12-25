@@ -51,6 +51,8 @@ struct Entity
 
 	int portalType;
 
+	int move;
+
 	float* topCircle;
 	float* rightCircle;
 	float* bottomCircle;
@@ -68,8 +70,9 @@ struct Entity
 struct Switch : public Entity
 {
 
-	//this constructor is for type 0 and type 1 switch
-	//type is 0 for touch switch, 1 for hold switch
+	//this constructor is for type 0, type 1, type 4, type 5, type 6
+	//type 0 for touch switch, 1 for hold switch
+	//type 5 for touch switch down, 6 for hold switch down, 
 	Switch(int startPosX, int startPosY, int platformNumber, int type)
 	{
 		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
@@ -128,6 +131,7 @@ struct Switch : public Entity
 		displacement.x = displacementX;
 		displacement.y = displacementY;
 	}
+
 
 	//this constructor is for type 3 (displacement) switch. 2 additional arguments
 
@@ -231,11 +235,12 @@ struct Platform : public Entity
 
 		activatePlatform = false;
 		maxHeight=300;
+
 	}
 
 
-
-	Platform(const char* filename, int startPosX, int startPosY, int maxHeight)
+	//move : 0 = none, 1 = up, 2 = down. ONLY FOR SWITCHES 0 AND 6. USE MOVE=0 FOR EVERYTHING ELSE
+	Platform(const char* filename, int startPosX, int startPosY, int maxHeight, int move)
 	{
 		eTexture.loadFromFile(filename);
 		eTextureSize = eTexture.getSize();
@@ -259,6 +264,8 @@ struct Platform : public Entity
 		activatePlatform = false;
 
 		this->maxHeight = maxHeight;
+		this->move = move;
+
 	}
 
 
@@ -353,7 +360,7 @@ struct Baker : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=490;
+		eStartPos.x=580;
 		eStartPos.y=700;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
