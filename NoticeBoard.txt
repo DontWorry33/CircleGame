@@ -96,3 +96,12 @@ Started work on Stage Creation
 3. Screenshots updated
 4. StageNotes updated
 5. Stage1 updated
+
+ - 12/25/14 (HUssain - I keep forgetting to use this so i'm gonna document whatever I remember since the last time)
+1. All powers complete
+2. Reset switches, displacement switches, stage removal switches, downwards movement stage switches all implemented, fixed many switch bugs (2 switches next to eachother)
+3. Missing bread images when boule tries to walk into a portal is done. Appears in same location as the NullSign (0,0), we can change anytime
+4. Baker now spawns at some point we have to declare in each stage. In Stage.cpp make sure to declare the baker start position in EACH STAGE like this:
+        bakerStartPos.x = 500;
+        bakerStartPos.y = 780;
+5. All collision bugs should be fixed and collision should work flawlessly. Can add more collision points if neccessary (currently we are at 8, 5 for bottom region of circle, 1 for left, 1 for right, 1 for top)
