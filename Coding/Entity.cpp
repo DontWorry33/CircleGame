@@ -239,7 +239,7 @@ struct Platform : public Entity
 	}
 
 
-	//move : 0 = none, 1 = up, 2 = down. ONLY FOR SWITCHES 0 AND 6. USE MOVE=0 FOR EVERYTHING ELSE
+	//move : 0 = none, 1 = up touch 0, 2 = down touch 6. ONLY FOR SWITCHES 0 AND 6. USE MOVE=0 FOR EVERYTHING ELSE
 	Platform(const char* filename, int startPosX, int startPosY, int maxHeight, int move)
 	{
 		eTexture.loadFromFile(filename);

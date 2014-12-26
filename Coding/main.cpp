@@ -27,6 +27,7 @@ int main()
 					"../Stage_Images/Stage1/IntroStage.png",
 			  	 	"../Stage_Images/Stage1/quad4Ver1.png"
 				 );
+    /*
 	Stage2* stage2 = new Stage2(
 				"../Stage_Images/Stage2/StageTwo.png");
     
@@ -41,14 +42,15 @@ int main()
     
     Stage6* stage6 = new Stage6(
                                 "../Stage_Images/Stage6/StageSix.png");
+     */
     
-	Stage* stages[6];
+	Stage* stages[1];
 	stages[0] = stage1;
-	stages[1] = stage2;
-    stages[2] = stage3;
-    stages[3] = stage4;
-    stages[4] = stage5;
-    stages[5] = stage6;
+	//stages[1] = stage2;
+    //stages[2] = stage3;
+    //stages[3] = stage4;
+    //stages[4] = stage5;
+    //stages[5] = stage6;
 
 	
 	Game* game = new Game;
@@ -60,7 +62,7 @@ int main()
 	delete anpan;
 	delete boule;
 	delete stage1;
-	delete stage2;
+	//delete stage2;
 	delete game;
 	
 	

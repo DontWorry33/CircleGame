@@ -57,10 +57,10 @@ struct Stage1 : public Stage
 		lines[0] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,782);
 
 
-		switches[0] = new Switch(1000,780,0,1);
+		switches[0] = new Switch(1000,780,0,0);
+//For platforms,
 
-
-		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500);
+		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500, 1);
 
 		portals[0] = new Portal (100,600,0);
 		portals[1] = new Portal(900,600,1);
@@ -85,6 +85,7 @@ struct Stage1 : public Stage
 
 };
 
+/*
 struct Stage2 : public Stage
 {
 
@@ -121,8 +122,8 @@ struct Stage2 : public Stage
         switches[0] = new Switch(760,700,0,1);
         switches[1] = new Switch(840,700,1,1);
 
-        platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png", 530, 360, -30);
-        platforms[1] = new Platform ("../Stage_Images/Stage2/quad2VerPlatform1.png", 710, 160, -50);
+        platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png", 530, 360, -30, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage2/quad2VerPlatform1.png", 710, 160, -50, 0);
         
         portals[0] = new Portal (995,740,0);
 
@@ -401,7 +402,7 @@ struct Stage5 : public Stage
         portals[0] = new Portal (100,780,2);
         
         
-        oven = new Oven(300, 800);
+        oven = new Oven(600, 800);
     }
     
     ~Stage5()
@@ -427,7 +428,7 @@ struct Stage6 : public Stage
     Stage6(const char* bkg_filename)
     {
         
-        lineCount = 1;
+        lineCount = 22;
         lines = new Entity* [lineCount];
         
         platformCount = 1;
@@ -444,28 +445,28 @@ struct Stage6 : public Stage
         background.setTexture(backgroundTexture);
         
   
-        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 200, 200);
-        //lines[1] = new Line ("../Stage_Images/Stage6/quad1Hor2.png");
-        //lines[2] = new Line ("../Stage_Images/Stage6/quad1Hor3.png");
-        //lines[3] = new Line ("../Stage_Images/Stage6/quad1Hor4.png");
-        //lines[4] = new Line ("../Stage_Images/Stage6/quad1Hor5.png");
-        //lines[5] = new Line ("../Stage_Images/Stage6/quad1Hor6.png");
-        //lines[6] = new Line ("../Stage_Images/Stage6/quad1Ver1.png");
-        //lines[7] = new Line ("../Stage_Images/Stage6/quad1Ver2.png");
-        //lines[8] = new Line ("../Stage_Images/Stage6/quad2Hor1.png");
-        //lines[9] = new Line ("../Stage_Images/Stage6/quad2Hor2.png");
-        //lines[10] = new Line ("../Stage_Images/Stage6/quad2Hor3.png");
-        //lines[11] = new Line ("../Stage_Images/Stage6/quad2Ver1.png");
-        //lines[12] = new Line ("../Stage_Images/Stage6/quad2Ver2.png");
-        //lines[13] = new Line ("../Stage_Images/Stage6/quad2Ver3.png");
-        //lines[14] = new Line ("../Stage_Images/Stage6/quad3Hor1.png");
-        //lines[15] = new Line ("../Stage_Images/Stage6/quad3Hor2.png");
-        //lines[16] = new Line ("../Stage_Images/Stage6/quad3Hor3.png");
-        //lines[17] = new Line ("../Stage_Images/Stage6/quad3Hor4.png");
-        //lines[18] = new Line ("../Stage_Images/Stage6/quad3Hor5.png");
-        //lines[19] = new Line ("../Stage_Images/Stage6/quad3Hor6.png");
-        //lines[20] = new Line ("../Stage_Images/Stage6/quad3Ver1.png");
-        //lines[21] = new Line ("../Stage_Images/Stage6/quad3Ver2.png");
+        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 33, 300);
+        lines[1] = new Line ("../Stage_Images/Stage6/quad1Hor2.png", 89, 274);
+        lines[2] = new Line ("../Stage_Images/Stage6/quad1Hor3.png", 236l, 130);
+        lines[3] = new Line ("../Stage_Images/Stage6/quad1Hor4.png", 240, 382);
+        lines[4] = new Line ("../Stage_Images/Stage6/quad1Hor5.png", 318, 233);
+        lines[5] = new Line ("../Stage_Images/Stage6/quad1Hor6.png", 561, 395);
+        lines[6] = new Line ("../Stage_Images/Stage6/quad1Ver1.png", 73, 300);
+        lines[7] = new Line ("../Stage_Images/Stage6/quad1Ver2.png", 367, 649);
+        lines[8] = new Line ("../Stage_Images/Stage6/quad2Hor1.png", 635, 255);
+        lines[9] = new Line ("../Stage_Images/Stage6/quad2Hor2.png", 673, 393);
+        lines[10] = new Line ("../Stage_Images/Stage6/quad2Hor3.png", 1124, 102);
+        lines[11] = new Line ("../Stage_Images/Stage6/quad2Ver1.png", 610, 394);
+        lines[12] = new Line ("../Stage_Images/Stage6/quad2Ver2.png", 875, 416);
+        lines[13] = new Line ("../Stage_Images/Stage6/quad2Ver3.png", 1061, 680);
+        lines[14] = new Line ("../Stage_Images/Stage6/quad3Hor1.png", 29, 546);
+        lines[15] = new Line ("../Stage_Images/Stage6/quad3Hor2.png", 68, 729);
+        lines[16] = new Line ("../Stage_Images/Stage6/quad3Hor3.png", 113, 622);
+        lines[17] = new Line ("../Stage_Images/Stage6/quad3Hor4.png", 193, 548);
+        lines[18] = new Line ("../Stage_Images/Stage6/quad3Hor5.png", 303, 650);
+        lines[19] = new Line ("../Stage_Images/Stage6/quad3Hor6.png", 477, 553);
+        lines[20] = new Line ("../Stage_Images/Stage6/quad3Ver1.png", 150, 729);
+        lines[21] = new Line ("../Stage_Images/Stage6/quad3Ver2.png", 492, 708);
         //lines[22] = new Line ("../Stage_Images/Stage6/quad4Hor1.png");
         //lines[23] = new Line ("../Stage_Images/Stage6/quad4Ver1.png");
         //lines[24] = new Line ("../Stage_Images/Stage6/quad4Ver2.png");
@@ -508,6 +509,6 @@ struct Stage6 : public Stage
     
     
 };
-
+*/
 
 #endif
