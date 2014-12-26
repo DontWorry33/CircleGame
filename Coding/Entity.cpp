@@ -27,6 +27,10 @@ struct Entity
 	sf::Vector2f eBounds; //give current position x and y boundries for entity
 	float weight;
 
+
+	sf::Texture eNotCreatedTexture;
+	sf::Sprite eNotCreated;
+
 	bool isCurrentEntity;
 	float isClickable;
 	bool isCircle;
@@ -59,6 +63,9 @@ struct Entity
 	float* leftCircle;
 	float* bottomRCircle;
 	float* bottomLCircle;
+	float* bottomLLCircle; //120 deg
+	float* bottomRRCircle; //60 deg
+
 	virtual void create(){};
 	virtual void power(){};
 	//virtual void swapTexture(sf::Texture){};
@@ -360,8 +367,8 @@ struct Baker : public Entity
 		cCircle.setRadius(cRadius);
 		cCircle.setOrigin(cRadius,cRadius);
 
-		eStartPos.x=580;
-		eStartPos.y=700;
+		eStartPos.x=600;
+		eStartPos.y=780;
 
 		eBounds.x = cCircle.getPosition().x - cRadius;
 		eBounds.y = cCircle.getPosition().y - cRadius;
@@ -405,6 +412,16 @@ struct Baker : public Entity
 		bottomLCircle = new float[2];
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
+
+		bottomLLCircle = new float[2];
+		bottomLLCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI/3));
+		bottomLLCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI/3));
+
+		bottomRRCircle = new float[2];
+		bottomRRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/3));
+		bottomRRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/3));
+
+
 	}
 
 	~Baker()
@@ -416,6 +433,8 @@ struct Baker : public Entity
 		delete[] leftCircle;
 		delete[] bottomRCircle;
 		delete[] bottomLCircle;
+		delete[] bottomLLCircle;
+		delete[] bottomRRCircle;
 	}
 };
 
@@ -449,8 +468,11 @@ struct Roti : public Entity
 		leftCircle = new float[2];
 		bottomRCircle = new float[2];
 		bottomLCircle = new float[2];
+		bottomLLCircle = new float[2];
+		bottomRRCircle  = new float[2];
 
-
+		eNotCreatedTexture.loadFromFile("../Stage_Images/Universal_StageParts/Missing_Roti.png");
+		eNotCreated.setTexture(eNotCreatedTexture);
 		//---------------------------- 
 	}
 	void create() //blank constructor, same for other 2
@@ -498,6 +520,12 @@ struct Roti : public Entity
 
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));
+
+		bottomLLCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI/3));
+		bottomLLCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI/3));
+
+		bottomRRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/3));
+		bottomRRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/3));
 	}
 	~Roti()
 	{
@@ -508,6 +536,8 @@ struct Roti : public Entity
 		delete[] leftCircle;
 		delete[] bottomRCircle;
 		delete[] bottomLCircle;
+		delete[] bottomLLCircle;
+		delete[] bottomRRCircle;
 	}
 };
 
@@ -545,6 +575,10 @@ struct Anpan : public Entity
 		leftCircle = new float[2];
 		bottomRCircle = new float[2];
 		bottomLCircle = new float[2];
+		bottomLLCircle = new float[2];
+		bottomRRCircle = new float[2];
+		eNotCreatedTexture.loadFromFile("../Stage_Images/Universal_StageParts/Missing_Anpan.png");
+		eNotCreated.setTexture(eNotCreatedTexture);
 		//----------------------------
 	}
 	void create()
@@ -590,6 +624,13 @@ struct Anpan : public Entity
 
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));	
+
+
+		bottomLLCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI/3));
+		bottomLLCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI/3));
+
+		bottomRRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/3));
+		bottomRRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/3));
 	}
 	void power()
 	{
@@ -606,6 +647,8 @@ struct Anpan : public Entity
 		delete[] leftCircle;
 		delete[] bottomRCircle;
 		delete[] bottomLCircle;
+		delete[] bottomLLCircle;
+		delete[] bottomRRCircle;
 	}
 };
 
@@ -645,6 +688,8 @@ struct Boule : public Entity
 		leftCircle = new float[2];
 		bottomRCircle = new float[2];
 		bottomLCircle = new float[2];
+		bottomLLCircle = new float[2];
+		bottomRRCircle = new float[2];
 	}
 
 
@@ -690,7 +735,15 @@ struct Boule : public Entity
 
 		bottomLCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/4));
 		bottomLCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/4));	
+
+
+		bottomLLCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI/3));
+		bottomLLCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI/3));
+
+		bottomRRCircle[0] = cCircle.getPosition().x + (cRadius*cos(PI/3));
+		bottomRRCircle[1] = cCircle.getPosition().y + (cRadius*sin(PI/3));
 	}
+
 
 	~Boule()
 	{
@@ -701,6 +754,8 @@ struct Boule : public Entity
 		delete[] leftCircle;
 		delete[] bottomRCircle;
 		delete[] bottomLCircle;
+		delete[] bottomLLCircle;
+		delete[] bottomRRCircle;
 	}
 };
 
