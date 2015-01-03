@@ -8,25 +8,19 @@ Stage 2
 2. quad4Switch1 activates quad1VerPlatform1
 
 Stage 3
-1. quad1Switch1 displaces Roti quad3VerPlatform1 (Right Side)
-2. quad1Switch3 activates quad2HorPlatform1
-3. quad2Switch1 activates quad2VerPlatform2
-4. quad2Switch2 activates quad2VerPlatform1
-5. quad3Switch1 resets Characters to quad3Hor1
-6. quad4Switch1 displaces Roti to quad1Hor1
-7. quad4Switch2 activates quad3VerPlatform1
+1. quad1Switch1 activates quad2HorPlatform1
+2. quad2Switch1 activates quad1VerPlatform1
+3. quad3Switch1 resets Characters to quad3Hor1
+4. quad4Switch1 activates quad3VerPlatform1
 
 Stage 4
-1. quad1Switch1 activates quad1HorPlatform2
-2. quad1Switch2 displaces Roti quad4 (opposite Anpan)
-3. quad2Switch1 displaces Roti quad2 (to itself)
-4. quad2Switch2 activates quad3HorPlatform1
-5. quad3Switch1 activates quad4HorPlatform1
-6. quad3Switch2 activates quad4VerPlatform1
-7. quad3Switch3 activates quad3HorPlatform2
-8. quad4Switch1 activates quad1HorPlatform1 and quad2HorPlatform1
-9. quad4Switch2 displaces Roti quad3 (Where Anpan is)
-10. quad4Switch3 activates quad3VerPlatform1
+1. quad2Switch1 displaces Roti quad2 (to itself)
+2. quad2Switch2 activates quad3HorPlatform1
+3. quad3Switch1 activates quad4HorPlatform1
+4. quad3Switch2 activates quad4VerPlatform1
+5. quad3Switch3 activates quad2HorPlatform1
+6. quad4Switch1 displaces Roti quad3 (Where Anpan is)
+7. quad4Switch2 activates quad3VerPlatform1
 
 Stage 5
 1. quad2Switch1 interacts with The Box
@@ -41,8 +35,7 @@ Stage 5
 Stage 6
 1. quad1Switch1 activates quad1HorPlatform1
 2. quad2Switch1 resets Characters
-3. quad3Switch1 activates quad3HorPlatform1
-4. quad3Switch2 activates quad3HorPlatform2
-5. quad3Switch3 activates quad4VerPlatform1
-6. quad4Switch resets Characters/ activates quad4HorPlatform1 (invisible)
+3. quad3Switch1 activates quad4VerPlatform1
+5. quad4Switch1 resets Characters
+6. quad4Switch2 activates quad3VerPlatform1
 	
