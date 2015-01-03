@@ -79,10 +79,10 @@ struct Switch : public Entity
 
 	//this constructor is for type 0, type 1, type 4, type 5, type 6
 	//type 0 for touch switch, 1 for hold switch
-	//type 5 for touch switch down, 6 for hold switch down, 
-	Switch(int startPosX, int startPosY, int platformNumber, int type)
+	//type 5 for hold switch down, 6 for touch switch down,
+	Switch(int startPosX, int startPosY, int platformNumber, int type, const char* filename)
 	{
-		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
+		eTexture.loadFromFile(filename);
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
@@ -110,11 +110,11 @@ struct Switch : public Entity
 
 	}
 	//this constructor is for type 2 (reset) switch and type 3 (displacement) switch.
-	//When type 2 is chosen, the displacement moves ROTI.
-	//When type 3 is chosen, the displacement moves BAKER.
-	Switch(int startPosX, int startPosY, int type, int displacementX, int displacementY)
+	//When type 3 is chosen, the displacement moves ROTI.
+	//When type 2 is chosen, the displacement moves BAKER.
+	Switch(int startPosX, int startPosY, int type, int displacementX, int displacementY, const char* filename)
 	{
-		eTexture.loadFromFile("../Stage_Images/Stage1/quad4Switch1.png");
+		eTexture.loadFromFile(filename);
 		eTextureSize = eTexture.getSize();
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
