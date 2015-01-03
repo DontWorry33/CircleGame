@@ -105,3 +105,20 @@ Started work on Stage Creation
         bakerStartPos.x = 500;
         bakerStartPos.y = 780;
 5. All collision bugs should be fixed and collision should work flawlessly. Can add more collision points if neccessary (currently we are at 8, 5 for bottom region of circle, 1 for left, 1 for right, 1 for top)
+
+ - 01/02/15 (Dedie)
+    Happy New Year
+1. Now then, on to business. I have implemented Stage1 to Stage4 for testing. *NOTE* I will need help to properly set all ground stage elements precisely on the floor, since my Mac doesn't show me the last few pixels on any stage.
+2. Switch now has an added argument which changes the image of the switch called. Still looking for a ways to tell the switch which type of switch it is, so that the corresponding switch hit is also added.
+3. Moving on, I have three main sections of observations started as I playtested each stage while implementing the parts. Here they are:
+
+    • Bugs
+        1. (On All Stages) The switch type 4 (the toggle switch that removes stage parts) only begins it's image swap on the second hit. In practice, what shows is the active switch, when the platform has been deactivated - and vice versa. Essentially, they represent the opposite of what they are doing.
+        2. (On Stage3) I use only two portals. But when Boule goes through the Anpan switch, it comes out of 0,0 rather than the specified portal.
+        3. (On Stage4) Baker and Bread are falling through the lines on this stage. Specifically quad1Hor4 and quad2Hor1. Will move up if that is the cheapest solution.
+        4. (On All Stages) Roti, while its power is activated, can move DOWN through stages along with Baker. My suggestion is disabling the Down Movement entirely while the power is active.
+
+    • Quality of Life
+        1. I aim to make the Portals transparent-ish, and on the normal stages, so as to make it easier for players to see where the Portals are located without having to activate Boule's power. Will see if transparent switches also become necessity later on in the test cycle.
+        2. Should also aim to make the power guage fill up at a faster rate. And maybe to clear itself after each shot, rather than holding on to the previous value for subsequent firings.
+        3. I also aim to add an extra argument for the Oven, to choose between its Default and Small size, much like the switches.

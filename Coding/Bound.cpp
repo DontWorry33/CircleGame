@@ -15,7 +15,7 @@
 
 #define PI 3.14159265
 #define ENTITIES_MAX 4
-#define STAGES_MAX 2
+#define STAGES_MAX 4
 #define G_MAX 160.0
 
 class Game
@@ -196,7 +196,7 @@ Game::Game() :
 			   music1(), music2(), music3(), music4(), music5()
 
 {
-	mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
+    mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
     mWindow.setFramerateLimit(60);
 
 	//set all statistics
@@ -707,8 +707,8 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 
 		//const float pushValue = 1000.f;
 
-		sf::Vector2f bakerRepulsion(10500.f,0.f);
-		sf::Vector2f rotiRepulsion(5500.f,0.f);
+		sf::Vector2f bakerRepulsion(7500.f,0.f);
+		sf::Vector2f rotiRepulsion(3500.f,0.f);
 		sf::Time applyRepulsion = shotClock.getElapsedTime();
 
 		if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
