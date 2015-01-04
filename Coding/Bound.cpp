@@ -1072,12 +1072,13 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			//only if portal teleport is true and if boule is touching a bread, move it to a portal.
 			if (portalTeleport && currentBread>=0)
 			{
-				if (currentBread >= stages[currentStage]->portalCount) 
+				for (int x=0; x<stages[currentStage]->portalCount; x++)
 				{
-					mEntityMissing = currentBread;
-					mMissing = true;				
+					if (stages[currentStage]->portals[x]->portalType == currentBread)
+					{
+						entities[3]->cCircle.setPosition(stages[currentStage]->portals[x]->eSprite.getPosition());
+					}
 				}
-				else entities[3]->cCircle.setPosition(stages[currentStage]->portals[currentBread]->eSprite.getPosition());
 			}
 
 
@@ -1085,12 +1086,16 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			//only if bread teleport is true and if boule is touching a portal, move boule to a bread
 			if (breadTeleport && currentPortal>=0)
 			{
-				if (!entities[currentPortal]->isCreated) 
+					if (!entities[currentPortal]->isCreated) 
+						{
+							mEntityMissing = currentPortal;
+							mMissing = true;
+						}
+					else 
 					{
-						mEntityMissing = currentPortal;
-						mMissing = true;
+						entities[3]->cCircle.setPosition(entities[stages[currentStage]->portals[currentPortal]->portalType]->cCircle.getPosition());
 					}
-				else entities[3]->cCircle.setPosition(entities[currentPortal]->cCircle.getPosition());
+				
 			}
 
 			//have to update ebounds since we modified posiion and need to check modified position in same frame
