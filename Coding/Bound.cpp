@@ -15,7 +15,7 @@
 
 #define PI 3.14159265
 #define ENTITIES_MAX 4
-#define STAGES_MAX 4
+#define STAGES_MAX 5
 #define G_MAX 160.0
 
 class Game
