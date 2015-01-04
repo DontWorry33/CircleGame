@@ -23,14 +23,10 @@ Stage 4
 7. quad4Switch2 activates quad3VerPlatform1
 
 Stage 5
-1. quad2Switch1 interacts with The Box
-2. quad2Switch2 interacts with The Box
-3. quad2Switch3 interacts with The Box
-4. quad3Switch1 resets Characters/ activates quad2VerPlatform2
-5. quad3Switch2 resets Characters/ activates quad2VerPlatform1
-6. quad4Switch1 activates quad4VerPlatform1
-7. quad4Switch2 activates quad3VerPlatform1
-8. quad4Switch3 activates quad4HorPlatform1
+1. quad1Switch1 resets Characters to quad2
+2. quad3Switch1 resets Characters to quad1
+3. quad4Switch1 activates quad4VerPlatform1
+4. quad4Switch2 activates quad3VerPlatform1
 
 Stage 6
 1. quad1Switch1 activates quad1HorPlatform1
