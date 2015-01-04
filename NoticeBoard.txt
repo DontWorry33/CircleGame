@@ -122,3 +122,16 @@ Started work on Stage Creation
         1. I aim to make the Portals transparent-ish, and on the normal stages, so as to make it easier for players to see where the Portals are located without having to activate Boule's power. Will see if transparent switches also become necessity later on in the test cycle.
         2. Should also aim to make the power guage fill up at a faster rate. And maybe to clear itself after each shot, rather than holding on to the previous value for subsequent firings.
         3. I also aim to add an extra argument for the Oven, to choose between its Default and Small size, much like the switches.
+
+
+- 01/03/15 (Hussain)
+	First update of the new year!
+
+	Bug Fixes:
+		1. Switch type 4 should now respond as it would normally.
+		2. Portal bugs have been fixed, still need to implement the missing portal image, for now it uses the missing bread images.
+		3. Should be fixed on my end. Was a collision/trajectory bug.
+		4. Roti is being a real pain. Still looking into fixes for this.
+
+	Quality of Life:
+		2. Fixed second part which is where power guage resets after each shot.
