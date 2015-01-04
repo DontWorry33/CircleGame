@@ -353,14 +353,14 @@ struct Stage5 : public Stage
         lines[1] = new Line ("../Stage_Images/Stage5/quad1Hor2.png", 404, 278);
         lines[2] = new Line ("../Stage_Images/Stage5/quad1Hor3.png", 528, 403);
         lines[3] = new Line ("../Stage_Images/Stage5/quad1Ver1.png", 112, 620);
-        lines[4] = new Line ("../Stage_Images/Stage5/quad1Ver2.png", 223, 492);
+        lines[4] = new Line ("../Stage_Images/Stage5/quad1Ver2.png", 221, 528);
         lines[5] = new Line ("../Stage_Images/Stage5/quad1Ver3.png", 587, 402);
         lines[6] = new Line ("../Stage_Images/Stage5/quad2Hor1.png", 864, 285);
         lines[7] = new Line ("../Stage_Images/Stage5/quad2Hor2.png", 1070, 159);
         lines[8] = new Line ("../Stage_Images/Stage5/quad2Ver1.png", 762, 145);
         lines[9] = new Line ("../Stage_Images/Stage5/quad2Ver2.png", 949, 273);
         lines[10] = new Line ("../Stage_Images/Stage5/quad3Hor1.png", 435, 630);
-        lines[11] = new Line ("../Stage_Images/Stage5/quad3Hor2.png", 282, 491);
+        lines[11] = new Line ("../Stage_Images/Stage5/quad3Hor2.png", 280, 529);
         lines[12] = new Line ("../Stage_Images/Stage5/quad3Ver1.png", 306, 785);
         lines[13] = new Line ("../Stage_Images/Stage5/quad3Ver2.png", 485, 617);
         lines[14] = new Line ("../Stage_Images/Stage5/quad4Hor1.png", 838, 696);
@@ -373,12 +373,12 @@ struct Stage5 : public Stage
         
         
         switches[0] = new Switch(530,390,2,1048,296, "../Stage_Images/Stage5/quad1Switch1.png");
-        switches[1] = new Switch(373,780,2,628,141, "../Stage_Images/Stage5/quad3Switch1.png");
+        switches[1] = new Switch(373,780,2,628,100, "../Stage_Images/Stage5/quad3Switch1.png");
         switches[2] = new Switch(697,780,1,1, "../Stage_Images/Stage5/quad4Switch1.png");
         switches[3] = new Switch(1164,567,0,1, "../Stage_Images/Stage5/quad4Switch2.png");
         
         
-        platforms[0] = new Platform ("../Stage_Images/Stage5/quad3VerPlatform1.png", 571, 764, 680, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage5/quad3VerPlatform1.png", 571, 764, 630, 0);
         platforms[1] = new Platform ("../Stage_Images/Stage5/quad4VerPlatform1.png", 828, 723, 680, 0);
         
         portals[0] = new Portal (1129,761,0);
