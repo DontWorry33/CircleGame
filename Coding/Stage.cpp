@@ -60,17 +60,15 @@ struct Stage1 : public Stage
 
 		lines[0] = new Line ("../Stage_Images/Stage1/quad4Ver1.png", 770,782);
 
-
-		switches[0] = new Switch(1000,780,0,0,"../Stage_Images/Stage1/quad4Switch1.png");
-//For platforms,
+		switches[0] = new Switch("../Stage_Images/Stage1/quad4Switch1.png", true, 1000, 780, 0, 0);
 
 		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500, 1);
 
-		portals[0] = new Portal (100,600,0);
-		portals[1] = new Portal(900,600,1);
+		portals[0] = new Portal (900,600,0);
+		portals[1] = new Portal(100,600,1);
 		portals[2] = new Portal(1110,600,2);
 
-		oven = new Oven(200,780);
+		oven = new Oven(200,780, true);
 	}
 
 	~Stage1()
@@ -126,15 +124,15 @@ struct Stage2 : public Stage
         lines[4] = new Line("../Stage_Images/Stage2/quad3Ver1.png", 178, 700);
         lines[5] = new Line("../Stage_Images/Stage2/quad4Hor1.png", 776, 790);
         
-        switches[0] = new Switch(1143,780,0,1, "../Stage_Images/Stage2/quad4Switch1.png");
-        switches[1] = new Switch(100,780,1,1, "../Stage_Images/Stage2/quad3Switch1.png");
+        switches[0] = new Switch("../Stage_Images/Stage2/quad4Switch1.png", true, 1143, 780, 0, 1);
+        switches[1] = new Switch("../Stage_Images/Stage2/quad3Switch1.png", true, 100, 780, 1, 1);
 
         platforms[0] = new Platform ("../Stage_Images/Stage2/quad1VerPlatform1.png", 530, 360, -30, 0);
         platforms[1] = new Platform ("../Stage_Images/Stage2/quad2VerPlatform1.png", 710, 160, -50, 0);
         
         portals[0] = new Portal (995,740,0);
 
-		oven = new Oven(870, 165);
+		oven = new Oven(870, 165, true);
         
 
 
@@ -191,13 +189,13 @@ struct Stage3 : public Stage
         lines[3] = new Line ("../Stage_Images/Stage3/quad2Hor1.png", 613, 380);
         lines[4] = new Line ("../Stage_Images/Stage3/quad2Hor2.png", 1138, 220);
         lines[5] = new Line ("../Stage_Images/Stage3/quad3Hor1.png", 78, 628);
-        lines[6] = new Line ("../Stage_Images/Stage3/quad4Hor1.png", 1149, 780);
+        lines[6] = new Line ("../Stage_Images/Stage3/quad4Hor1.png", 1149, 781);
       
         
-        switches[0] = new Switch(263,160,1,4, "../Stage_Images/Stage3/quad1Switch1.png");
-        switches[1] = new Switch(1156,201,0,4, "../Stage_Images/Stage3/quad2Switch1.png");
-        switches[2] = new Switch(104, 780, 2, 67, 521, "../Stage_Images/Stage3/quad3Switch1.png");
-        switches[3] = new Switch(1159, 697, 2, 1, "../Stage_Images/Stage3/quad4Switch1.png");
+        switches[0] = new Switch("../Stage_Images/Stage3/quad1Switch1.png", true, 263, 160, 1, 4);
+        switches[1] = new Switch("../Stage_Images/Stage3/quad2Switch1.png", true, 1156, 201, 0, 4);
+        switches[2] = new Switch("../Stage_Images/Stage3/quad3Switch1.png", true, 104, 781, 2, 67, 521);
+        switches[3] = new Switch("../Stage_Images/Stage3/quad4Switch1.png", false, 1159, 698, 2, 1);
        
         
         
@@ -205,11 +203,10 @@ struct Stage3 : public Stage
         platforms[1] = new Platform ("../Stage_Images/Stage3/quad2HorPlatform1.png", 953, 379, 100, 0); //Should disappear
         platforms[2] = new Platform ("../Stage_Images/Stage3/quad3VerPlatform1.png", 353, 771, 500, 0);
         
-        portals[0] = new Portal (472,152,0);
-        //portals[1] = new Portal(1017,250,1);
-        portals[1] = new Portal(95,152,2);
+        portals[0] = new Portal (470,150,0);
+        portals[1] = new Portal(90,150,2);
         
-        oven = new Oven(470,351);
+        oven = new Oven(470,351, true);
         
     }
     
@@ -235,7 +232,7 @@ struct Stage4 : public Stage
     
     Stage4(const char* bkg_filename)
     {
-        //Dedie: Nearly done. Switch functionality has not been added, because this stage relies heavily on one of the last types of switches to be made. Otherwise complete.
+        //Dedie: Done.
         
         bakerStartPos.x = 1000;
         bakerStartPos.y = 0;
@@ -283,13 +280,13 @@ struct Stage4 : public Stage
         lines[23] = new Line ("../Stage_Images/Stage4/quad4Ver3.png", 899, 640);
 
         
-        switches[0] = new Switch(632,186,3,474,166, "../Stage_Images/Stage4/quad2Switch1.png");
-        switches[1] = new Switch(916,398,1,4, "../Stage_Images/Stage4/quad2Switch2.png");
-        switches[2] = new Switch(23,780,3,4, "../Stage_Images/Stage4/quad3Switch1.png");
-        switches[3] = new Switch(265,780,4,4, "../Stage_Images/Stage4/quad3Switch2.png");
-        switches[4] = new Switch(467,780,0,4, "../Stage_Images/Stage4/quad3Switch3.png");
-        switches[5] = new Switch(1156,599,3,382,535, "../Stage_Images/Stage4/quad4Switch1.png");
-        switches[6] = new Switch(1170,780,2,4, "../Stage_Images/Stage4/quad4Switch2.png");
+        switches[0] = new Switch("../Stage_Images/Stage4/quad2Switch1.png", false, 632, 186, 3, 474, 166);
+        switches[1] = new Switch("../Stage_Images/Stage4/quad2Switch2.png", false, 916, 398, 1, 4);
+        switches[2] = new Switch("../Stage_Images/Stage4/quad3Switch1.png", false, 23, 780, 3, 4);
+        switches[3] = new Switch("../Stage_Images/Stage4/quad3Switch2.png", false, 265, 780, 4, 4);
+        switches[4] = new Switch("../Stage_Images/Stage4/quad3Switch3.png", false, 467, 780, 0, 4);
+        switches[5] = new Switch("../Stage_Images/Stage4/quad4Switch1.png", false, 1156, 599, 3, 382, 535);
+        switches[6] = new Switch("../Stage_Images/Stage4/quad4Switch2.png", false, 1170, 781, 2, 4);
         
         
         platforms[0] = new Platform ("../Stage_Images/Stage4/quad2HorPlatform1.png", 1120, 170, 0, 0);
@@ -299,10 +296,10 @@ struct Stage4 : public Stage
         platforms[4] = new Platform ("../Stage_Images/Stage4/quad4VerPlatform1.png", 787, 768, 0, 0);
         
         portals[0] = new Portal(550,170,0);
-        portals[1] = new Portal(730,765,1);
-        portals[2] = new Portal(373,766,2);
+        portals[1] = new Portal(720,770,1);
+        portals[2] = new Portal(370,770,2);
         
-        oven = new Oven(490, 800);
+        oven = new Oven(530, 782, true);
     }
     
     ~Stage4()
@@ -327,7 +324,7 @@ struct Stage5 : public Stage
     
     Stage5(const char* bkg_filename)
     {
-        //Dedie: All placeholders have been implemented. Just need to quality check. And again, Baker needs to spawn at the specified location for this stage. Getting some issues with having just a sole Anpan portal. Will look into that.
+        //Dedie: Done.
         
         bakerStartPos.x = 1066;
         bakerStartPos.y = 80;
@@ -349,43 +346,43 @@ struct Stage5 : public Stage
         background.setTexture(backgroundTexture);
         
 
-        lines[0] = new Line ("../Stage_Images/Stage5/quad1Hor1.png", 435, 159);
-        lines[1] = new Line ("../Stage_Images/Stage5/quad1Hor2.png", 404, 278);
-        lines[2] = new Line ("../Stage_Images/Stage5/quad1Hor3.png", 528, 403);
-        lines[3] = new Line ("../Stage_Images/Stage5/quad1Ver1.png", 112, 620);
-        lines[4] = new Line ("../Stage_Images/Stage5/quad1Ver2.png", 221, 528);
-        lines[5] = new Line ("../Stage_Images/Stage5/quad1Ver3.png", 587, 402);
-        lines[6] = new Line ("../Stage_Images/Stage5/quad2Hor1.png", 864, 285);
-        lines[7] = new Line ("../Stage_Images/Stage5/quad2Hor2.png", 1070, 159);
-        lines[8] = new Line ("../Stage_Images/Stage5/quad2Ver1.png", 762, 145);
-        lines[9] = new Line ("../Stage_Images/Stage5/quad2Ver2.png", 949, 273);
-        lines[10] = new Line ("../Stage_Images/Stage5/quad3Hor1.png", 435, 630);
-        lines[11] = new Line ("../Stage_Images/Stage5/quad3Hor2.png", 280, 529);
-        lines[12] = new Line ("../Stage_Images/Stage5/quad3Ver1.png", 306, 785);
-        lines[13] = new Line ("../Stage_Images/Stage5/quad3Ver2.png", 485, 617);
-        lines[14] = new Line ("../Stage_Images/Stage5/quad4Hor1.png", 838, 696);
-        lines[15] = new Line ("../Stage_Images/Stage5/quad4Hor2.png", 1027, 467);
-        lines[16] = new Line ("../Stage_Images/Stage5/quad4Hor3.png", 1155, 580);
-        lines[17] = new Line ("../Stage_Images/Stage5/quad4Ver1.png", 777, 688);
-        lines[18] = new Line ("../Stage_Images/Stage5/quad4Ver2.png", 986, 545);
+        lines[0] = new Line ("../Stage_Images/Stage5/quad1Hor1.png", 425, 162);
+        lines[1] = new Line ("../Stage_Images/Stage5/quad1Hor2.png", 428, 279);
+        lines[2] = new Line ("../Stage_Images/Stage5/quad1Hor3.png", 548, 399);
+        lines[3] = new Line ("../Stage_Images/Stage5/quad1Ver1.png", 100, 622);
+        lines[4] = new Line ("../Stage_Images/Stage5/quad1Ver2.png", 211, 521);
+        lines[5] = new Line ("../Stage_Images/Stage5/quad2Hor1.png", 855, 309);
+        lines[6] = new Line ("../Stage_Images/Stage5/quad2Hor2.png", 1073, 175);
+        lines[7] = new Line ("../Stage_Images/Stage5/quad2Ver1.png", 637, 398);
+        lines[8] = new Line ("../Stage_Images/Stage5/quad2Ver2.png", 750, 145);
+        lines[9] = new Line ("../Stage_Images/Stage5/quad2Ver3.png", 953, 309);
+        lines[10] = new Line ("../Stage_Images/Stage5/quad3Hor1.png", 439, 622);
+        lines[11] = new Line ("../Stage_Images/Stage5/quad3Hor2.png", 273, 522);
+        lines[12] = new Line ("../Stage_Images/Stage5/quad3Ver1.png", 260, 782);
+        lines[13] = new Line ("../Stage_Images/Stage5/quad3Ver2.png", 481, 595);
+        lines[14] = new Line ("../Stage_Images/Stage5/quad4Hor1.png", 848, 694);
+        lines[15] = new Line ("../Stage_Images/Stage5/quad4Hor2.png", 1034, 460);
+        lines[16] = new Line ("../Stage_Images/Stage5/quad4Hor3.png", 1160, 581);
+        lines[17] = new Line ("../Stage_Images/Stage5/quad4Ver1.png", 779, 694);
+        lines[18] = new Line ("../Stage_Images/Stage5/quad4Ver2.png", 992, 530);
         
      
         
         
-        switches[0] = new Switch(530,390,2,1048,296, "../Stage_Images/Stage5/quad1Switch1.png");
-        switches[1] = new Switch(373,780,2,628,100, "../Stage_Images/Stage5/quad3Switch1.png");
-        switches[2] = new Switch(697,780,1,1, "../Stage_Images/Stage5/quad4Switch1.png");
-        switches[3] = new Switch(1164,567,0,1, "../Stage_Images/Stage5/quad4Switch2.png");
+        switches[0] = new Switch("../Stage_Images/Stage5/quad1Switch1.png", true, 580, 382, 2, 1048, 296);
+        switches[1] = new Switch("../Stage_Images/Stage5/quad3Switch1.png", true, 373, 781, 2, 628, 100);
+        switches[2] = new Switch("../Stage_Images/Stage5/quad4Switch1.png", false, 695, 781, 1, 1);
+        switches[3] = new Switch("../Stage_Images/Stage5/quad4Switch2.png", false, 1164, 562, 0, 1);
         
         
-        platforms[0] = new Platform ("../Stage_Images/Stage5/quad3VerPlatform1.png", 571, 764, 630, 0);
-        platforms[1] = new Platform ("../Stage_Images/Stage5/quad4VerPlatform1.png", 828, 723, 680, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage5/quad3VerPlatform1.png", 572, 765, 630, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage5/quad4VerPlatform1.png", 838, 719, 680, 0);
         
-        portals[0] = new Portal (1129,761,0);
-        portals[1] = new Portal (1024,413,2);
+        portals[0] = new Portal (1130,760,0);
+        portals[1] = new Portal (1030,420,2);
         
         
-        oven = new Oven(205, 780);
+        oven = new Oven(205, 780, true);
     }
     
     ~Stage5()
@@ -404,23 +401,30 @@ struct Stage5 : public Stage
     
 };
 
-/*
+
 struct Stage6 : public Stage
 {
     
     Stage6(const char* bkg_filename)
     {
+        //Dedie: Done.
         
-        lineCount = 22;
+        bakerStartPos.x = 730;
+        bakerStartPos.y = 299;
+        
+        //bakerStartPos.x = 730;
+        //bakerStartPos.y = 523;
+
+        lineCount = 16;
         lines = new Entity* [lineCount];
         
-        platformCount = 1;
+        platformCount = 3;
         platforms = new Entity* [platformCount];
         
-        switchCount = 1;
+        switchCount = 5;
         switches = new Entity* [switchCount];
         
-        portalCount = 3;
+        portalCount = 2;
         portals = new Entity* [portalCount];
         backgroundTexture.loadFromFile(bkg_filename);
         
@@ -428,53 +432,37 @@ struct Stage6 : public Stage
         background.setTexture(backgroundTexture);
         
   
-        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 33, 300);
-        lines[1] = new Line ("../Stage_Images/Stage6/quad1Hor2.png", 89, 274);
-        lines[2] = new Line ("../Stage_Images/Stage6/quad1Hor3.png", 236l, 130);
-        lines[3] = new Line ("../Stage_Images/Stage6/quad1Hor4.png", 240, 382);
-        lines[4] = new Line ("../Stage_Images/Stage6/quad1Hor5.png", 318, 233);
-        lines[5] = new Line ("../Stage_Images/Stage6/quad1Hor6.png", 561, 395);
-        lines[6] = new Line ("../Stage_Images/Stage6/quad1Ver1.png", 73, 300);
-        lines[7] = new Line ("../Stage_Images/Stage6/quad1Ver2.png", 367, 649);
-        lines[8] = new Line ("../Stage_Images/Stage6/quad2Hor1.png", 635, 255);
-        lines[9] = new Line ("../Stage_Images/Stage6/quad2Hor2.png", 673, 393);
-        lines[10] = new Line ("../Stage_Images/Stage6/quad2Hor3.png", 1124, 102);
-        lines[11] = new Line ("../Stage_Images/Stage6/quad2Ver1.png", 610, 394);
-        lines[12] = new Line ("../Stage_Images/Stage6/quad2Ver2.png", 875, 416);
-        lines[13] = new Line ("../Stage_Images/Stage6/quad2Ver3.png", 1061, 680);
-        lines[14] = new Line ("../Stage_Images/Stage6/quad3Hor1.png", 29, 546);
-        lines[15] = new Line ("../Stage_Images/Stage6/quad3Hor2.png", 68, 729);
-        lines[16] = new Line ("../Stage_Images/Stage6/quad3Hor3.png", 113, 622);
-        lines[17] = new Line ("../Stage_Images/Stage6/quad3Hor4.png", 193, 548);
-        lines[18] = new Line ("../Stage_Images/Stage6/quad3Hor5.png", 303, 650);
-        lines[19] = new Line ("../Stage_Images/Stage6/quad3Hor6.png", 477, 553);
-        lines[20] = new Line ("../Stage_Images/Stage6/quad3Ver1.png", 150, 729);
-        lines[21] = new Line ("../Stage_Images/Stage6/quad3Ver2.png", 492, 708);
-        //lines[22] = new Line ("../Stage_Images/Stage6/quad4Hor1.png");
-        //lines[23] = new Line ("../Stage_Images/Stage6/quad4Ver1.png");
-        //lines[24] = new Line ("../Stage_Images/Stage6/quad4Ver2.png");
-
+        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 33, 290);
+        lines[1] = new Line ("../Stage_Images/Stage6/quad1Hor2.png", 236, 148);
+        lines[2] = new Line ("../Stage_Images/Stage6/quad1Hor3.png", 240, 382);
+        lines[3] = new Line ("../Stage_Images/Stage6/quad1Hor4.png", 288, 273);
+        lines[4] = new Line ("../Stage_Images/Stage6/quad1Ver1.png", 367, 565);
+        lines[5] = new Line ("../Stage_Images/Stage6/quad2Hor1.png", 664, 250);
+        lines[6] = new Line ("../Stage_Images/Stage6/quad2Ver1.png", 660, 413);
+        lines[7] = new Line ("../Stage_Images/Stage6/quad2Ver2.png", 933, 359);
+        lines[8] = new Line ("../Stage_Images/Stage6/quad3Hor1.png", 127, 475);
+        lines[9] = new Line ("../Stage_Images/Stage6/quad3Hor2.png", 227, 565);
+        lines[10] = new Line ("../Stage_Images/Stage6/quad3Hor3.png", 484, 564);
+        lines[11] = new Line ("../Stage_Images/Stage6/quad3Hor4.png", 588, 413);
+        lines[12] = new Line ("../Stage_Images/Stage6/quad4Hor1.png", 735, 413);
+        lines[13] = new Line ("../Stage_Images/Stage6/quad4Hor2.png", 733, 697);
+        lines[14] = new Line ("../Stage_Images/Stage6/quad4Hor3.png", 856, 697);
+        lines[15] = new Line ("../Stage_Images/Stage6/quad4Hor4.png", 1095, 545);
         
+        switches[0] = new Switch("../Stage_Images/Stage6/quad1Switch1.png", false, 319,255,0,4);
+        switches[1] = new Switch("../Stage_Images/Stage6/quad2Switch1.png", true, 607,232,2,772,177);
+        switches[2] = new Switch("../Stage_Images/Stage6/quad3Switch1.png", false, 416,536,2,5);
+        switches[3] = new Switch("../Stage_Images/Stage6/quad4Switch1.png", true, 750,673,2,730,523);
+        switches[4] = new Switch("../Stage_Images/Stage6/quad4Switch2.png", true, 1152,780,1,1);
         
-        switches[0] = new Switch(300,780,3,1000,300); //quad1Switch1
-        //switches[1] = new Switch(); //quad2Switch1
-        //switches[2] = new Switch(); //quad3Switch1
-        //switches[3] = new Switch(); //quad3Switch2
-        //switches[4] = new Switch(); //quad3Switch3
-        //switches[5] = new Switch(); //quad4Switch1
+        platforms[0] = new Platform ("../Stage_Images/Stage6/quad1HorPlatform1.png", 58, 383, 0, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage6/quad3VerPlatform1.png", 494, 752, 560, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage6/quad4VerPlatform1.png", 793, 780, 855, 0);
         
-        platforms[0] = new Platform ("../Stage_Images/Stage1/quad1HorPlatform1.png", 700, 780, 300);
-        //platforms[1] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform1.png", 0, 0, 0);
-        //platforms[2] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform2.png", 0, 0, 0);
-        //platforms[3] = new Platform ("../Stage_Images/Stage1/quad3HorPlatform3.png", 0, 0, 0);
-        //platforms[4] = new Platform ("../Stage_Images/Stage1/quad4HorPlatform1.png", 0, 0, 0);
-        //platforms[5] = new Platform ("../Stage_Images/Stage1/quad4VerPlatform1.png", 0, 0, 0);
+        portals[0] = new Portal(870,780,0);
+        portals[1] = new Portal(300,360,2);
         
-        portals[0] = new Portal (100,780,0);
-        portals[1] = new Portal(900,780,1);
-        portals[2] = new Portal(1110,780,2);
-        
-        oven = new Oven(1000,10);
+        oven = new Oven(619,399, false);
     }
     
     ~Stage6()
@@ -492,6 +480,6 @@ struct Stage6 : public Stage
     
     
 };
-*/
+
 
 #endif
