@@ -15,7 +15,7 @@
 
 #define PI 3.14159265
 #define ENTITIES_MAX 4
-#define STAGES_MAX 5
+#define STAGES_MAX 6
 #define G_MAX 160.0
 
 class Game
@@ -1086,7 +1086,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			//only if bread teleport is true and if boule is touching a portal, move boule to a bread
 			if (breadTeleport && currentPortal>=0)
 			{
-					if (!entities[currentPortal]->isCreated) 
+					if (!entities[stages[currentStage]->portals[currentPortal]->portalType]->isCreated) 
 						{
 							mEntityMissing = currentPortal;
 							mMissing = true;
