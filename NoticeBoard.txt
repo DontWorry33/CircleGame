@@ -135,3 +135,11 @@ Started work on Stage Creation
 
 	Quality of Life:
 		2. Fixed second part which is where power guage resets after each shot.
+
+- 01/04/15 (Dedie)
+    Alright, here's a thick one.
+1. First up, I made large changes to Stage5 and Stage6. Their Grid and Screens have also been fittingly updated.
+2. All Stages now have hints of how to progress in the form of Portals showing on both the normal stage and the boule-version of the stage. Figured it would make it easier to avoid right clicking straight into a portal and getting teleported away. I know that happened to me far too many times....
+3. Stage3 had a bit of an err with its border. I cleaned that up good.
+4. Lastly, I have found a more elegant way of implementing the last argument to Switch and Oven. Now, we can choose whether we want the large image, or the small image for each one.
+5. Also, Switch Symbols have been added as a means of showing what the switch does before you hit it.
