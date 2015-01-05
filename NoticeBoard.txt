@@ -143,3 +143,4 @@ Started work on Stage Creation
 3. Stage3 had a bit of an err with its border. I cleaned that up good.
 4. Lastly, I have found a more elegant way of implementing the last argument to Switch and Oven. Now, we can choose whether we want the large image, or the small image for each one.
 5. Also, Switch Symbols have been added as a means of showing what the switch does before you hit it.
+6. *NOTE* The Bug with the portals is still there. While I can now pass through Anpan and come out the portal, I can't seem to go through the portal to come back out of Anpan.
