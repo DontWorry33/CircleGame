@@ -144,3 +144,19 @@ Started work on Stage Creation
 4. Lastly, I have found a more elegant way of implementing the last argument to Switch and Oven. Now, we can choose whether we want the large image, or the small image for each one.
 5. Also, Switch Symbols have been added as a means of showing what the switch does before you hit it.
 6. *NOTE* The Bug with the portals is still there. While I can now pass through Anpan and come out the portal, I can't seem to go through the portal to come back out of Anpan.
+
+- 01/20/15 (Hussain)
+
+Bug fixes:
+	1. Fixed bug where sometimes switches would re-active even though boule would still be on it.
+	2. Fixed bug during roti power where you would be able to float
+	3. Fixed bug where sometimes during roti power, if you were at the very top, you wouldn't be able to shoot out, it would just drop.
+
+
+Completely re-vamped roti power!
+	1. During the beta stage of the power, roti and the baker both, "smoothly" shoot out and trajectory applies.
+	2. The baker will now stop violently shaking when being attracted against the wall
+	3. Baker now does not go "underground" during the start of the roti power. It is level with roti.
+
+Current bugs/glitches
+	1. Rotation for roti power is a little bit off, it rotates into the wall even though it shouldn't be (depending on wether you like this, we can keep it)

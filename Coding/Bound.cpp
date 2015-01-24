@@ -153,6 +153,8 @@ class Game
 		sf::Clock nullSignTime;
 		sf::Clock missingSignTime;
 
+		sf::Clock rotiShotTime;
+
 		bool negateGravity;
 
 		bool isBeingAttracted;
@@ -170,6 +172,7 @@ class Game
 
 		int currentStage;
 		int tSwitch;
+		int displacedSwitch;
 
 		std::vector<sf::Music*> music;
    		sf::Music music1;
@@ -180,6 +183,11 @@ class Game
    		sf::Music music6;
 
    		int currSong;
+   		bool rotiActive;
+   		bool skip;
+
+  		sf::Vector2f bakerRepulsion;
+		sf::Vector2f rotiRepulsion;
 };
 
 
@@ -193,7 +201,7 @@ Game::Game() :
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5()
+			   music1(), music2(), music3(), music4(), music5(), rotiShotTime()
 
 {
     mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -277,7 +285,14 @@ Game::Game() :
 
 	tSwitch = 0;
 	currSong = 0;
-    
+    displacedSwitch = -1;
+    rotiActive = false;
+    skip = false;
+
+    bakerRepulsion.x = 400;
+    rotiRepulsion.x = 400;
+    bakerRepulsion.y = 0;
+    rotiRepulsion.y = 0;
 
 	if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
 	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
@@ -350,7 +365,11 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 			for (int x = 0; x<ENTITIES_MAX; x++) 
 			{ 
-				if (!negateGravity) checkGravity(entities, stages, x); 
+				if (!negateGravity) 
+					{
+						//std::cout << "gravity applying" << std::endl;
+						checkGravity(entities, stages, x); 
+					}
 				//checkGravity(entities,stages,x);
 			} //D: Loops per character. Separating gravity effects for each
 
@@ -452,7 +471,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						
 					}
 					
-					int tmmp[2];
+					int tmmp[3];
 					checkHitting(entities,stages,shotChooser,false,tmmp);
 					if (tmmp[1])
 					{
@@ -477,7 +496,64 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				}
 
 			processEvents(elapsedTime, entities, stages);
-			update(TimePerFrame,entities,stages);
+
+
+			if (rotiActive)
+			{
+				//std::cout << "currently active" << std::endl;
+				negateGravity = false; 
+				int bakerHitting[3]; 
+				int	rotiHitting[3]; 
+				checkHitting(entities,stages,0,false,bakerHitting);
+				checkHitting(entities,stages,1,false,rotiHitting);
+
+		//const float pushValue = 1000.f;
+
+				//sf::Time applyRepulsion = shotClock.getElapsedTime();
+				if (!skip)
+				{
+					if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
+					{
+						rotiShotTime.restart();
+						if (bakerRepulsion.x > 0) bakerRepulsion.x = -bakerRepulsion.x;
+						//std::cout << "negating baker" << std::endl;
+					}
+
+					else if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
+					{	
+						rotiShotTime.restart();
+						if (rotiRepulsion.x > 0) rotiRepulsion.x = -rotiRepulsion.x;
+						//std::cout << "negating roti" << std::endl;
+					}
+					else
+					{
+						//std::cout << "not touching the wall" << std::endl;
+						//bakerRepulsion.x = 0.f;
+						//rotiRepulsion.x = 0.f;
+					}
+				}
+				//need to restrict movement as it can currently move "through" a wall.
+				//std::cout << elapsedTime.asSeconds() << std::endl;
+				sf::Time applyMotion = rotiShotTime.getElapsedTime();
+				//std::cout << applyMotion.asSeconds() << std::endl;
+				//std::cout << bakerRepulsion.x << rotiRepulsion.x << std::endl;
+				if (applyMotion.asSeconds() < 0.35) 
+				{ 
+					skip=true;
+					entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
+					entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
+				}
+				else
+				{
+					bakerRepulsion.x = 400;
+					rotiRepulsion.x = 400;
+					skip = false;
+					rotiActive = false;
+					rotiShotTime.restart();
+				} 
+			}
+
+		update(TimePerFrame,entities,stages);
 
 		}
 
@@ -530,7 +606,7 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 
 		//The angle is arctangent of mArrow origin - current mouse position of Y/X.
 		float angle_in_rad = atan2(cy-mMousePos.y,cx-mMousePos.x);
-
+ 
 		//atan2 returns angle in radians, convert to degrees for debugging purposes		
 		float angle_in_deg = (angle_in_rad*180)/PI;
 
@@ -634,7 +710,10 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 }
 
+/*
+we need to check if the stage part tthat roti/baker is on, make sure it's under the max height.
 
+*/
 void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
 
@@ -666,8 +745,8 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 				rotateangle = 0;
 			}
 		}
-		int bakerHitting[2];
-		int rotiHitting[2];
+		int bakerHitting[3];
+		int rotiHitting[3];
 		checkHitting(entities,stages,0,false,bakerHitting);
 		checkHitting(entities,stages,1,false,rotiHitting);
 
@@ -677,20 +756,31 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 			//std::cout << "hitting opposite sides of same surface";
 			//std::cout << "baker: " << bakerHitting[1] << ", " << "roti: " << rotiHitting[1] << std::endl;
 			//std::cout << "bakerstage: " << bakerHitting[0] << ", " << "rotistage: " << rotiHitting[0] << std::endl;
-
-			negateGravity = true;
+			//check data[0] max height
+			//std::cout << entities[0]->eBounds.y << std::endl;
+			//std::cout << stages[currentStage]->platforms[bakerHitting[0]]->eBounds.y << std::endl;
+			if (rotiHitting[2]==0) if (entities[1]->eBounds.y+entities[1]->cRadius-15 <= stages[currentStage]->lines[rotiHitting[0]]->eBounds.y)
+			{
+				negateGravity = false;
+			}
+			else negateGravity = true;
+			if (rotiHitting[2] == 1) if (entities[1]->eBounds.y+entities[1]->cRadius-15 <= stages[currentStage]->platforms[rotiHitting[0]]->eBounds.y)
+			{
+				negateGravity = false;
+			}
+			else negateGravity = true;
 			entities[0]->canMoveDown = true;
 			entities[0]->gCurrent = 0;
 			entities[1]->canMoveDown = true;
 			entities[1]->gCurrent = 0;
-			if (entities[1]->eBounds.y <= entities[0]->eBounds.y)
+			rotateangle = 150;
+			if (entities[1]->eBounds.y <= entities[0]->eBounds.y+27)
 			{
-				//motionCheck(0, entities);
+
 				isBeingAttracted = true;
 				attract_direction.y = -150.f;
-				//entities[0]->gCurrent = 0;
+				updateEntityPosition(entities,stages);
 			}
-			else attract_direction.y = 150.f;
 
 		}
 		else 
@@ -709,40 +799,23 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 
 }
 
+//FIX SO THAT TRAJECTORY IS APPLIED INSTEAD OF JUST 1 SINGLE BIG MOVEMENT
+
+/*
+	use the function to set a boolean value.
+Reason for this is so that the external function can be called with frame time rather than on-buttom-release so that
+we can move with the trajectory instead of 1 movement.
+*/
 void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
 
-	if (isBeingAttracted) { negateGravity = false; int bakerHitting[2]; int
-	rotiHitting[2]; checkHitting(entities,stages,0,false,bakerHitting);
-	checkHitting(entities,stages,1,false,rotiHitting);
-
-		//const float pushValue = 1000.f;
-
-		sf::Vector2f bakerRepulsion(7500.f,0.f);
-		sf::Vector2f rotiRepulsion(3500.f,0.f);
-		sf::Time applyRepulsion = shotClock.getElapsedTime();
-
-		if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
-		{
-			bakerRepulsion = -bakerRepulsion;
-		}
-
-		else if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
-		{
-			rotiRepulsion = -rotiRepulsion;
-		}
-		else
-		{
-			std::cout << "I KNOW THIS IS A BUG." << std::endl;
-			bakerRepulsion.x = 0.f;
-			rotiRepulsion.x = 0.f;
-		} 
-		//need to restrict movement as it can currently move "through" a wall.
-		entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
-		entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
+	if (isBeingAttracted)
+	{ 
+		//std::cout << "setting active to true" << std::endl;
+		rotiActive = true;
+		negateGravity = false;
 	}
-	isBeingAttracted = false;	
-	
+	isBeingAttracted = false;
 } 	
 
 void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
@@ -894,11 +967,21 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 				swapBackground(entities,stages);
 			}
 
+
+			sf::Vector2f dispVal;
+			dispVal.x = 0;
+			dispVal.y = 0; 
 			//displacement switch
-			if (currentSwitch[0] >= 0 && stages[currentStage]->switches[currentSwitch[0]]->switchType == 3 && !displaced)
+			if (currentSwitch[0] >= 0 && stages[currentStage]->switches[currentSwitch[0]]->switchType == 3)
 			{
 				std::cout << "displacement switch activated" << std::endl;
-				if(entities[1]->isCreated) entities[1]->cCircle.setPosition(stages[currentStage]->switches[currentSwitch[0]]->displacement);
+				if(entities[1]->isCreated && !displaced) 
+					{
+						entities[1]->cCircle.setPosition(stages[currentStage]->switches[currentSwitch[0]]->displacement);
+						dispVal = stages[currentStage]->switches[currentSwitch[0]]->displacement;
+						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture2);
+						displacedSwitch = currentSwitch[0];
+					}
 				entities[1]->gCurrent = 0;
 				displaced = true;
 			}
@@ -1038,6 +1121,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			if (currentSwitch[0] < 0) 
 			{
 				displaced = false;
+				if (displacedSwitch!=-1) stages[currentStage]->switches[displacedSwitch]->eSprite.setTexture(stages[currentStage]->switches[displacedSwitch]->eTexture);
 				disp = false;
 
 			}
@@ -1686,12 +1770,66 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 		*/
 		for (int a=0; a<stages[currentStage]->switchCount; a++)
 		{
+			if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
+				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
+				entities[airborneEntity]->bottomRCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
+				entities[airborneEntity]->bottomRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
+				{
+					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					std::cout << "brc" << std::endl;
+					data[0] = a;
+					return;
+				}
+			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
+				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
+				entities[airborneEntity]->bottomLCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
+				entities[airborneEntity]->bottomLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
+				{
+					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					std::cout << "blc" << std::endl;
+					data[0] = a;
+					return;
+				}
+			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
+				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
+				entities[airborneEntity]->bottomLLCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
+				entities[airborneEntity]->bottomLLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
+				{
+					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					std::cout << "bllc" << std::endl;
+					data[0] = a;
+					return;
+				}
+
+			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
+				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
+				entities[airborneEntity]->bottomRRCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
+				entities[airborneEntity]->bottomRRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
+				{
+					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
+					std::cout << "brrc" << std::endl;
+					data[0] = a;
+					return;
+				}
+
+			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
+				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
+				entities[airborneEntity]->bottomCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
+				entities[airborneEntity]->bottomCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
+				{
+					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-entities[x]->cRadius);
+					std::cout << "bc" << std::endl;
+					data[0] = a;
+					return;
+				}
 			if (entities[airborneEntity]->rightCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
 				entities[airborneEntity]->rightCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
 				entities[airborneEntity]->rightCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
 				entities[airborneEntity]->rightCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x-entities[x]->cRadius, entities[x]->eBounds.y+entities[x]->cRadius);
+					std::cout << "rc" << std::endl;
+					std::cout << stages[currentStage]->switches[a]->eBounds.y << "," << stages[currentStage]->switches[a]->eBounds.y+stages[currentStage]->switches[a]->eTextureSize.y << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -1702,6 +1840,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				entities[airborneEntity]->leftCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x+stages[currentStage]->lines[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->eBounds.y+entities[x]->cRadius);
+					std::cout << "lc" << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -1713,57 +1852,12 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 
 					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y+entities[x]->cRadius);
 					//entities[x]->gCurrent = 0;	
+					std::cout << "tc" << std::endl;
 					data[0] = a;
 					return;
 				}
 
-			 if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
-				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
-				entities[airborneEntity]->bottomRCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
-				entities[airborneEntity]->bottomRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
-				{
-					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					data[0] = a;
-					return;
-				}
-			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
-				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
-				entities[airborneEntity]->bottomLCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
-				entities[airborneEntity]->bottomLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
-				{
-					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					data[0] = a;
-					return;
-				}
-			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
-				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
-				entities[airborneEntity]->bottomLLCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
-				entities[airborneEntity]->bottomLLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
-				{
-					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					data[0] = a;
-					return;
-				}
-
-			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
-				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
-				entities[airborneEntity]->bottomRRCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
-				entities[airborneEntity]->bottomRRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
-				{
-					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					data[0] = a;
-					return;
-				}
-
-			else if (entities[airborneEntity]->bottomCircle[1] >= stages[currentStage]->switches[a]->eBounds.y &&
-				entities[airborneEntity]->bottomCircle[1] <= stages[currentStage]->switches[a]->eBounds.y + stages[currentStage]->switches[a]->eTextureSize.y &&
-				entities[airborneEntity]->bottomCircle[0] >= stages[currentStage]->switches[a]->eBounds.x &&
-				entities[airborneEntity]->bottomCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
-				{
-					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-entities[x]->cRadius);
-					data[0] = a;
-					return;
-				}
+		
 		}
 
 		data[0]=-1;
@@ -1782,6 +1876,8 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
 				data[0] = x;
 				data[1] = 3;
+				//make third index which tells us either line [0] or platform [1];
+				data[2]=0;
 				return;
 			}
 		if (ceil(entities[airborneEntity]->leftCircle[1]) >= stages[currentStage]->lines[x]->eBounds.y &&
@@ -1792,6 +1888,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x+stages[currentStage]->lines[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
 				data[0] = x;
 				data[1] = 2;
+				data[2] = 0;
 				return;
 			}
 
@@ -1808,6 +1905,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x-entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
 				data[0] = x;
 				data[1] = 3;
+				data[2] = 1;
 				return;
 			}
 		if (ceil(entities[airborneEntity]->leftCircle[1]) >= stages[currentStage]->platforms[x]->eBounds.y &&
@@ -1818,6 +1916,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				//entities[x]->cCircle.setPosition(stages[currentStage]->lines[a]->eBounds.x+stages[currentStage]->lines[a]->eTextureSize.x+entities[x]->cRadius, entities[x]->cCircle.getPosition().y);
 				data[0] = x;
 				data[1] = 2;
+				data[2] = 1;
 				return;
 			}
 
@@ -1826,6 +1925,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 
 	data[0]=-1;
 	data[1]=0;
+	data[2]=-1;
 	return;
 }
 
