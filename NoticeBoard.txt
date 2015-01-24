@@ -160,3 +160,14 @@ Completely re-vamped roti power!
 
 Current bugs/glitches
 	1. Rotation for roti power is a little bit off, it rotates into the wall even though it shouldn't be (depending on wether you like this, we can keep it)
+
+- 01/24/15 (Hussain)
+
+Changes:
+	1. Roti power does not rely on clock anymore.
+
+Bugs:
+	1. Sometimes at the very top of a line or platform, when activating the "beta" part of the power, both roti and baker will go to the top of the platform. This bug is extremely hard to reproduce and I have only encountered it once
+	2. Rotation for roti power is a little bit off, it rotates into the wall even though it shouldn't be (depending on wether you like this, we can keep it)
+
+Oh and i'm not removing the debugging messages as I need them to fix the bugs.
