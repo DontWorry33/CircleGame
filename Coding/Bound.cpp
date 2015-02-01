@@ -108,7 +108,8 @@ class Game
 
 		//power gauuge
 		sf::Sprite mPowerGaugeShell;
-		sf::Sprite mPowerGaugeMetre;
+		sf::CircleShape mPowerGaugeMetre;
+
 		sf::Texture mPowerGaugeShellTexture;
 		sf::Texture mPowerGaugeMetreTexture;
 
@@ -207,9 +208,10 @@ Game::Game() :
 
 {
     mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
-    mWindow.setFramerateLimit(60);
+   // mWindow.setFramerateLimit(120);
 
 	//set all statistics
+	mWindow.setFramerateLimit(60);
 	mStatisticsNumFrames = 0;
 	mFont.loadFromFile("Sansation.ttf");
 	mStatisticsText.setFont(mFont);
@@ -226,8 +228,12 @@ Game::Game() :
 	//set powergauge stuff
 	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre.png");
 	mPowerGaugeShellTexture.loadFromFile("../Character_Images/PowerGauge_Shell.png");
-	mPowerGaugeMetre.setTexture(mPowerGaugeMetreTexture);
+	mPowerGaugeMetre.setTexture(&mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
+
+	mPowerGaugeMetre.setRadius(mPowerGaugeMetreTexture.getSize().x/2);
+	mPowerGaugeMetre.setOrigin(mPowerGaugeMetreTexture.getSize().x/2,mPowerGaugeMetreTexture.getSize().y/2);
+
 
 	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
@@ -247,7 +253,7 @@ Game::Game() :
 	mIsLaunched = false;
 
 	//power bar multiplier for trajectory
-	powerMetre = 3;
+	powerMetre = 0;
 
 	//Locks mouse and position when trajectory is active so that we don't get curved bread.
 	mouseLock=false;
@@ -330,15 +336,15 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 		while (timeSinceLastUpdate > TimePerFrame)
 		{
-			//std::cout << entities[2]->cCircle.getPosition().x << ", " << entities[2]->cCircle.getPosition().y << std::endl;
 			timeSinceLastUpdate -= TimePerFrame;
+
+			//mPowerGaugeMetre.setRadius(powerMetre);
 
 			//if mouse lock is not active, get the curr pos, same with position
 			if (!mouseLock) mMousePos = sf::Mouse::getPosition(mWindow);
 			if (!positionLock)
 			{
 				traj_pos = entities[0]->cCircle.getPosition();
-			//	std::cout << "lock pos(X): " << traj_pos.x << std::endl;
 				mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
 
 			}
@@ -346,12 +352,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			{
 				mArrow.setPosition(traj_pos);
 			}
-			//	std::cout << "LOCKED!!!" << std::endl;
-
 			//set the arrow position to follow the circle
 
 			mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
-			mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition());
+			mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition().x+mPowerGaugeMetre.getRadius(), mPowerGaugeShell.getPosition().y+mPowerGaugeMetre.getRadius());
 
 
 			Arrow(entities);
@@ -1243,8 +1247,8 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 	if (key == sf::Keyboard::Space) 
 		{
 			mDrawMetre = true;
-			if (powerMetre <=60 ) powerMetre+=1.5;
-			else powerMetre = 3;
+			if (powerMetre <= 1) powerMetre+=0.03;
+			else powerMetre = 0;
 		}
 	else 
 		{
@@ -2105,14 +2109,14 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 
 void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 {
-	sf::Vector2f motion(0.f, 0.f);	
+	sf::Vector2f motion(0.f, 0.f);
 	double xDirection = mArrow.getPosition().x - traj_pos.x;
 	double yDirection = mArrow.getPosition().y - traj_pos.y;
 
 	if (mIsLaunched && !(entities[shotChooser]->isCreated))
 	{
-		motion.y += yDirection*(powerMetre/2);
-		motion.x += xDirection*(powerMetre/2);
+		motion.y += yDirection*(powerMetre)*30;
+		motion.x += xDirection*(powerMetre)*30;
 		entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
 	}
 }
@@ -2496,7 +2500,7 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
 			"Time / Update = " + toString(mStatisticsUpdateTime.asMilliseconds() / mStatisticsNumFrames) + "ms");
-							 
+	 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
@@ -2563,7 +2567,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		if (bouleActivated) mWindow.draw(stages[currentStage]->portals[x]->eSprite);
 	}
 	mWindow.draw(stages[currentStage]->oven->eSprite);
-	mPowerGaugeMetre.setTextureRect(sf::IntRect(0,0,mPowerGaugeMetreTexture.getSize().x,powerMetre));
+	mPowerGaugeMetre.setScale(powerMetre,powerMetre);
 	if (mDrawMetre)
 	{
 		mWindow.draw(mPowerGaugeShell);
