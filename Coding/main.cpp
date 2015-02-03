@@ -80,7 +80,8 @@ int main()
 	    		case sf::Event::MouseButtonPressed:
 	    			if (menu.isTouchingOption() == 0)
 	    			{
-	    				menu.fade();
+	    				menu.fade(menu.UI_options[0]->option, stages[0]->background);
+	    				std::cout << "fade finished" << std::endl;
 	    				Game* game = new Game(&menu.win);
 						game->run(entities,stages);
 	    			}

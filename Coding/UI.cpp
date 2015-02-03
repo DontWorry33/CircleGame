@@ -24,7 +24,7 @@ struct UI
 	sf::Clock fadeClock;
 
 
-	virtual int isTouchingOption(){}; //ONLY CALL ONCE WIN IS INSTANTIANATED
+	virtual int isTouchingOption(){}; //ONLY CALL ONCE WIN AIS INSTANTIANATED
 	virtual void render(){};
 	virtual void fade(){};
 
@@ -99,23 +99,39 @@ struct Main_Menu : UI
 		win.display();
 	}
 
-	void fade()
+	void fade(sf::Sprite bkg_fadeout, sf::Sprite bkg_fadein)
 	{
 		//sf::Color curr = UI_options[0]->option.getColor();
 		int x = 255;
-		while (x!= 0)
+		while (x > 0)
 		{	
 			sf::Time fade = fadeClock.getElapsedTime();
 			if (fade.asSeconds() >= 0.001)
 			{
 				fade = fadeClock.restart();
 				win.clear();
-				UI_options[0]->option.setColor(sf::Color(UI_options[0]->option.getColor().r, 
-				UI_options[0]->option.getColor().g, UI_options[0]->option.getColor().b, x));
-				win.draw(UI_options[0]->option);
+				bkg_fadeout.setColor(sf::Color(bkg_fadeout.getColor().r, 
+				bkg_fadeout.getColor().g, bkg_fadeout.getColor().b, x));
+				win.draw(bkg_fadeout);
 				win.display();
 				std::cout << x << std::endl;
-				x--;
+				x-=2;
+			}
+		}
+		x = 0;
+		while (x < 255)
+		{
+			sf::Time fade = fadeClock.getElapsedTime();
+			if (fade.asSeconds() >= 0.001)
+			{
+				fade = fadeClock.restart();
+				win.clear();
+				bkg_fadein.setColor(sf::Color(bkg_fadein.getColor().r, 
+				bkg_fadein.getColor().g, bkg_fadein.getColor().b, x));
+				std::cout << x << std::endl;
+				win.draw(bkg_fadein);	
+				win.display();
+				x+=1;
 			}
 		}
 
