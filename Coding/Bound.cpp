@@ -22,7 +22,7 @@ class Game
 {
 	public:
 	
-		Game();
+		Game(sf::RenderWindow* tmpWin);
 		//functions
 		void run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		void updateEntityPosition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
@@ -69,7 +69,7 @@ class Game
 		//int* retValLeft;
 		//int* retValRight;
 		//int* retValS;
-		sf::RenderWindow mWindow;		
+		sf::RenderWindow* mWindow;		
 
 		//Arrow Indicator
 		sf::Texture mArrowTexture;
@@ -199,7 +199,7 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
 //instantiates most objects and sets starting values
-Game::Game() : 
+Game::Game(sf::RenderWindow* tmpWin) : 
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
@@ -207,11 +207,12 @@ Game::Game() :
 			   music1(), music2(), music3(), music4(), music5(), rotiShotTime()
 
 {
-    mWindow.create(sf::VideoMode(1200, 800), "CircleGame!");
-   // mWindow.setFramerateLimit(120);
+   // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
+   // mWindow->setFramerateLimit(120);
 
+	mWindow = tmpWin;
 	//set all statistics
-	mWindow.setFramerateLimit(60);
+	mWindow->setFramerateLimit(60);
 	mStatisticsNumFrames = 0;
 	mFont.loadFromFile("Sansation.ttf");
 	mStatisticsText.setFont(mFont);
@@ -324,7 +325,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
-	while (mWindow.isOpen())
+	while (mWindow->isOpen())
 	{
 		
 		//get the current amount of time elapsed
@@ -341,7 +342,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			//mPowerGaugeMetre.setRadius(powerMetre);
 
 			//if mouse lock is not active, get the curr pos, same with position
-			if (!mouseLock) mMousePos = sf::Mouse::getPosition(mWindow);
+			if (!mouseLock) mMousePos = sf::Mouse::getPosition(*(mWindow));
 			if (!positionLock)
 			{
 				traj_pos = entities[0]->cCircle.getPosition();
@@ -2129,7 +2130,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 	sf::Event event;
 	activateRotiPowerAlpha(elapsedTime, entities,stages);
 	activateBoulePower(entities,stages,elapsedTime);
-	while (mWindow.pollEvent(event))
+	while (mWindow->pollEvent(event))
 	{
 		switch (event.type)
 		{
@@ -2173,7 +2174,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 				break;
 
 			case sf::Event::Closed:
-				mWindow.close();
+				mWindow->close();
 				break;
 		}
 	}
@@ -2509,15 +2510,15 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
-	mWindow.clear();	
-	mWindow.draw(stages[currentStage]->background);
-	mWindow.draw(mStatisticsText);
+	mWindow->clear();	
+	mWindow->draw(stages[currentStage]->background);
+	mWindow->draw(mStatisticsText);
 	
 	if (currentlySelected%3 == 1) 
 	{
 		entities[1]->cCircle.setOutlineThickness(5);
 		entities[1]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
-		mWindow.draw(entities[1]->eSprite2);
+		mWindow->draw(entities[1]->eSprite2);
 		entities[2]->cCircle.setOutlineThickness(0);
 		entities[3]->cCircle.setOutlineThickness(0);
 	}
@@ -2525,7 +2526,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		entities[2]->cCircle.setOutlineThickness(5);
 		entities[2]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
-		mWindow.draw(entities[2]->eSprite2);
+		mWindow->draw(entities[2]->eSprite2);
 		entities[1]->cCircle.setOutlineThickness(0);
 		entities[3]->cCircle.setOutlineThickness(0);
 
@@ -2534,7 +2535,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		entities[3]->cCircle.setOutlineThickness(5);
 		entities[3]->cCircle.setOutlineColor(sf::Color(60, 129, 113));
-		mWindow.draw(entities[3]->eSprite2);
+		mWindow->draw(entities[3]->eSprite2);
 		entities[1]->cCircle.setOutlineThickness(0);
 		entities[2]->cCircle.setOutlineThickness(0);
 
@@ -2542,44 +2543,44 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	
 	for (int x=0; x<ENTITIES_MAX; x++) 
 	{
-		mWindow.draw(entities[x]->cCircle);
-		//else mWindow.draw(entities[x]->eSprite);
+		mWindow->draw(entities[x]->cCircle);
+		//else mWindow->draw(entities[x]->eSprite);
 	}
 
 
 	for (int x=0; x<stages[currentStage]->lineCount; x++)
 	{
-		mWindow.draw(stages[currentStage]->lines[x]->eSprite);
+		mWindow->draw(stages[currentStage]->lines[x]->eSprite);
 	}
 
 	for (int x=0; x<stages[currentStage]->platformCount; x++)
 	{
-		mWindow.draw(stages[currentStage]->platforms[x]->eSprite);
+		mWindow->draw(stages[currentStage]->platforms[x]->eSprite);
 	}
 
 	for (int x=0; x<stages[currentStage]->switchCount; x++)
 	{
-		if (bouleActivated) mWindow.draw(stages[currentStage]->switches[x]->eSprite);
+		if (bouleActivated) mWindow->draw(stages[currentStage]->switches[x]->eSprite);
 	}
 
 	for (int x=0; x<stages[currentStage]->portalCount; x++)
 	{
-		if (bouleActivated) mWindow.draw(stages[currentStage]->portals[x]->eSprite);
+		if (bouleActivated) mWindow->draw(stages[currentStage]->portals[x]->eSprite);
 	}
-	mWindow.draw(stages[currentStage]->oven->eSprite);
+	mWindow->draw(stages[currentStage]->oven->eSprite);
 	mPowerGaugeMetre.setScale(powerMetre,powerMetre);
 	if (mDrawMetre)
 	{
-		mWindow.draw(mPowerGaugeShell);
-		mWindow.draw(mPowerGaugeMetre);
+		mWindow->draw(mPowerGaugeShell);
+		mWindow->draw(mPowerGaugeMetre);
 	}
 	
 
-	//for (int x=7; x<ENTITIES_MAX; x++) mWindow.draw(entities[x]->eSprite);
+	//for (int x=7; x<ENTITIES_MAX; x++) mWindow->draw(entities[x]->eSprite);
 
 
-	//mWindow.draw(entities[9]->eSprite);
-	//mWindow.draw(entities[10]->eSprite);
+	//mWindow->draw(entities[9]->eSprite);
+	//mWindow->draw(entities[10]->eSprite);
 
 	sf::Time removeNullSign = nullSignTime.getElapsedTime();
 	if (!mDrawNull) removeNullSign = nullSignTime.restart();
@@ -2596,7 +2597,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mDrawNull = false;
 		removeNullSign = nullSignTime.restart();
 	}
-	if (mDrawNull) mWindow.draw(mNullSign);
+	if (mDrawNull) mWindow->draw(mNullSign);
 
 	sf::Time removeMissingSign = missingSignTime.getElapsedTime();
 	if (!mMissing) removeMissingSign = missingSignTime.restart();
@@ -2612,11 +2613,11 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	}
 	if (mMissing) 
 	{
-		mWindow.draw(entities[mEntityMissing]->eNotCreated);
+		mWindow->draw(entities[mEntityMissing]->eNotCreated);
 	}
 
-	mWindow.draw(mArrow);
-	mWindow.display();
+	mWindow->draw(mArrow);
+	mWindow->display();
 }
 
 
