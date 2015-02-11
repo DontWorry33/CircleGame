@@ -227,7 +227,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mArrow.setOrigin(45,55);
 
 	//set powergauge stuff
-	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre.png");
+	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre2.png");
 	mPowerGaugeShellTexture.loadFromFile("../Character_Images/PowerGauge_Shell.png");
 	mPowerGaugeMetre.setTexture(&mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
@@ -1248,7 +1248,7 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 	if (key == sf::Keyboard::Space) 
 		{
 			mDrawMetre = true;
-			if (powerMetre <= 1) powerMetre+=0.03;
+			if (powerMetre <= 1) powerMetre+=0.075;
 			else powerMetre = 0;
 		}
 	else 
