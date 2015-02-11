@@ -191,6 +191,9 @@ class Game
 
   		sf::Vector2f bakerRepulsion;
 		sf::Vector2f rotiRepulsion;
+
+		sf::Texture breadSelectedImage;
+		sf::Sprite breadSelected;
 };
 
 
@@ -204,7 +207,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5(), rotiShotTime()
+			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), breadSelectedImage(), breadSelected()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -314,6 +317,11 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
 	//retValS = new int[1];
+
+
+
+	//breadSelectedImage.loadFromFile("../Character_Images/Arrowtail.png")
+
 }
 
 
@@ -346,7 +354,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			if (!positionLock)
 			{
 				traj_pos = entities[0]->cCircle.getPosition();
-				mArrow.setPosition(entities[currentEntityIndex]->cCircle.getPosition());
+				mArrow.setPosition(entities[0]->cCircle.getPosition());
 
 			}
 			else
@@ -557,6 +565,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 					//std::cout << "applying baker force" << std::endl;
 					if (!skipBaker) std::cout << "starting skip baker" << std::endl;
 					skipBaker=true;
+					if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl;}
+					if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl;}
 					entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
 				}
 				else
@@ -570,6 +580,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 					//std::cout << "applying roti force" << std::endl;
 					if (!skipRoti) std::cout << "starting skip roti" << std::endl;
 					skipRoti = true;
+					if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl;}
+					if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl;}
 					entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
 				}
 				else
@@ -584,6 +596,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				//BUG WITH THIS! WHEN ROTI/BAKER ARE AT TOP, I THINK IT TRIGGERS BL OR
 				if ( (isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius)) && (isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius)))
 				{
+					if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) rotiActive=false;
+					if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) rotiActive = false;
+					if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
+					if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
 					std::cout << "rotiactive is false" << std::endl;
 					rotiActive = false;
 				}
@@ -650,8 +666,8 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 		int rooY = entities[currentEntityIndex]->cCircle.getPosition().y + (entities[currentEntityIndex]->cRadius*sin(PI));
 	//std::cout << "(" << rooX << "," << rooY << ")" << std::endl;
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
-		mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
 
+		 mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
 
@@ -817,6 +833,12 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 				attract_direction.y = -150.f;
 				updateEntityPosition(entities,stages);
 			}
+			std::cout << "baker bound: " << entities[0]->eBounds.y << ", roti bound: " << entities[1]->eBounds.y << std::endl;
+			if (entities[0]->eBounds.y < entities[1]->eBounds.y-39)
+			{
+				negateGravity = false;
+			}
+
 
 		}
 		else 
@@ -1248,7 +1270,7 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 	if (key == sf::Keyboard::Space) 
 		{
 			mDrawMetre = true;
-			if (powerMetre <= 1) powerMetre+=0.03;
+			if (powerMetre <= 1) powerMetre+=0.075;
 			else powerMetre = 0;
 		}
 	else 
@@ -2480,7 +2502,8 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 
 	if (mTeleportation)
 	{
-		entities[2]->cCircle.setPosition(340,100);
+		entities[0]->cCircle.setPosition(1000,100);
+		entities[1]->cCircle.setPosition(300,100);
 	}
 
 	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
@@ -2569,7 +2592,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	}
 	mWindow->draw(stages[currentStage]->oven->eSprite);
 	mPowerGaugeMetre.setScale(powerMetre,powerMetre);
-	if (mDrawMetre)
+	if (mDrawMetre && currentEntityIndex == 0)
 	{
 		mWindow->draw(mPowerGaugeShell);
 		mWindow->draw(mPowerGaugeMetre);
@@ -2616,7 +2639,7 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mWindow->draw(entities[mEntityMissing]->eNotCreated);
 	}
 
-	mWindow->draw(mArrow);
+	if (currentEntityIndex == 0) mWindow->draw(mArrow);
 	mWindow->display();
 }
 
