@@ -227,7 +227,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mArrow.setOrigin(45,55);
 
 	//set powergauge stuff
-	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre2.png");
+	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre.png");
 	mPowerGaugeShellTexture.loadFromFile("../Character_Images/PowerGauge_Shell.png");
 	mPowerGaugeMetre.setTexture(&mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
