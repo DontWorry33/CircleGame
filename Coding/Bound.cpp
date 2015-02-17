@@ -71,6 +71,7 @@ class Game
 		//int* retValS;
 		sf::RenderWindow* mWindow;		
 
+
 		//Arrow Indicator
 		sf::Texture mArrowTexture;
 		sf::Sprite mArrow;
@@ -192,8 +193,8 @@ class Game
   		sf::Vector2f bakerRepulsion;
 		sf::Vector2f rotiRepulsion;
 
-		sf::Texture breadSelectedImage;
-		sf::Sprite breadSelected;
+		sf::Texture arrowTailImage;
+		sf::Sprite arrowTail;
 };
 
 
@@ -207,7 +208,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), breadSelectedImage(), breadSelected()
+			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -230,7 +231,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mArrow.setOrigin(45,55);
 
 	//set powergauge stuff
-	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre2.png");
+	mPowerGaugeMetreTexture.loadFromFile("../Character_Images/PowerGauge_Metre.png");
 	mPowerGaugeShellTexture.loadFromFile("../Character_Images/PowerGauge_Shell.png");
 	mPowerGaugeMetre.setTexture(&mPowerGaugeMetreTexture);
 	mPowerGaugeShell.setTexture(mPowerGaugeShellTexture);
@@ -320,7 +321,8 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 
 
-	//breadSelectedImage.loadFromFile("../Character_Images/Arrowtail.png")
+	arrowTailImage.loadFromFile("../Character_Images/Arrowtail.png");
+	arrowTail.setTexture(arrowTailImage);
 
 }
 
@@ -368,6 +370,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 
 			Arrow(entities);
+			if (currentEntityIndex > 0 )arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
 			//get mouse-coordinates relative to the window
 
 			updateEntityPosition(entities,stages);
@@ -518,7 +521,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			if (rotiActive)
 			{
 				//std::cout << "currently active" << std::endl;
-				negateGravity = false; 
+				negateGravity = false;
 				int bakerHitting[3]; 
 				int	rotiHitting[3]; 
 				checkHitting(entities,stages,0,false,bakerHitting);
@@ -668,6 +671,7 @@ void Game::Arrow(Entity* entities[ENTITIES_MAX])
 		//apply formula to move mArrow around circumference of circle. (cx + r*cos(angle))
 
 		 mArrow.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
+		 //arrowTail.setPosition(cx-(entities[currentEntityIndex]->cRadius * cos(angle_in_rad)), cy-(entities[currentEntityIndex]->cRadius * sin(angle_in_rad)));
 		//use setRotation to set new rotation angle instead of rotate(),  -90 since top left (x,y) = (0,0)
 		mArrow.setRotation(angle_in_deg-90);
 
@@ -756,6 +760,15 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	breadTeleport = false;
 	pLock = false;
 	bLock = false;
+    rotiActive = false;
+
+    skipRoti = false;
+    skipBaker = false;
+
+    bakerRepulsion.x = 400;
+    rotiRepulsion.x = 600;
+    bakerRepulsion.y = 0;
+    rotiRepulsion.y = 0;
 	updateEntityPosition(entities,stages);
 
 	
@@ -815,12 +828,20 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 			{
 				negateGravity = false;
 			}
-			else negateGravity = true;
+			else 
+			{
+				negateGravity = true;
+
+			}				
 			if (rotiHitting[2] == 1) if (entities[1]->eBounds.y+entities[1]->cRadius-25 <= stages[currentStage]->platforms[rotiHitting[0]]->eBounds.y)
 			{
 				negateGravity = false;
 			}
-			else negateGravity = true;
+			else
+			{
+				negateGravity = true;
+				
+			}
 			entities[0]->canMoveDown = true;
 			entities[0]->gCurrent = 0;
 			entities[1]->canMoveDown = true;
@@ -873,6 +894,7 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 		rotiActive = true;
 		negateGravity = false;
 	}
+		negateGravity = false;
 	isBeingAttracted = false;
 } 	
 
@@ -1270,7 +1292,7 @@ void Game::powerMetreUpdate(sf::Keyboard::Key key)
 	if (key == sf::Keyboard::Space) 
 		{
 			mDrawMetre = true;
-			if (powerMetre <= 1) powerMetre+=0.075;
+			if (powerMetre <= 1) powerMetre+=0.04;
 			else powerMetre = 0;
 		}
 	else 
@@ -2640,6 +2662,11 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	}
 
 	if (currentEntityIndex == 0) mWindow->draw(mArrow);
+	else 
+	{
+		//std::cout << currentEntityIndex << std::endl;
+		mWindow->draw(arrowTail);
+	}
 	mWindow->display();
 }
 
