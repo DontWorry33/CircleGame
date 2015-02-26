@@ -9,6 +9,7 @@
 #include "StringHelpers.hpp"
 #include "Entity.cpp"
 #include "Stage.cpp"
+#include "UI.cpp"
 
 #ifndef BOUND_H
 #define BOUND_H
@@ -52,7 +53,9 @@ class Game
 		void activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX],sf::Time elapsedTime);
 
 		void processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
-		
+		int pauseMenuRun();
+
+
 		void motionCheck(int character, Entity* entities[ENTITIES_MAX],Stage* stages[STAGES_MAX]);
 		void update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		void render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
@@ -195,6 +198,9 @@ class Game
 
 		sf::Texture arrowTailImage;
 		sf::Sprite arrowTail;
+
+		Pause_Menu** pauseMenu; 
+
 };
 
 
@@ -324,7 +330,36 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	arrowTailImage.loadFromFile("../Character_Images/Arrowtail.png");
 	arrowTail.setTexture(arrowTailImage);
 
+	pauseMenu = new Pause_Menu* [STAGES_MAX];
+
+	pauseMenu[0] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/1Pause/1Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/1Pause/1Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/1Pause/1Pause_Quit.png");
+	pauseMenu[1] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/2Pause/2Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/2Pause/2Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/2Pause/2Pause_Quit.png");
+	pauseMenu[2] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/3Pause/3Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/3Pause/3Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/3Pause/3Pause_Quit.png");
+	pauseMenu[3] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/4Pause/4Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/4Pause/4Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/4Pause/4Pause_Quit.png");
+	pauseMenu[4] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/5Pause/5Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/5Pause/5Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/5Pause/5Pause_Quit.png");
+	pauseMenu[5] = new Pause_Menu(mWindow, 
+		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
+		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
+		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+
 }
+
+
 
 
 
@@ -373,10 +408,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			if (currentEntityIndex > 0 )arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
 			//get mouse-coordinates relative to the window
 
-			updateEntityPosition(entities,stages);
+			if ( !pauseMenu[currentStage]->isPaused) updateEntityPosition(entities,stages);
 
 			if (mResetGame) resetLevel(entities,stages);
-
+			
 			for (int x=0; x < stages[currentStage]->platformCount; x++)
 			{
 				stages[currentStage]->platforms[x]->eBounds.x = stages[currentStage]->platforms[x]->eSprite.getPosition().x - stages[currentStage]->platforms[x]->eTextureSize.x/2;
@@ -385,7 +420,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 			for (int x = 0; x<ENTITIES_MAX; x++) 
 			{ 
-				if (!negateGravity) 
+				if (!negateGravity && !pauseMenu[currentStage]->isPaused)
 					{
 						//std::cout << "gravity applying" << std::endl;
 						checkGravity(entities, stages, x); 
@@ -394,6 +429,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			} //D: Loops per character. Separating gravity effects for each
 
 			swapStage(entities,stages);
+
 	//---------------------GRAVITY
 				sf::Time updateGravity = gravityClock.getElapsedTime();
 
@@ -408,9 +444,9 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				{
 					for (int x=0; x<ENTITIES_MAX; x++)	
 					{
-						if (entities[x]->gCurrent < G_MAX && !negateGravity) entities[x]->gCurrent+=g;
+						if (entities[x]->gCurrent < G_MAX && !negateGravity && !pauseMenu[currentStage]->isPaused) entities[x]->gCurrent+=g;
 						else if (negateGravity && ( x == 0 || x == 1)) continue; 
-						else entities[x]->gCurrent = G_MAX;
+						//else entities[x]->gCurrent = G_MAX;
 					}
 					updateGravity = gravityClock.restart();
 				}
@@ -424,90 +460,91 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				{
 					positionLock = true;
 					mouseLock=true;
-
-					trajectory(elapsedTime, entities);
-				
-				//Right Border Collision Check	
-					if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+					if (!pauseMenu[currentStage]->isPaused)
 					{
-						//std::cout << "rb stopped trag" << std::endl;
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-				
-						entities[shotChooser]->isCreated = true;
-						entities[shotChooser]->gCurrent = 0;	
-					}
+						trajectory(elapsedTime, entities);
 					
-				//Left Border Collision Check	
-					if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
-					{
-						//std::cout << "lb stopped trag" << std::endl;
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+					//Right Border Collision Check	
+						if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+						{
+							//std::cout << "rb stopped trag" << std::endl;
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
 					
-						entities[shotChooser]->gCurrent = 0;	
-						entities[shotChooser]->isCreated = true;
-					}
-
-				//Top Border Collision Check
-					if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
-					{
-						//std::cout << "tb stopped trag" << std::endl;
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
-					
-						entities[shotChooser]->gCurrent = 0;	
-						entities[shotChooser]->isCreated = true;
-					}
-
-				//Bottom Border Collision Check
-					//std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
-					if (entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= 785)
-					{
-						//std::cout << "bb stopped trag" << std::endl;
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-					
-						entities[shotChooser]->isCreated = true;
-						entities[shotChooser]->gCurrent = 0;	
-					}
-
-					if (isTouchingSurface(entities, stages, shotChooser))
-					{
-						//std::cout << "touching da surf stopped trajectory" << std::endl;
-						//bottomCircleCollision(entities,stages,shotChooser);
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->isCreated = true;
+							entities[shotChooser]->isCreated = true;
+							entities[shotChooser]->gCurrent = 0;	
+						}
 						
-					}
-					
-					int tmmp[3];
-					checkHitting(entities,stages,shotChooser,false,tmmp);
-					if (tmmp[1])
-					{
-						//std::cout << "check hitting stopped trajectory" << std::endl;
-						powerMetre = 3;
-						mIsLaunched = false;
-						mDrawMetre = false;
-						entities[shotChooser]->gCurrent = 0;	
-						entities[shotChooser]->isCreated = true;
-					}
-					
-				
-					//CHANGED TO TEST FOR ALL STAGE PARTS AT ALL TIMES. LESS EFFICIEINT.	
-							
-				}
+					//Left Border Collision Check	
+						if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
+						{
+							//std::cout << "lb stopped trag" << std::endl;
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+						
+							entities[shotChooser]->gCurrent = 0;	
+							entities[shotChooser]->isCreated = true;
+						}
 
+					//Top Border Collision Check
+						if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
+						{
+							//std::cout << "tb stopped trag" << std::endl;
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
+						
+							entities[shotChooser]->gCurrent = 0;	
+							entities[shotChooser]->isCreated = true;
+						}
+
+					//Bottom Border Collision Check
+						//std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
+						if (entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= 785)
+						{
+							//std::cout << "bb stopped trag" << std::endl;
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+						
+							entities[shotChooser]->isCreated = true;
+							entities[shotChooser]->gCurrent = 0;	
+						}
+
+						if (isTouchingSurface(entities, stages, shotChooser))
+						{
+							//std::cout << "touching da surf stopped trajectory" << std::endl;
+							//bottomCircleCollision(entities,stages,shotChooser);
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->isCreated = true;
+							
+						}
+						
+						int tmmp[3];
+						checkHitting(entities,stages,shotChooser,false,tmmp);
+						if (tmmp[1])
+						{
+							//std::cout << "check hitting stopped trajectory" << std::endl;
+							powerMetre = 3;
+							mIsLaunched = false;
+							mDrawMetre = false;
+							entities[shotChooser]->gCurrent = 0;	
+							entities[shotChooser]->isCreated = true;
+						}
+						
+					
+						//CHANGED TO TEST FOR ALL STAGE PARTS AT ALL TIMES. LESS EFFICIEINT.	
+								
+					}
+				}
 
 				else 
 				{
@@ -608,7 +645,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 				}
 			}
 
-		update(TimePerFrame,entities,stages);
+		if (!pauseMenu[currentStage]->isPaused) 
+			{
+				update(TimePerFrame,entities,stages);
+			}
 
 		}
 
@@ -892,9 +932,9 @@ void Game::activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES
 	{ 
 		//std::cout << "setting active to true" << std::endl;
 		rotiActive = true;
-		negateGravity = false;
+		//negateGravity = false;
 	}
-		negateGravity = false;
+	negateGravity = false;
 	isBeingAttracted = false;
 } 	
 
@@ -1936,7 +1976,8 @@ void Game::checkGravity(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 		{
 			isOnGround = false;
 			//std::cout << "gravity at work on: " << character << std::endl;
-			entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
+			if ( !pauseMenu[currentStage]->isPaused) entities[character]->cCircle.move(0,entities[character]->gCurrent+entities[character]->weight);
+			//else entities[character]->gCurrent = g;
 		}
 
 
@@ -2162,7 +2203,7 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	{
 		motion.y += yDirection*(powerMetre)*30;
 		motion.x += xDirection*(powerMetre)*30;
-		entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
+		if (!pauseMenu[currentStage]->isPaused) entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
 	}
 }
 
@@ -2172,81 +2213,160 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 {
 	entitySelector(entities);
 	sf::Event event;
-	activateRotiPowerAlpha(elapsedTime, entities,stages);
-	activateBoulePower(entities,stages,elapsedTime);
-	while (mWindow->pollEvent(event))
+	if (!pauseMenu[currentStage]->isPaused)
 	{
-		switch (event.type)
-		{
-			case sf::Event::KeyPressed:
-				handlePlayerInput(event.key.code, true);
-				breadSelector(event.key.code, 0);
-				powerMetreUpdate(event.key.code); 
-				if (event.key.code == sf::Keyboard::R) 
-					{
-						std::cout << "reset" << std::endl;
-						mResetGame=true;
-					}
-				break;
-
-			case sf::Event::KeyReleased:
-                switch(event.key.code)
-                {		
-	                case sf::Keyboard::Space:
-						mIsLaunched = true;
-						break;
-					case sf::Keyboard::L:
-						currentStage+=1;
-						break;
-						//powerMetre=0;
-
-				}
-				handlePlayerInput(event.key.code, false);
-				break;
-
-			case sf::Event::MouseMoved:
-				break;
-
-
-			case sf::Event::MouseButtonPressed:
-				activateAnpanPower(entities,stages);
-				if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 )swapBackground(entities,stages);
-				break;
-
-			case sf::Event::MouseButtonReleased:
-    				if (event.mouseButton.button == sf::Mouse::Right) activateRotiPowerBeta(elapsedTime,entities,stages);
-				break;
-
-			case sf::Event::Closed:
-				mWindow->close();
-				break;
-		}
+		activateRotiPowerAlpha(elapsedTime, entities,stages);
+		activateBoulePower(entities,stages,elapsedTime);
 	}
+
+	
+		while (mWindow->pollEvent(event))
+		{
+			switch (event.type)
+			{
+				case sf::Event::KeyPressed:
+					handlePlayerInput(event.key.code, true);
+					std::cout << "after hpi" << std::endl;
+					breadSelector(event.key.code, 0);
+					powerMetreUpdate(event.key.code); 
+					if (event.key.code == sf::Keyboard::R) 
+						{
+							std::cout << "reset" << std::endl;
+							mResetGame=true;
+						}
+					break;
+
+				case sf::Event::KeyReleased:
+	                switch(event.key.code)
+	                {		
+		                case sf::Keyboard::Space:
+							mIsLaunched = true;
+							break;
+						case sf::Keyboard::L:
+							currentStage+=1;
+							break;
+							//powerMetre=0;
+
+					}
+					handlePlayerInput(event.key.code, false);
+					break;
+
+				case sf::Event::MouseMoved:
+					break;
+
+
+				case sf::Event::MouseButtonPressed:
+					activateAnpanPower(entities,stages);
+					if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 )swapBackground(entities,stages);
+					break;
+
+				case sf::Event::MouseButtonReleased:
+	    				if (event.mouseButton.button == sf::Mouse::Right) activateRotiPowerBeta(elapsedTime,entities,stages);
+					break;
+
+				case sf::Event::Closed:
+					mWindow->close();
+					break;
+			}
+		}
+	
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
-{	
-	if (key == sf::Keyboard::Space){
-		mIsSpaceBar = isPressed;
-		//powerMetreUpdate(key);		
-	}
-	if (key == sf::Keyboard::W)
-		mIsMovingUp = isPressed;
-	if (key == sf::Keyboard::S)
-		mIsMovingDown = isPressed;
-	if (key == sf::Keyboard::A)
-		mIsMovingLeft = isPressed;
-	if (key == sf::Keyboard::D)
-		mIsMovingRight = isPressed;
-	if (key == sf::Keyboard::T)
-		mTeleportation = isPressed;
-	if (key == sf::Keyboard::M)
+{
+	if (!pauseMenu[currentStage]->isPaused)
 	{
-		music[currSong]->stop();
-		currSong+=1;
-		if (currSong >= 5) currSong = 0;
+		if (key == sf::Keyboard::Space){
+			mIsSpaceBar = isPressed;
+			//powerMetreUpdate(key);		
+		}
+		if (key == sf::Keyboard::W)
+			mIsMovingUp = isPressed;
+		if (key == sf::Keyboard::S)
+			mIsMovingDown = isPressed;
+		if (key == sf::Keyboard::A)
+			mIsMovingLeft = isPressed;
+		if (key == sf::Keyboard::D)
+			mIsMovingRight = isPressed;
+		if (key == sf::Keyboard::T)
+			mTeleportation = isPressed;
+		if (key == sf::Keyboard::M)
+		{
+			music[currSong]->stop();
+			currSong+=1;
+			if (currSong >= 5) currSong = 0;
+		}
+	}
+	if (key == sf::Keyboard::P)
+	{
+		std::cout << "p pressed main" << std::endl;
+		if (pauseMenu[currentStage]->isPaused) 
+			{
+				pauseMenu[currentStage]->isPaused = false;
+			}
+
+		else
+		{
+			pauseMenu[currentStage]->isPaused = true;
+		} 
+		if (pauseMenuRun() == 1) handlePlayerInput(sf::Keyboard::P, true);
+
 	}
 }
+
+int Game::pauseMenuRun()
+{
+	if (pauseMenu[currentStage]->isPaused)
+	{
+	    while (pauseMenu[currentStage]->win->isOpen())
+	    {
+		    pauseMenu[currentStage]->render();
+
+		    sf::Event event2;
+		    while (pauseMenu[currentStage]->win->pollEvent(event2))
+		    {
+		    	switch (event2.type)
+		    	{
+		    		case sf::Event::KeyPressed:
+		    			if (event2.key.code == sf::Keyboard::Escape)
+		    			{
+		    				//pauseMenu[currentStage]->isPaused = false;
+		    				pauseMenu[currentStage]->win->close();
+		    			}
+		    			if (event2.key.code == sf::Keyboard::P) 
+		    			{
+		    				//pauseMenu[currentStage]->isPaused = false;
+		    				negateGravity = false;
+		    				return 0;
+		    			}
+		    			break;
+
+					case sf::Event::Closed:
+		    			pauseMenu[currentStage]->isPaused = false;
+						pauseMenu[currentStage]->win->close();
+						break;
+
+		    		case sf::Event::MouseButtonPressed:
+		    			if (pauseMenu[currentStage]->isTouchingOption() == 0)
+		    			{
+		    				negateGravity = false;
+		    				return 1;
+		    			}
+		    			else if (pauseMenu[currentStage]->isTouchingOption() == 1)
+		    			{
+		    				pauseMenu[currentStage]->isPaused = false;
+		    				pauseMenu[currentStage]->win->close();
+		    			}
+		    			break;
+		    	}
+		    }
+    	}
+
+	}
+	return 0;
+
+}
+
 
 void Game::motionCheck( int character, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
@@ -2524,8 +2644,8 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 
 	if (mTeleportation)
 	{
-		entities[0]->cCircle.setPosition(1000,100);
-		entities[1]->cCircle.setPosition(300,100);
+		entities[0]->cCircle.setPosition(mMousePos.x,mMousePos.y);
+		entities[1]->cCircle.setPosition(mMousePos.x,mMousePos.y);
 	}
 
 	entities[currentEntityIndex]->cCircle.move(movement * elapsedTime.asSeconds());
@@ -2673,6 +2793,13 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 Game::~Game()
 {
+	//pauseMenu = new Pause_Menu* [STAGES_MAX];
+
+		for (int x=0; x<STAGES_MAX; x++)
+		{
+			delete pauseMenu[x];
+		}
+		delete[] pauseMenu;
 		std::cout << "game destroyed" << std::endl;
 }
 #endif
