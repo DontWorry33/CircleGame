@@ -10,7 +10,7 @@ using namespace std;
 
 struct UI
 {
-	sf::RenderWindow win;
+	sf::RenderWindow* win;
 	sf::Texture UI_bkg_img;
 	sf::Sprite UI_bkg;
 
@@ -34,7 +34,6 @@ struct UI
 struct Main_Menu : UI
 {
 
-	Option* none;
 	Option* continue_game;
 	Option* new_game;
 	Option* tutorials;
@@ -56,7 +55,7 @@ struct Main_Menu : UI
 	Main_Menu(int winX, int winY)
 	{
 
-		win.create(sf::VideoMode(winX, winY),"Bound");
+		win = new sf::RenderWindow(sf::VideoMode(winX, winY),"Bound");
 		UI_bkg_img.loadFromFile("../User_Interfaces/Main_Menu/Menu-Default.png");
 		UI_bkg.setTexture(UI_bkg_img);
 		continue_game = new Option("../User_Interfaces/Main_Menu/Menu-Continue.png", 62, 136, 240, 179);
@@ -71,12 +70,19 @@ struct Main_Menu : UI
 		mm_mousepos.y = 0;
 	}
 
-
+	~Main_Menu()
+	{
+		delete continue_game;
+		delete new_game;
+		delete tutorials;
+		delete quit;
+		std::cout << "main menu destroyed" << std::endl;
+	}
 
 
 	int isTouchingOption()
 	{
-		mm_mousepos = sf::Mouse::getPosition(win);
+		mm_mousepos = sf::Mouse::getPosition(*(win));
 		for (int x=0; x<UI_options.size(); x++)
 		{
 			if (mm_mousepos.x >= UI_options[x]->option_tl_bound.x && mm_mousepos.x <= UI_options[x]->option_br_bound.x
@@ -88,15 +94,13 @@ struct Main_Menu : UI
 		return -1;
 	}
 
-
-
 	void render()
 	{
-		win.clear();
+		win->clear();
 		int menuVal = isTouchingOption();
-		if (menuVal>=0) win.draw(UI_options[menuVal]->option);
-		else win.draw(UI_bkg);
-		win.display();
+		if (menuVal>=0) win->draw(UI_options[menuVal]->option);
+		else win->draw(UI_bkg);
+		win->display();
 	}
 
 	void fade(sf::Sprite bkg_fadeout, sf::Sprite bkg_fadein)
@@ -109,11 +113,11 @@ struct Main_Menu : UI
 			if (fade.asSeconds() >= 0.001)
 			{
 				fade = fadeClock.restart();
-				win.clear();
+				win->clear();
 				bkg_fadeout.setColor(sf::Color(bkg_fadeout.getColor().r, 
 				bkg_fadeout.getColor().g, bkg_fadeout.getColor().b, x));
-				win.draw(bkg_fadeout);
-				win.display();
+				win->draw(bkg_fadeout);
+				win->display();
 				std::cout << x << std::endl;
 				x-=2;
 			}
@@ -125,17 +129,70 @@ struct Main_Menu : UI
 			if (fade.asSeconds() >= 0.001)
 			{
 				fade = fadeClock.restart();
-				win.clear();
+				win->clear();
 				bkg_fadein.setColor(sf::Color(bkg_fadein.getColor().r, 
 				bkg_fadein.getColor().g, bkg_fadein.getColor().b, x));
 				std::cout << x << std::endl;
-				win.draw(bkg_fadein);	
-				win.display();
-				x+=1;
+				win->draw(bkg_fadein);	
+				win->display();
+				x+=2;
 			}
 		}
-
+		x = 255;
 	}
+
+};
+
+struct Pause_Menu : UI
+{
+	Option* resume;
+	Option* quit;
+
+	bool isPaused;
+
+	Pause_Menu(sf::RenderWindow* curr_win, const char* bkg, const char* res, const char* qui)
+	{
+		win = curr_win;
+		UI_bkg_img.loadFromFile(bkg);
+		UI_bkg.setTexture(UI_bkg_img);
+		resume = new Option(res,515,350,680,385);
+		UI_options.push_back(resume);
+		quit = new Option(qui,515,415,621,454);
+		UI_options.push_back(quit);
+		isPaused = false;
+	}
+
+
+	int isTouchingOption()
+	{
+		mm_mousepos = sf::Mouse::getPosition(*(win));
+		for (int x=0; x<UI_options.size(); x++)
+		{
+			if (mm_mousepos.x >= UI_options[x]->option_tl_bound.x && mm_mousepos.x <= UI_options[x]->option_br_bound.x
+				&& mm_mousepos.y >= UI_options[x]->option_tl_bound.y && mm_mousepos.y <= UI_options[x]->option_br_bound.y)
+			{
+				return x;
+			}
+		}
+		return -1;
+	}
+
+	void render()
+	{
+		win->clear();
+		int menuVal = isTouchingOption();
+		if (menuVal>=0) win->draw(UI_options[menuVal]->option);
+		else win->draw(UI_bkg);
+		win->display();
+	}
+
+	~Pause_Menu()
+	{
+		delete resume;
+		delete quit;
+		std::cout << "pause menu destroyed" << std::endl;
+	}
+
 
 };
 
