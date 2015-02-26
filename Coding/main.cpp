@@ -57,37 +57,43 @@ int main()
 	
 	//MAIN MENU WINDOW/LOOP
     Main_Menu menu(1200,800);
-    while (menu.win.isOpen())
+    Game* game = new Game(menu.win);
+    while (menu.win->isOpen())
     {
 	    menu.render();
 
 	    sf::Event event;
-	    while (menu.win.pollEvent(event))
+	    while (menu.win->pollEvent(event))
 	    {
 	    	switch (event.type)
 	    	{
 	    		case sf::Event::KeyPressed:
 	    			if (event.key.code == sf::Keyboard::Escape)
 	    			{
-	    				menu.win.close();
+	    				menu.win->close();
+	    			}
+	    			if (event.key.code == sf::Keyboard::Return)
+	    			{
+	    				game->run(entities,stages);
+	    				delete game;
 	    			}
 	    			break;
 
 				case sf::Event::Closed:
-					menu.win.close();
+					menu.win->close();
 					break;
 
 	    		case sf::Event::MouseButtonPressed:
 	    			if (menu.isTouchingOption() == 0)
 	    			{
-	    				menu.fade(menu.UI_options[0]->option, stages[0]->background);
-	    				std::cout << "fade finished" << std::endl;
-	    				Game* game = new Game(&menu.win);
+	    				//menu.fade(menu.UI_options[0]->option, stages[0]->background);
+	    				//std::cout << "fade finished" << std::endl;
 						game->run(entities,stages);
+						delete game;
 	    			}
 	    			else if (menu.isTouchingOption() == 3)
 	    			{
-	    				menu.win.close();
+	    				menu.win->close();
 	    			}
 	    			break;
 	    	}
@@ -111,7 +117,6 @@ int main()
     delete stage4;
     delete stage5;
     delete stage6;
-	//delete game;
 	
 	
 	return 0;
