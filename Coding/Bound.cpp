@@ -161,6 +161,11 @@ class Game
 
 		sf::Clock rotiShotTime;
 
+
+		sf::Time elapsedTime;
+		sf::Clock clock;
+		sf::Time timeSinceLastUpdate;
+
 		bool negateGravity;
 
 		bool isBeingAttracted;
@@ -192,6 +197,8 @@ class Game
    		bool rotiActive;
    		bool skipRoti;
    		bool skipBaker;
+
+   		int itrnum;
 
   		sf::Vector2f bakerRepulsion;
 		sf::Vector2f rotiRepulsion;
@@ -315,6 +322,8 @@ Game::Game(sf::RenderWindow* tmpWin) :
     bakerRepulsion.y = 0;
     rotiRepulsion.y = 0;
 
+    itrnum = 0;
+
 	if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
 	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
 	if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
@@ -357,6 +366,8 @@ Game::Game(sf::RenderWindow* tmpWin) :
 		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
 		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
 
+
+	timeSinceLastUpdate = sf::Time::Zero;
 }
 
 
@@ -368,295 +379,319 @@ Game::Game(sf::RenderWindow* tmpWin) :
 //read 
 void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
-	sf::Clock clock;
-	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+	
+	timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow->isOpen())
 	{
 		
 		//get the current amount of time elapsed
 		
 		//processEvents(elapsedTime, entities);
-		sf::Time elapsedTime = clock.restart();
-		timeSinceLastUpdate += elapsedTime;
-		//if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
+			std::cout << "window open " << std::endl;
+			elapsedTime = clock.restart();
+			timeSinceLastUpdate += elapsedTime;
+			std::cout << elapsedTime.asSeconds() << std::endl;
+			//if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
 
-		while (timeSinceLastUpdate > TimePerFrame)
-		{
-			timeSinceLastUpdate -= TimePerFrame;
-
-			//mPowerGaugeMetre.setRadius(powerMetre);
-
-			//if mouse lock is not active, get the curr pos, same with position
-			if (!mouseLock) mMousePos = sf::Mouse::getPosition(*(mWindow));
-			if (!positionLock)
+			while (timeSinceLastUpdate > TimePerFrame)
 			{
-				traj_pos = entities[0]->cCircle.getPosition();
-				mArrow.setPosition(entities[0]->cCircle.getPosition());
+				std::cout << "inner while " << std::endl;
+				timeSinceLastUpdate -= TimePerFrame;
 
-			}
-			else
-			{
-				mArrow.setPosition(traj_pos);
-			}
-			//set the arrow position to follow the circle
+				//mPowerGaugeMetre.setRadius(powerMetre);
 
-			mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
-			mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition().x+mPowerGaugeMetre.getRadius(), mPowerGaugeShell.getPosition().y+mPowerGaugeMetre.getRadius());
-
-
-			Arrow(entities);
-			if (currentEntityIndex > 0 )arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
-			//get mouse-coordinates relative to the window
-
-			if ( !pauseMenu[currentStage]->isPaused) updateEntityPosition(entities,stages);
-
-			if (mResetGame) resetLevel(entities,stages);
-			
-			for (int x=0; x < stages[currentStage]->platformCount; x++)
-			{
-				stages[currentStage]->platforms[x]->eBounds.x = stages[currentStage]->platforms[x]->eSprite.getPosition().x - stages[currentStage]->platforms[x]->eTextureSize.x/2;
-				stages[currentStage]->platforms[x]->eBounds.y = stages[currentStage]->platforms[x]->eSprite.getPosition().y - stages[currentStage]->platforms[x]->eTextureSize.y/2;
-			}
-
-			for (int x = 0; x<ENTITIES_MAX; x++) 
-			{ 
-				if (!negateGravity && !pauseMenu[currentStage]->isPaused)
-					{
-						//std::cout << "gravity applying" << std::endl;
-						checkGravity(entities, stages, x); 
-					}
-				//checkGravity(entities,stages,x);
-			} //D: Loops per character. Separating gravity effects for each
-
-			swapStage(entities,stages);
-
-	//---------------------GRAVITY
-				sf::Time updateGravity = gravityClock.getElapsedTime();
-
-				//if the current time is less than our update time
-				if (updateGravity.asSeconds() <= timePerGravityUpdate)
+				//if mouse lock is not active, get the curr pos, same with position
+				if (!mouseLock && !pauseMenu[currentStage]->isPaused) mMousePos = sf::Mouse::getPosition(*(mWindow));
+				if (!positionLock)
 				{
-					//keep getting the time until it is greater
-					updateGravity = gravityClock.getElapsedTime();
+					traj_pos = entities[0]->cCircle.getPosition();
+					mArrow.setPosition(entities[0]->cCircle.getPosition());
+
 				}
-				//once it is greater, update our current G (acceleration) and reset the clock to repeat
-				else 
+				else
 				{
-					for (int x=0; x<ENTITIES_MAX; x++)	
-					{
-						if (entities[x]->gCurrent < G_MAX && !negateGravity && !pauseMenu[currentStage]->isPaused) entities[x]->gCurrent+=g;
-						else if (negateGravity && ( x == 0 || x == 1)) continue; 
-						//else entities[x]->gCurrent = G_MAX;
-					}
-					updateGravity = gravityClock.restart();
+					mArrow.setPosition(traj_pos);
 				}
-	//-----------------
-				//std::cout << "PM : " << powerMetre << std::endl;
-			
-				//activateRotiPowerBeta(elapsedTime, entities);
+				//set the arrow position to follow the circle
 
-	//--------------TRAJECTORY PARAMETERS
-				if ( (mIsLaunched)) 
+				mPowerGaugeShell.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x-100,entities[currentEntityIndex]->cCircle.getPosition().y-80);
+				mPowerGaugeMetre.setPosition(mPowerGaugeShell.getPosition().x+mPowerGaugeMetre.getRadius(), mPowerGaugeShell.getPosition().y+mPowerGaugeMetre.getRadius());
+
+
+				Arrow(entities);
+				if (currentEntityIndex > 0 ) arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
+				//get mouse-coordinates relative to the window
+
+				updateEntityPosition(entities,stages);
+
+				if (mResetGame) resetLevel(entities,stages);
+				
+				for (int x=0; x < stages[currentStage]->platformCount; x++)
 				{
-					positionLock = true;
-					mouseLock=true;
-					if (!pauseMenu[currentStage]->isPaused)
+					stages[currentStage]->platforms[x]->eBounds.x = stages[currentStage]->platforms[x]->eSprite.getPosition().x - stages[currentStage]->platforms[x]->eTextureSize.x/2;
+					stages[currentStage]->platforms[x]->eBounds.y = stages[currentStage]->platforms[x]->eSprite.getPosition().y - stages[currentStage]->platforms[x]->eTextureSize.y/2;
+				}
+
+				for (int x = 0; x<ENTITIES_MAX; x++) 
+				{ 
+					if (!negateGravity && !pauseMenu[currentStage]->isPaused)
+						{
+							//std::cout << "gravity applying" << std::endl;
+							checkGravity(entities, stages, x); 
+						}
+					//checkGravity(entities,stages,x);
+				} //D: Loops per character. Separating gravity effects for each
+
+				swapStage(entities,stages);
+
+		//---------------------GRAVITY
+					sf::Time updateGravity = gravityClock.getElapsedTime();
+
+					//if the current time is less than our update time
+					if (updateGravity.asSeconds() <= timePerGravityUpdate)
 					{
-						trajectory(elapsedTime, entities);
-					
-					//Right Border Collision Check	
-						if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+						//keep getting the time until it is greater
+						updateGravity = gravityClock.getElapsedTime();
+					}
+					//once it is greater, update our current G (acceleration) and reset the clock to repeat
+					else 
+					{
+						for (int x=0; x<ENTITIES_MAX; x++)	
 						{
-							//std::cout << "rb stopped trag" << std::endl;
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-					
-							entities[shotChooser]->isCreated = true;
-							entities[shotChooser]->gCurrent = 0;	
+							if (entities[x]->gCurrent < G_MAX && !negateGravity && !pauseMenu[currentStage]->isPaused) entities[x]->gCurrent+=g;
+							else if (negateGravity && ( x == 0 || x == 1)) continue; 
+							//else entities[x]->gCurrent = G_MAX;
 						}
-						
-					//Left Border Collision Check	
-						if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
-						{
-							//std::cout << "lb stopped trag" << std::endl;
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
-						
-							entities[shotChooser]->gCurrent = 0;	
-							entities[shotChooser]->isCreated = true;
-						}
+						updateGravity = gravityClock.restart();
+					}
+		//-----------------
+					//std::cout << "PM : " << powerMetre << std::endl;
+				
+					//activateRotiPowerBeta(elapsedTime, entities);
 
-					//Top Border Collision Check
-						if (entities[shotChooser]->cCircle.getPosition().y <= 0+entities[shotChooser]->cRadius)
-						{
-							//std::cout << "tb stopped trag" << std::endl;
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
-						
-							entities[shotChooser]->gCurrent = 0;	
-							entities[shotChooser]->isCreated = true;
-						}
+	//				std::cout << "entities 1 pos: " << entities[1]->eBounds.x << ", " << entities[1]->eBounds.y << std::endl;
 
-					//Bottom Border Collision Check
-						//std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
-						if (entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= 785)
-						{
-							//std::cout << "bb stopped trag" << std::endl;
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
-						
-							entities[shotChooser]->isCreated = true;
-							entities[shotChooser]->gCurrent = 0;	
-						}
+		//--------------TRAJECTORY PARAMETERS
+					itrnum++;
+					std::cout << "iteration: " << itrnum << std::endl;
 
-						if (isTouchingSurface(entities, stages, shotChooser))
+					if ( (mIsLaunched)) 
+					{
+						positionLock = true;
+						mouseLock=true;
+						if (!pauseMenu[currentStage]->isPaused)
 						{
-							//std::cout << "touching da surf stopped trajectory" << std::endl;
-							//bottomCircleCollision(entities,stages,shotChooser);
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->isCreated = true;
+							std::cout << "entities 1 pos before traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+
+							trajectory(elapsedTime, entities);
+							std::cout << "entities 1 pos after traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+						
+						//Right Border Collision Check	
+							if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
+							{
+								std::cout << "rb stopped trag" << std::endl;
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->cCircle.setPosition(1200-entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+								updateEntityPosition(entities,stages);
+								entities[shotChooser]->isCreated = true;
+								entities[shotChooser]->gCurrent = 0;	
+							}
 							
-						}
-						
-						int tmmp[3];
-						checkHitting(entities,stages,shotChooser,false,tmmp);
-						if (tmmp[1])
-						{
-							//std::cout << "check hitting stopped trajectory" << std::endl;
-							powerMetre = 3;
-							mIsLaunched = false;
-							mDrawMetre = false;
-							entities[shotChooser]->gCurrent = 0;	
-							entities[shotChooser]->isCreated = true;
-						}
-						
-					
-						//CHANGED TO TEST FOR ALL STAGE PARTS AT ALL TIMES. LESS EFFICIEINT.	
+						//Left Border Collision Check	
+							if (entities[shotChooser]->cCircle.getPosition().x <= 0 + entities[shotChooser]->cRadius)
+							{
+								std::cout << "lb stopped trag" << std::endl;
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->cCircle.setPosition(0+entities[shotChooser]->cRadius, entities[shotChooser]->cCircle.getPosition().y);
+								updateEntityPosition(entities,stages);
+
+							
+								//entities[shotChooser]->gCurrent = 0;	
+								//entities[shotChooser]->isCreated = true;
+							}
+
+						//Top Border Collision Check
+							if (entities[shotChooser]->eBounds.y <= 0+entities[shotChooser]->cRadius)
+							{
+								std::cout << "entities 1 pos inside TB collision check: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+								std::cout << "tb stopped trag" << std::endl;
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
+								updateEntityPosition(entities,stages);
+
+							
+								//entities[shotChooser]->gCurrent = 0;	
+								//entities[shotChooser]->isCreated = true;
+							}
+
+						//Bottom Border Collision Check
+							//std::cout << "ebounds.y (" << shotChooser << "): " << entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y << std::endl;
+							if (entities[shotChooser]->eBounds.y+entities[shotChooser]->eTextureSize.y >= 785)
+							{
+								std::cout << "bb stopped trag" << std::endl;
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,785-entities[shotChooser]->cRadius);
+								updateEntityPosition(entities,stages);
+
+							
+								entities[shotChooser]->isCreated = true;
+								entities[shotChooser]->gCurrent = 0;	
+							}
+
+							if (isTouchingSurface(entities, stages, shotChooser))
+							{
+								std::cout << "touching da surf stopped trajectory" << std::endl;
+								//bottomCircleCollision(entities,stages,shotChooser);
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->isCreated = true;
 								
+							}
+							
+							int tmmp[3];
+							checkHitting(entities,stages,shotChooser,false,tmmp);
+							if (tmmp[1])
+							{
+								std::cout << "check hitting stopped trajectory" << std::endl;
+								powerMetre = 3;
+								mIsLaunched = false;
+								mDrawMetre = false;
+								entities[shotChooser]->gCurrent = 0;	
+								entities[shotChooser]->isCreated = true;
+							}
+							
+						
+							//CHANGED TO TEST FOR ALL STAGE PARTS AT ALL TIMES. LESS EFFICIEINT.	
+									
+						}
+						//else entities[shotChooser]->isCreated = true;
 					}
-				}
 
-				else 
-				{
-					mouseLock=false;
-					positionLock=false;
-				}
-
-			processEvents(elapsedTime, entities, stages);
-
-
-			if (rotiActive)
-			{
-				//std::cout << "currently active" << std::endl;
-				negateGravity = false;
-				int bakerHitting[3]; 
-				int	rotiHitting[3]; 
-				checkHitting(entities,stages,0,false,bakerHitting);
-				checkHitting(entities,stages,1,false,rotiHitting);
-
-		//const float pushValue = 1000.f;
-
-				//sf::Time applyRepulsion = shotClock.getElapsedTime();
-				if (!skipBaker)
-				{
-					if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
+					else 
 					{
-						if (bakerRepulsion.x > 0) bakerRepulsion.x = -bakerRepulsion.x;
-						std::cout << "negating baker in skipbaker" << std::endl;
+						mouseLock=false;
+						positionLock=false;
 					}
-					if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
-					{	
-						if (rotiRepulsion.x > 0) rotiRepulsion.x = -rotiRepulsion.x;
-						std::cout << "negating roti in skipbaker****" << std::endl;
 
-					}
-				}
-				if (!skipRoti)
+
+				processEvents(elapsedTime, entities, stages);
+
+				std::cout << "entities 1 pos after PE: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+
+
+				if (rotiActive)
 				{
-					if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
-					{	
-						if (rotiRepulsion.x > 0) rotiRepulsion.x = -rotiRepulsion.x;
-						std::cout << "negating roti in skiproti" << std::endl;
+					//std::cout << "currently active" << std::endl;
+					negateGravity = false;
+					int bakerHitting[3]; 
+					int	rotiHitting[3]; 
+					checkHitting(entities,stages,0,false,bakerHitting);
+					checkHitting(entities,stages,1,false,rotiHitting);
 
-					}
-					if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
+			//const float pushValue = 1000.f;
+
+					//sf::Time applyRepulsion = shotClock.getElapsedTime();
+					if (!skipBaker)
 					{
-						if (bakerRepulsion.x > 0) bakerRepulsion.x = -bakerRepulsion.x;
-						std::cout << "negating baker in skiproti****" << std::endl;
+						if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
+						{
+							if (bakerRepulsion.x > 0) bakerRepulsion.x = -bakerRepulsion.x;
+							std::cout << "negating baker in skipbaker" << std::endl;
+						}
+						if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
+						{	
+							if (rotiRepulsion.x > 0) rotiRepulsion.x = -rotiRepulsion.x;
+							std::cout << "negating roti in skipbaker****" << std::endl;
+
+						}
+					}
+					if (!skipRoti)
+					{
+						if (rotiHitting[1] == 3 && bakerHitting[1] == 2)
+						{	
+							if (rotiRepulsion.x > 0) rotiRepulsion.x = -rotiRepulsion.x;
+							std::cout << "negating roti in skiproti" << std::endl;
+
+						}
+						if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
+						{
+							if (bakerRepulsion.x > 0) bakerRepulsion.x = -bakerRepulsion.x;
+							std::cout << "negating baker in skiproti****" << std::endl;
+						}
+					}
+					//need to restrict movement as it can currently move "through" a wall.
+					//std::cout << elapsedTime.asSeconds() << std::endl;
+					//std::cout << applyMotion.asSeconds() << std::endl;
+					//std::cout << bakerRepulsion.x << rotiRepulsion.x << std::endl;
+					//if (applyMotion.asSeconds() < 0.35) 
+					if (!isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius))
+					{
+						//std::cout << "applying baker force" << std::endl;
+						if (!skipBaker) std::cout << "starting skip baker" << std::endl;
+						skipBaker=true;
+						if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl;}
+						if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl;}
+						entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
+					}
+					else
+					{
+						//std::cout << "stopping baker force" << std::endl;
+						bakerRepulsion.x = 400;
+						skipBaker = false;
+					}
+					if (!isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius))
+					{
+						//std::cout << "applying roti force" << std::endl;
+						if (!skipRoti) std::cout << "starting skip roti" << std::endl;
+						skipRoti = true;
+						if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl;}
+						if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl;}
+						entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
+					}
+					else
+					{
+						//std::cout << "stopping roti force " << std::endl;
+						rotiRepulsion.x = 600;
+						skipRoti = false;
+					}
+
+
+
+					//BUG WITH THIS! WHEN ROTI/BAKER ARE AT TOP, I THINK IT TRIGGERS BL OR
+					if ( (isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius)) && (isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius)))
+					{
+						if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) rotiActive=false;
+						if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) rotiActive = false;
+						if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
+						if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
+						std::cout << "rotiactive is false" << std::endl;
+						rotiActive = false;
 					}
 				}
-				//need to restrict movement as it can currently move "through" a wall.
-				//std::cout << elapsedTime.asSeconds() << std::endl;
-				//std::cout << applyMotion.asSeconds() << std::endl;
-				//std::cout << bakerRepulsion.x << rotiRepulsion.x << std::endl;
-				//if (applyMotion.asSeconds() < 0.35) 
-				if (!isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius))
+
+			if (!pauseMenu[currentStage]->isPaused) 
 				{
-					//std::cout << "applying baker force" << std::endl;
-					if (!skipBaker) std::cout << "starting skip baker" << std::endl;
-					skipBaker=true;
-					if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl;}
-					if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl;}
-					entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
-				}
-				else
-				{
-					//std::cout << "stopping baker force" << std::endl;
-					bakerRepulsion.x = 400;
-					skipBaker = false;
-				}
-				if (!isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius))
-				{
-					//std::cout << "applying roti force" << std::endl;
-					if (!skipRoti) std::cout << "starting skip roti" << std::endl;
-					skipRoti = true;
-					if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl;}
-					if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl;}
-					entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
-				}
-				else
-				{
-					//std::cout << "stopping roti force " << std::endl;
-					rotiRepulsion.x = 600;
-					skipRoti = false;
+					update(TimePerFrame,entities,stages);
 				}
 
-
-
-				//BUG WITH THIS! WHEN ROTI/BAKER ARE AT TOP, I THINK IT TRIGGERS BL OR
-				if ( (isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius)) && (isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius)))
-				{
-					if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) rotiActive=false;
-					if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) rotiActive = false;
-					if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
-					if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
-					std::cout << "rotiactive is false" << std::endl;
-					rotiActive = false;
-				}
 			}
 
-		if (!pauseMenu[currentStage]->isPaused) 
-			{
-				update(TimePerFrame,entities,stages);
-			}
-
+			updateStatistics(elapsedTime);
+			render(entities,stages);
 		}
+		//if (mResetGame) return 1;
+		//return 0;
+	
 
-		updateStatistics(elapsedTime);
-		render(entities,stages);
-	}
-	//if (mResetGame) return 1;
-	//return 0;
 }
 
 void Game::updateEntityPosition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
@@ -2198,11 +2233,14 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	sf::Vector2f motion(0.f, 0.f);
 	double xDirection = mArrow.getPosition().x - traj_pos.x;
 	double yDirection = mArrow.getPosition().y - traj_pos.y;
+	std::cout << "arrow pos: " <<  mArrow.getPosition().x << " , " <<  mArrow.getPosition().y << std::endl;
 
 	if (mIsLaunched && !(entities[shotChooser]->isCreated))
 	{
 		motion.y += yDirection*(powerMetre)*30;
 		motion.x += xDirection*(powerMetre)*30;
+		std::cout << "motion vector x: " << motion.x << ", y: " << motion.y << std::endl;
+		std::cout << "traj elapsed time: " << elapsedTime.asSeconds() << std::endl;
 		if (!pauseMenu[currentStage]->isPaused) entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
 	}
 }
@@ -2225,6 +2263,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 			switch (event.type)
 			{
 				case sf::Event::KeyPressed:
+
 					handlePlayerInput(event.key.code, true);
 					std::cout << "after hpi" << std::endl;
 					breadSelector(event.key.code, 0);
@@ -2256,6 +2295,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 
 
 				case sf::Event::MouseButtonPressed:
+					std::cout << "mouse button pressed" << std::endl;
 					activateAnpanPower(entities,stages);
 					if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 )swapBackground(entities,stages);
 					break;
@@ -2302,11 +2342,13 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		std::cout << "p pressed main" << std::endl;
 		if (pauseMenu[currentStage]->isPaused) 
 			{
+				std::cout << "pause is false" << std::endl;
 				pauseMenu[currentStage]->isPaused = false;
 			}
 
 		else
 		{
+			std::cout << "pause is true " << std::endl;
 			pauseMenu[currentStage]->isPaused = true;
 		} 
 		if (pauseMenuRun() == 1) handlePlayerInput(sf::Keyboard::P, true);
@@ -2320,7 +2362,13 @@ int Game::pauseMenuRun()
 	{
 	    while (pauseMenu[currentStage]->win->isOpen())
 	    {
+	    	//std::cout << "iteration in pause: " << itrnum << std::endl;
 		    pauseMenu[currentStage]->render();
+
+		    elapsedTime = clock.restart();
+			timeSinceLastUpdate += elapsedTime;
+
+			if (timeSinceLastUpdate > TimePerFrame) timeSinceLastUpdate -= TimePerFrame;
 
 		    sf::Event event2;
 		    while (pauseMenu[currentStage]->win->pollEvent(event2))
@@ -2349,12 +2397,12 @@ int Game::pauseMenuRun()
 		    		case sf::Event::MouseButtonPressed:
 		    			if (pauseMenu[currentStage]->isTouchingOption() == 0)
 		    			{
+		    				std::cout << "mbp in pause " << std::endl;
 		    				negateGravity = false;
 		    				return 1;
 		    			}
-		    			else if (pauseMenu[currentStage]->isTouchingOption() == 1)
+		    			if (pauseMenu[currentStage]->isTouchingOption() == 1)
 		    			{
-		    				pauseMenu[currentStage]->isPaused = false;
 		    				pauseMenu[currentStage]->win->close();
 		    			}
 		    			break;
