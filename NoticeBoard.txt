@@ -171,3 +171,10 @@ Bugs:
 	2. Rotation for roti power is a little bit off, it rotates into the wall even though it shouldn't be (depending on wether you like this, we can keep it)
 
 Oh and i'm not removing the debugging messages as I need them to fix the bugs.
+
+- 03/18/15 (Dedie)
+	Had a good talk with Hussain about where we stand in the game and what’s left to be completed. Right now, all 20 Transition Screens have been designed and are ALMOST ready for deploy. I have to write a poem for each stage, and figure out what I feel the overlay should be. Also have to create images of just the Text Boxes and Centre Pieces to be implemented.
+	Next up is the Scoring System. Prototype scheme is to have a points system based on which character is shot out with regards to the “Ideal First Choice” of each stage. There will be an “Ideal Second Choice” as well, for a deeper point rewarding scheme. As well as a “Worst First Choice” and so on, in order to weight player’s decisions against.
+	IF, a player finishes the stage faster than the “Predicted Completion Time” and yet started with something other than the Ideal Choice, they are rewarded with an extra bonus that not only nullifies the penalization of choosing the “Wrong” character first, but rewards them greatly for doing so. As it should be assumed they found a far more ideal way to finish the stage than intended.
+	Music is still up in the air, but I will try finding some new talent next week. 
+	Over all, estimate for percentage of completion of the games is a clean 40%. Still need to design the other 14 stages and we might just have a product to show.
