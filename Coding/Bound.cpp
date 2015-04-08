@@ -10,6 +10,7 @@
 #include "Entity.cpp"
 #include "Stage.cpp"
 #include "UI.cpp"
+#include "Transition.cpp"
 
 #ifndef BOUND_H
 #define BOUND_H
@@ -37,6 +38,7 @@ class Game
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		bool isTouchingRotiSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		void swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		void startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		void resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 
 		void breadSelector(sf::Keyboard::Key key, int selectedEntity); 
@@ -207,6 +209,10 @@ class Game
 		sf::Sprite arrowTail;
 
 		Pause_Menu** pauseMenu; 
+		Transition** transitList;
+
+		sf::Clock fadeClock;
+
 
 };
 
@@ -221,7 +227,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail()
+			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -366,6 +372,13 @@ Game::Game(sf::RenderWindow* tmpWin) :
 		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
 		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
 
+
+
+	transitList = new Transition* [1];
+
+	transitList[0] = new Transition("../testscreens/Transit_5-Anger.png", 
+									   "../testscreens/Transit_5-AngerB.png", 
+									   "../testscreens/Transit_5-AngerC.png");
 
 	timeSinceLastUpdate = sf::Time::Zero;
 }
@@ -782,8 +795,11 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		 (entities[0]->eBounds.y <= stages[currentStage]->oven->eBounds.y+stages[currentStage]->oven->eTextureSize.y)))
 		)
 	{
+		mIsMovingLeft = false;
+		startTransition(entities,stages);
 		resetLevel(entities,stages);
 		currentStage += 1;
+		resetLevel(entities,stages);
 		entities[0]->cCircle.setPosition(stages[currentStage]->bakerStartPos);
 
 		return;
@@ -797,11 +813,98 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		 (entities[0]->eBounds.y <= stages[currentStage]->oven->eBounds.y+stages[currentStage]->oven->eTextureSize.y-8))
 		)	   
 	{
-
+		mIsMovingLeft = false;
+		startTransition(entities,stages);
+		resetLevel(entities,stages);
 		currentStage += 1;
 		resetLevel(entities,stages);
 		return;
 	}
+}
+
+void Game::startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
+{
+
+		for (int tr = 0; tr < 3; tr++)
+		{
+			int x = 255;
+			if (tr == 0)	
+			{	
+				while (x > 0)
+				{	
+					sf::Time fade = fadeClock.getElapsedTime();
+					if (fade.asSeconds() >= 0.001)
+					{
+						fade = fadeClock.restart();
+						mWindow->clear();
+						stages[currentStage]->background.setColor(sf::Color(stages[currentStage]->background.getColor().r, 
+						stages[currentStage]->background.getColor().g, stages[currentStage]->background.getColor().b, x));
+						mWindow->draw(stages[currentStage]->background);
+						mWindow->display();
+						std::cout << x << std::endl;
+						x-=2;
+					}
+				}
+				x = 0;
+				while (x < 255)
+				{
+					sf::Time fade = fadeClock.getElapsedTime();
+					if (fade.asSeconds() >= 0.001)
+					{
+						fade = fadeClock.restart();
+						mWindow->clear();
+						transitList[currentStage]->transit[0]->setColor(sf::Color(transitList[currentStage]->transit[0]->getColor().r, 
+						transitList[currentStage]->transit[0]->getColor().g, transitList[currentStage]->transit[0]->getColor().b, x));
+						std::cout << x << std::endl;
+						mWindow->draw(*(transitList[currentStage]->transit[0]));	
+						mWindow->display();
+						x+=2;
+					}
+				}
+				x = 255;
+			}
+
+			else
+			{
+				x = 0;
+				while (x < 255)
+				{
+					sf::Time fade = fadeClock.getElapsedTime();
+					if (fade.asSeconds() >= 0.001)
+					{
+						fade = fadeClock.restart();
+						mWindow->clear();
+						transitList[currentStage]->transit[tr]->setColor(sf::Color(transitList[currentStage]->transit[tr]->getColor().r, 
+						transitList[currentStage]->transit[tr]->getColor().g, transitList[currentStage]->transit[tr]->getColor().b, x));
+						std::cout << x << std::endl;
+						mWindow->draw(*(transitList[currentStage]->transit[tr-1]));
+						mWindow->draw(*(transitList[currentStage]->transit[tr]));	
+						mWindow->display();
+						x+=2;
+					}
+				
+				}
+				
+
+			}
+		}
+		sf::Event event3;
+		//sf::Time fade = fadeClock.restart();
+		//while (fade.asSeconds() < 2.f) fade = fadeClock.getElapsedTime();;
+		while (true)
+		{
+			while (mWindow->pollEvent(event3))
+			{
+				switch (event3.type)
+				{
+					case sf::Event::KeyPressed:
+						if (event3.key.code == sf::Keyboard::Q) return;
+
+				}
+			}
+
+		}
+		
 }
 
 
