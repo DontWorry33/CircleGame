@@ -22,7 +22,7 @@ struct Transition
 
 	Transition(const char* path1, const char* path2, const char* path3)
 	{
-		bkg_img.loadFromFile("../testscreens/Transit_0-Default.png");
+		bkg_img.loadFromFile("../User_Interfaces/Transit_Screens/Transit_0-Default.png");
 		bkg.setTexture(bkg_img);
 		img1_img.loadFromFile(path1);
 		img1.setTexture(img1_img);
