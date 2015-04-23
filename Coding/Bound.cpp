@@ -38,6 +38,7 @@ class Game
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		bool isTouchingRotiSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		void swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		void initPostStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		void startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		void resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 
@@ -112,6 +113,14 @@ class Game
 		sf::Time mStatisticsUpdateTime;
 		std::size_t	mStatisticsNumFrames;
 
+
+		sf::Text postScreenText;
+
+
+		sf::Clock stageTime;
+		sf::Text currentPointsText;
+		sf::Text stageTimeText;
+
 		//power gauuge
 		sf::Sprite mPowerGaugeShell;
 		sf::CircleShape mPowerGaugeMetre;
@@ -168,6 +177,8 @@ class Game
 		sf::Clock clock;
 		sf::Time timeSinceLastUpdate;
 
+		sf::Time currentStageTime;
+
 		bool negateGravity;
 
 		bool isBeingAttracted;
@@ -199,6 +210,7 @@ class Game
    		bool rotiActive;
    		bool skipRoti;
    		bool skipBaker;
+   		bool pointAdded;
 
    		int itrnum;
 
@@ -212,6 +224,16 @@ class Game
 		Transition** transitList;
 
 		sf::Clock fadeClock;
+
+		sf::Texture postScreen_img;
+		sf::Sprite postScreen;
+
+
+
+		bool mDrawPostScreen;
+		int currentPoints;
+
+		bool debug;
 
 
 };
@@ -227,7 +249,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock()
+			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -242,7 +264,22 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 	mStatisticsText.setCharacterSize(20);
 	mStatisticsText.setColor(sf::Color::White);
+
+	postScreenText.setFont(mFont);
+	postScreenText.setColor(sf::Color::Black);
+	postScreenText.setCharacterSize(35);
+
+	currentPointsText.setFont(mFont);
+	currentPointsText.setColor(sf::Color::Black);
+	currentPointsText.setCharacterSize(30);
+	currentPointsText.setPosition(900,10);
 	
+
+	stageTimeText.setFont(mFont);
+	stageTimeText.setColor(sf::Color::Black);
+	stageTimeText.setCharacterSize(30);
+	stageTimeText.setPosition(240,10);
+
 	//set arrow stuff
 	mArrowTexture.loadFromFile("../Character_Images/Arrowhead.png");
 	mArrow.setTexture(mArrowTexture);
@@ -262,7 +299,10 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
 
-
+	postScreen_img.loadFromFile("../User_Interfaces/postgamescreen.png");
+	postScreen.setTexture(postScreen_img);
+	mDrawPostScreen = false;
+	currentPoints = 0;
 
 	//current entity index is the bread which is clicked
 	currentEntityIndex = 0;
@@ -327,6 +367,10 @@ Game::Game(sf::RenderWindow* tmpWin) :
     rotiRepulsion.x = 600;
     bakerRepulsion.y = 0;
     rotiRepulsion.y = 0;
+    pointAdded = false;
+
+    //DEBUG VAR, TRUE WILL ENABLE ALL THE TEXT
+    debug = false;
 
     itrnum = 0;
 
@@ -394,21 +438,22 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
 	
 	timeSinceLastUpdate = sf::Time::Zero;
+	stageTime.restart();
 	while (mWindow->isOpen())
 	{
 		
 		//get the current amount of time elapsed
 		
 		//processEvents(elapsedTime, entities);
-			std::cout << "window open " << std::endl;
+			if (debug) std::cout << "window open " << std::endl;
 			elapsedTime = clock.restart();
 			timeSinceLastUpdate += elapsedTime;
-			std::cout << elapsedTime.asSeconds() << std::endl;
+			if (debug) std::cout << elapsedTime.asSeconds() << std::endl;
 			//if (music[currSong]->getStatus() !=  sf::Sound::Playing) music[currSong]->play();
 
 			while (timeSinceLastUpdate > TimePerFrame)
 			{
-				std::cout << "inner while " << std::endl;
+				if (debug) std::cout << "inner while " << std::endl;
 				timeSinceLastUpdate -= TimePerFrame;
 
 				//mPowerGaugeMetre.setRadius(powerMetre);
@@ -486,7 +531,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 		//--------------TRAJECTORY PARAMETERS
 					itrnum++;
-					std::cout << "iteration: " << itrnum << std::endl;
+					if (debug) std::cout << "iteration: " << itrnum << std::endl;
 
 					if ( (mIsLaunched)) 
 					{
@@ -494,10 +539,10 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						mouseLock=true;
 						if (!pauseMenu[currentStage]->isPaused)
 						{
-							std::cout << "entities 1 pos before traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+							if (debug) std::cout << "entities 1 pos before traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
 
 							trajectory(elapsedTime, entities);
-							std::cout << "entities 1 pos after traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+							if (debug) std::cout << "entities 1 pos after traj call: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
 						
 						//Right Border Collision Check	
 							if (entities[shotChooser]->cCircle.getPosition().x >= 1200 - entities[shotChooser]->cRadius)
@@ -530,7 +575,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						//Top Border Collision Check
 							if (entities[shotChooser]->eBounds.y <= 0+entities[shotChooser]->cRadius)
 							{
-								std::cout << "entities 1 pos inside TB collision check: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+								if (debug) std::cout << "entities 1 pos inside TB collision check: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
 								std::cout << "tb stopped trag" << std::endl;
 								powerMetre = 3;
 								mIsLaunched = false;
@@ -598,12 +643,13 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 				processEvents(elapsedTime, entities, stages);
 
-				std::cout << "entities 1 pos after PE: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
+				if (debug) std::cout << "entities 1 pos after PE: " << entities[1]->cCircle.getPosition().x << ", " << entities[1]->cCircle.getPosition().y << std::endl;
 
 
 				if (rotiActive)
 				{
-					//std::cout << "currently active" << std::endl;
+
+					std::cout << "currently active" << std::endl;
 					negateGravity = false;
 					int bakerHitting[3]; 
 					int	rotiHitting[3]; 
@@ -651,8 +697,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						//std::cout << "applying baker force" << std::endl;
 						if (!skipBaker) std::cout << "starting skip baker" << std::endl;
 						skipBaker=true;
-						if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl;}
-						if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl;}
+						if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl; currentPoints+=1;}
+						if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl; currentPoints+=1;}
 						entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
 					}
 					else
@@ -666,8 +712,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						//std::cout << "applying roti force" << std::endl;
 						if (!skipRoti) std::cout << "starting skip roti" << std::endl;
 						skipRoti = true;
-						if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl;}
-						if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl;}
+						if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl; currentPoints+=1;}
+						if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl; currentPoints+=1;}
 						entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
 					}
 					else
@@ -682,11 +728,12 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 					//BUG WITH THIS! WHEN ROTI/BAKER ARE AT TOP, I THINK IT TRIGGERS BL OR
 					if ( (isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius)) && (isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius)))
 					{
-						if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) rotiActive=false;
-						if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) rotiActive = false;
-						if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
-						if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) rotiActive = false;
+						if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c1" << std::endl; currentPoints+=1;}
+						if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c2" << std::endl; currentPoints+=1;}
+						if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c3" << std::endl; currentPoints+=1;}
+						if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c4" << std::endl; currentPoints+=1;}
 						std::cout << "rotiactive is false" << std::endl;
+						currentPoints+=1;
 						rotiActive = false;
 					}
 				}
@@ -795,13 +842,20 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		 (entities[0]->eBounds.y <= stages[currentStage]->oven->eBounds.y+stages[currentStage]->oven->eTextureSize.y)))
 		)
 	{
+
 		mIsMovingLeft = false;
+		mDrawPostScreen = true;
+		render(entities,stages);
+		initPostStage(entities,stages);
+		mDrawPostScreen = false;
+		render(entities,stages);
 		startTransition(entities,stages);
 		resetLevel(entities,stages);
 		currentStage += 1;
 		resetLevel(entities,stages);
 		entities[0]->cCircle.setPosition(stages[currentStage]->bakerStartPos);
-
+		currentPoints = 0;
+		stageTime.restart();
 		return;
 	}			
 
@@ -814,12 +868,41 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		)	   
 	{
 		mIsMovingLeft = false;
+		mDrawPostScreen = true;
+		render(entities,stages);
+		initPostStage(entities,stages);
+		mDrawPostScreen = false;
+		render(entities,stages);
 		startTransition(entities,stages);
 		resetLevel(entities,stages);
 		currentStage += 1;
 		resetLevel(entities,stages);
+		entities[0]->cCircle.setPosition(stages[currentStage]->bakerStartPos);
+		currentPoints = 0;
+		stageTime.restart();
 		return;
 	}
+}
+
+void Game::initPostStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
+{
+		
+		sf::Event event4;
+		while (true)
+		{
+			while (mWindow->pollEvent(event4))
+			{
+				switch (event4.type)
+				{
+					case sf::Event::KeyPressed:
+						if (event4.key.code == sf::Keyboard::Return) return;
+
+				}
+			}
+
+		}
+
+
 }
 
 void Game::startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
@@ -915,6 +998,7 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		entities[x]->cCircle.setPosition(entities[x]->eStartPos);
 		entities[x]->isCreated = false;
+
 		entities[x]->isCurrentEntity = false;
 	}
 
@@ -939,6 +1023,7 @@ void Game::resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	pLock = false;
 	bLock = false;
     rotiActive = false;
+    shotChooser = 0;
 
     skipRoti = false;
     skipBaker = false;
@@ -962,6 +1047,9 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 1)
 	{
+
+
+		
 		sf::Vector2f attract_direction(150.0,0.f);
 		int rotateangle = 150;
 
@@ -1054,6 +1142,7 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 	}
 
 
+
 }
 
 //FIX SO THAT TRAJECTORY IS APPLIED INSTEAD OF JUST 1 SINGLE BIG MOVEMENT
@@ -1080,7 +1169,8 @@ void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 {
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && currentEntityIndex == 2)
-	{	
+	{
+
 		//std::cout << "activating SWAP" << std::endl;	
 		sf::Vector2f temp_pos = entities[0]->cCircle.getPosition();
 		entities[0]->cCircle.setPosition(entities[currentEntityIndex]->cCircle.getPosition().x,entities[currentEntityIndex]->cCircle.getPosition().y-42 );
@@ -1095,6 +1185,7 @@ void Game::activateAnpanPower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 		}
 		else 
 		{
+			currentPoints +=1;
 			entities[currentEntityIndex]->cCircle.setPosition(temp_pos);
 			entities[currentEntityIndex]->isCurrentEntity = false;
 			currentEntityIndex = 0;
@@ -1107,6 +1198,7 @@ void Game::swapBackground(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_M
 {
 	if(stages[currentStage]->background.getTexture() == &(stages[currentStage]->backgroundTexture)) 
 		{
+			currentPoints+=1;
 			stages[currentStage]->background.setTexture(stages[currentStage]->bouleTexture);
 			bouleActivated = true;
 		}
@@ -2336,14 +2428,14 @@ void Game::trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX])
 	sf::Vector2f motion(0.f, 0.f);
 	double xDirection = mArrow.getPosition().x - traj_pos.x;
 	double yDirection = mArrow.getPosition().y - traj_pos.y;
-	std::cout << "arrow pos: " <<  mArrow.getPosition().x << " , " <<  mArrow.getPosition().y << std::endl;
+	if (debug) std::cout << "arrow pos: " <<  mArrow.getPosition().x << " , " <<  mArrow.getPosition().y << std::endl;
 
 	if (mIsLaunched && !(entities[shotChooser]->isCreated))
 	{
 		motion.y += yDirection*(powerMetre)*30;
 		motion.x += xDirection*(powerMetre)*30;
-		std::cout << "motion vector x: " << motion.x << ", y: " << motion.y << std::endl;
-		std::cout << "traj elapsed time: " << elapsedTime.asSeconds() << std::endl;
+		if (debug) std::cout << "motion vector x: " << motion.x << ", y: " << motion.y << std::endl;
+		if (debug) std::cout << "traj elapsed time: " << elapsedTime.asSeconds() << std::endl;
 		if (!pauseMenu[currentStage]->isPaused) entities[shotChooser]->cCircle.move(motion * elapsedTime.asSeconds());
 	}
 }
@@ -2400,11 +2492,17 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 				case sf::Event::MouseButtonPressed:
 					std::cout << "mouse button pressed" << std::endl;
 					activateAnpanPower(entities,stages);
-					if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 )swapBackground(entities,stages);
+					if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 ) 
+						{
+							swapBackground(entities,stages);
+						}
 					break;
 
 				case sf::Event::MouseButtonReleased:
-	    				if (event.mouseButton.button == sf::Mouse::Right) activateRotiPowerBeta(elapsedTime,entities,stages);
+	    				if (event.mouseButton.button == sf::Mouse::Right)
+	    				{
+	    					activateRotiPowerBeta(elapsedTime,entities,stages);
+	    				} 
 					break;
 
 				case sf::Event::Closed:
@@ -2616,9 +2714,11 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 
 	if (mIsSpaceBar && currentEntityIndex == 0) //Space only works, if TheBaker is selected.
 	{
-		//std::cout << "SpaceBar check/currSelect: " << currentlySelected << std::endl;
+		std::cout << "creation check: " << currentlySelected%3 << ", " << shotChooser << ", " << positionLock << std::endl;
 		if (currentlySelected%3 == 1 && !entities[1]->isCreated && !positionLock)
 		{
+
+			if (shotChooser != 1) currentPoints+=1;
 			entities[1]->create();
 			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition().x, entities[0]->cCircle.getPosition().y);
 			shotChooser = 1;
@@ -2626,6 +2726,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 
 		else if (currentlySelected%3 == 2 && !entities[2]->isCreated && !positionLock)
 		{
+			if (shotChooser != 2) currentPoints+=1;
 			entities[2]->create();
 			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 			shotChooser = 2;
@@ -2633,6 +2734,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 		
 		else if (currentlySelected%3 == 0 && !entities[3]->isCreated && !positionLock)
 		{
+			if (shotChooser != 3) currentPoints+=1;
 			entities[3]->create();
 			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 			shotChooser = 3;
@@ -2811,6 +2913,10 @@ void Game::updateStatistics(sf::Time elapsedTime)
 {
 	mStatisticsUpdateTime += elapsedTime;
 	mStatisticsNumFrames += 1;
+	currentStageTime = stageTime.getElapsedTime();
+	stageTimeText.setString("Elapsed Time: " + toString(currentStageTime.asSeconds()));
+	currentPointsText.setString("Current points: " + toString(currentPoints));
+
 
 	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
 	{
@@ -2890,8 +2996,16 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mWindow->draw(mPowerGaugeShell);
 		mWindow->draw(mPowerGaugeMetre);
 	}
-	
+	if (mDrawPostScreen) 
+	{
+		postScreenText.setPosition(422,300);
+		postScreenText.setString(toString(currentPoints) + "\n\n\n" + "50+(50-" + toString(currentPoints) + ") = " + toString(50+(50-currentPoints)));
+		mWindow->draw(postScreen);
+		mWindow->draw(postScreenText);
+	}
 
+	mWindow->draw(currentPointsText);
+	mWindow->draw(stageTimeText);
 	//for (int x=7; x<ENTITIES_MAX; x++) mWindow->draw(entities[x]->eSprite);
 
 
@@ -2951,6 +3065,10 @@ Game::~Game()
 			delete pauseMenu[x];
 		}
 		delete[] pauseMenu;
+		delete transitList[0];
+		delete[] transitList;
 		std::cout << "game destroyed" << std::endl;
+
+
 }
 #endif
