@@ -420,9 +420,9 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 	transitList = new Transition* [1];
 
-	transitList[0] = new Transition("../testscreens/Transit_5-Anger.png", 
-									   "../testscreens/Transit_5-AngerB.png", 
-									   "../testscreens/Transit_5-AngerC.png");
+	transitList[0] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+									   "../User_Interfaces/Transit_Screens/Transit_1-Curiosity.png",
+									   "../User_Interfaces/Transit_Screens/Transit_1-CuriosityB.png");
 
 	timeSinceLastUpdate = sf::Time::Zero;
 }
@@ -932,7 +932,7 @@ void Game::startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_
 				while (x < 255)
 				{
 					sf::Time fade = fadeClock.getElapsedTime();
-					if (fade.asSeconds() >= 0.001)
+					if (fade.asSeconds() >= 0.01)
 					{
 						fade = fadeClock.restart();
 						mWindow->clear();
