@@ -248,7 +248,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
-			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(1), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
+			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(0), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
 			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
 
 {
