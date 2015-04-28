@@ -82,6 +82,8 @@ struct Stage1 : public Stage
 		if (switchCount>0) delete[] switches;
         for (int x=0; x<portalCount; x++) delete portals[x];
         if (portalCount>0) delete[] portals;
+
+        delete oven;
 	}
 
 
@@ -149,6 +151,7 @@ struct Stage2 : public Stage
 		if (switchCount>0) delete[] switches;
 		for (int x=0; x<portalCount; x++) delete portals[x];
 		if (portalCount>0) delete[] portals; 
+        delete oven;
 	}
 };
 
@@ -221,6 +224,7 @@ struct Stage3 : public Stage
         if (switchCount>0) delete[] switches;
         for (int x=0; x<portalCount; x++) delete portals[x];
         if (portalCount>0) delete[] portals;
+        delete oven;
     }
     
     
@@ -313,6 +317,7 @@ struct Stage4 : public Stage
         if (switchCount>0) delete[] switches;
         for (int x=0; x<portalCount; x++) delete portals[x];
         if (portalCount>0) delete[] portals;
+        delete oven;
     }
     
     
@@ -396,6 +401,7 @@ struct Stage5 : public Stage
         if (switchCount>0) delete[] switches;
         for (int x=0; x<portalCount; x++) delete portals[x];
         if (portalCount>0) delete[] portals;
+        delete oven;
     }
     
     
@@ -476,6 +482,7 @@ struct Stage6 : public Stage
         if (switchCount>0) delete[] switches;
         for (int x=0; x<portalCount; x++) delete portals[x];
         if (portalCount>0) delete[] portals;
+        delete oven;
     }
     
     

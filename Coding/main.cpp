@@ -23,6 +23,7 @@ int main()
 	entities[2] = anpan;
 	entities[3] = boule;
 	cout << sizeof(entities) << endl;
+	cout << sizeof(*baker) << endl;
 	//Baker b2;
 	//cout << sizeof(b2) << endl;
 	Stage1* stage1 = new Stage1(
@@ -47,6 +48,7 @@ int main()
     
     
 	Stage* stages[6];
+	cout << sizeof(*stage4) << endl;
 	stages[0] = stage1;
 	stages[1] = stage2;
     stages[2] = stage3;
@@ -56,7 +58,7 @@ int main()
 
 	
 	//MAIN MENU WINDOW/LOOP
-    Main_Menu menu(1200,800);
+    Main_Menu 	menu(1200,800);
     Game* game = new Game(menu.win);
     while (menu.win->isOpen())
     {
@@ -75,6 +77,7 @@ int main()
 	    			if (event.key.code == sf::Keyboard::Return)
 	    			{
 	    				game->run(entities,stages);
+	    				std::cout << "asd" << std::endl;
 	    				delete game;
 	    			}
 	    			break;
@@ -89,6 +92,7 @@ int main()
 	    				//menu.fade(menu.UI_options[0]->option, stages[0]->background);
 	    				//std::cout << "fade finished" << std::endl;
 						game->run(entities,stages);
+						std::cout << "asd" << std::endl;
 						delete game;
 	    			}
 	    			else if (menu.isTouchingOption() == 3)
@@ -103,10 +107,6 @@ int main()
     }
     
 
-
-
-
-
 	delete baker;
 	delete roti;
 	delete anpan;
@@ -117,6 +117,7 @@ int main()
     delete stage4;
     delete stage5;
     delete stage6;
+   // delete game;
 	
 	
 	return 0;

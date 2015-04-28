@@ -198,6 +198,7 @@ class Game
 		int tSwitch;
 		int displacedSwitch;
 
+/*
 		std::vector<sf::Music*> music;
    		sf::Music music1;
    		sf::Music music2;
@@ -205,7 +206,7 @@ class Game
    		sf::Music music4;
    		sf::Music music5;
    		sf::Music music6;
-
+*/
    		int currSong;
    		bool rotiActive;
    		bool skipRoti;
@@ -243,13 +244,13 @@ const float Game::PlayerSpeed = 150.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 
 
-//instantiates most objects and sets starting values
+//instantiates most objects and sets starting values 
 Game::Game(sf::RenderWindow* tmpWin) : 
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
 			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(0), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   music1(), music2(), music3(), music4(), music5(), rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
+			   rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
@@ -374,11 +375,11 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
     itrnum = 0;
 
-	if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
-	if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
-	if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
-	if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
-	if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
+	//if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
+	//if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
+	//if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
+	//if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
+	//if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
     //LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
@@ -477,7 +478,12 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 
 				Arrow(entities);
-				if (currentEntityIndex > 0 ) arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
+				if (currentEntityIndex > 0 ) 
+				{
+					if (currentEntityIndex == 1) arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x, entities[currentEntityIndex]->eBounds.y-40);
+					else if (currentEntityIndex == 2) arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x-8, entities[currentEntityIndex]->eBounds.y-40);
+					else if (currentEntityIndex == 3) arrowTail.setPosition(entities[currentEntityIndex]->eBounds.x-16, entities[currentEntityIndex]->eBounds.y-40);
+				}
 				//get mouse-coordinates relative to the window
 
 				updateEntityPosition(entities,stages);
@@ -842,7 +848,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		 (entities[0]->eBounds.y <= stages[currentStage]->oven->eBounds.y+stages[currentStage]->oven->eTextureSize.y)))
 		)
 	{
-
+		
 		mIsMovingLeft = false;
 		mDrawPostScreen = true;
 		render(entities,stages);
@@ -850,6 +856,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mDrawPostScreen = false;
 		render(entities,stages);
 		startTransition(entities,stages);
+		
 		resetLevel(entities,stages);
 		currentStage += 1;
 		resetLevel(entities,stages);
@@ -867,6 +874,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		 (entities[0]->eBounds.y <= stages[currentStage]->oven->eBounds.y+stages[currentStage]->oven->eTextureSize.y-8))
 		)	   
 	{
+		
 		mIsMovingLeft = false;
 		mDrawPostScreen = true;
 		render(entities,stages);
@@ -874,6 +882,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mDrawPostScreen = false;
 		render(entities,stages);
 		startTransition(entities,stages);
+		
 		resetLevel(entities,stages);
 		currentStage += 1;
 		resetLevel(entities,stages);
@@ -1470,7 +1479,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			//------------------------------------------------------------------------------------------------------------------------------------
 			if (currentSwitch[0] < 0) 
 			{
-				displaced = false;
+				displaced = false;	
 				if (displacedSwitch!=-1) stages[currentStage]->switches[displacedSwitch]->eSprite.setTexture(stages[currentStage]->switches[displacedSwitch]->eTexture);
 				disp = false;
 
@@ -1480,7 +1489,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			int currentBread = isTouchingBread(entities,stages,3);
 			//check if boule is touching portal
 			int currentPortal = isTouchingPortal(entities,stages,3);
-
+ 	
 			//if boule is touching the bread and portalLock is false
 			if (currentBread >= 0 && !pLock)
 			{
@@ -2533,9 +2542,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 			mTeleportation = isPressed;
 		if (key == sf::Keyboard::M)
 		{
-			music[currSong]->stop();
-			currSong+=1;
-			if (currSong >= 5) currSong = 0;
+			//music[currSong]->stop();
+			//currSong+=1;
+			//if (currSong >= 5) currSong = 0;
 		}
 	}
 	if (key == sf::Keyboard::P)
