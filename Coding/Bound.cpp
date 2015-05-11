@@ -419,11 +419,14 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 
 
-	transitList = new Transition* [1];
+	transitList = new Transition* [2];
 
 	transitList[0] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
 									   "../User_Interfaces/Transit_Screens/Transit_1-Curiosity.png",
 									   "../User_Interfaces/Transit_Screens/Transit_1-CuriosityB.png");
+	transitList[1] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+										"../User_Interfaces/Transit_Screens/Transit_2-Fear.png",
+										"../User_Interfaces/Transit_Screens/Transit_2-FearB.png");
 
 	timeSinceLastUpdate = sf::Time::Zero;
 }
@@ -589,7 +592,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 								entities[shotChooser]->cCircle.setPosition(entities[shotChooser]->cCircle.getPosition().x,0+entities[shotChooser]->cRadius);
 								updateEntityPosition(entities,stages);
 
-							
+								
 								//entities[shotChooser]->gCurrent = 0;	
 								//entities[shotChooser]->isCreated = true;
 							}
@@ -850,6 +853,10 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		
 		mIsMovingLeft = false;
+		mIsMovingRight = false;
+		mIsMovingUp = false;
+		mIsMovingDown = false;
+
 		mDrawPostScreen = true;
 		render(entities,stages);
 		initPostStage(entities,stages);
@@ -876,6 +883,10 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	{
 		
 		mIsMovingLeft = false;
+		mIsMovingRight = false;
+		mIsMovingUp = false;
+		mIsMovingDown = false;
+		
 		mDrawPostScreen = true;
 		render(entities,stages);
 		initPostStage(entities,stages);
@@ -3075,6 +3086,7 @@ Game::~Game()
 		}
 		delete[] pauseMenu;
 		delete transitList[0];
+		delete transitList[1];
 		delete[] transitList;
 		std::cout << "game destroyed" << std::endl;
 
