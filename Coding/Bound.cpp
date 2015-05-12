@@ -419,11 +419,15 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 
 
-	transitList = new Transition* [1];
+	transitList = new Transition* [2];
 
 	transitList[0] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
 									   "../User_Interfaces/Transit_Screens/Transit_1-Curiosity.png",
 									   "../User_Interfaces/Transit_Screens/Transit_1-CuriosityB.png");
+
+    transitList[1] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+                                    "../User_Interfaces/Transit_Screens/Transit_2-Fear.png",
+                                    "../User_Interfaces/Transit_Screens/Transit_2-FearB.png");
 
 	timeSinceLastUpdate = sf::Time::Zero;
 }
