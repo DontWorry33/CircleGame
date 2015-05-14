@@ -17,7 +17,7 @@
 
 #define PI 3.14159265
 #define ENTITIES_MAX 4
-#define STAGES_MAX 11
+#define STAGES_MAX 15
 #define G_MAX 160.0
 
 class Game
@@ -419,25 +419,41 @@ Game::Game(sf::RenderWindow* tmpWin) :
 		"../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
     //Modify pauseMenus from here downwards.
     pauseMenu[6] = new Pause_Menu(mWindow,
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+        "../User_Interfaces/Pause_Screens/7Pause/7Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/7Pause/7Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/7Pause/7Pause_Quit.png");
     pauseMenu[7] = new Pause_Menu(mWindow,
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+        "../User_Interfaces/Pause_Screens/8Pause/8Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/8Pause/8Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/8Pause/8Pause_Quit.png");
     pauseMenu[8] = new Pause_Menu(mWindow,
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+        "../User_Interfaces/Pause_Screens/9Pause/9Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/9Pause/9Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/9Pause/9Pause_Quit.png");
     pauseMenu[9] = new Pause_Menu(mWindow,
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+        "../User_Interfaces/Pause_Screens/10Pause/10Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/10Pause/10Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/10Pause/10Pause_Quit.png");
     pauseMenu[10] = new Pause_Menu(mWindow,
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Default.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Resume.png",
-        "../User_Interfaces/Pause_Screens/6Pause/6Pause_Quit.png");
+        "../User_Interfaces/Pause_Screens/11Pause/11Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/11Pause/11Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/11Pause/11Pause_Quit.png");
+    pauseMenu[11] = new Pause_Menu(mWindow,
+        "../User_Interfaces/Pause_Screens/12Pause/12Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/12Pause/12Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/12Pause/12Pause_Quit.png");
+    pauseMenu[12] = new Pause_Menu(mWindow,
+        "../User_Interfaces/Pause_Screens/13Pause/13Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/13Pause/13Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/13Pause/13Pause_Quit.png");
+    pauseMenu[13] = new Pause_Menu(mWindow,
+        "../User_Interfaces/Pause_Screens/14Pause/14Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/14Pause/14Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/14Pause/14Pause_Quit.png");
+    pauseMenu[14] = new Pause_Menu(mWindow,
+        "../User_Interfaces/Pause_Screens/15Pause/15Pause_Default.png",
+        "../User_Interfaces/Pause_Screens/15Pause/15Pause_Resume.png",
+        "../User_Interfaces/Pause_Screens/15Pause/15Pause_Quit.png");
 
 
 
@@ -486,6 +502,22 @@ Game::Game(sf::RenderWindow* tmpWin) :
     transitList[10] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
                                     "../User_Interfaces/Transit_Screens/Transit_11-Hurt.png",
                                     "../User_Interfaces/Transit_Screens/Transit_11-HurtB.png");
+    
+    transitList[11] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_12-Remorse.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_12-RemorseB.png");
+    
+    transitList[12] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_13-Contentment.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_13-ContentmentB.png");
+    
+    transitList[13] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_14-Happiness.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_14-HappinessB.png");
+    
+    transitList[14] = new Transition("../User_Interfaces/Transit_Screens/Transit_0-Default.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_15-Love.png",
+                                     "../User_Interfaces/Transit_Screens/Transit_15-LoveB.png");
 
     
 	timeSinceLastUpdate = sf::Time::Zero;

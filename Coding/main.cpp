@@ -60,8 +60,21 @@ int main()
     
     Stage11* stage11 = new Stage11(
                                    "../Stage_Images/Stage11/StageEleven.png");
+    
+    Stage12* stage12 = new Stage12(
+                                   "../Stage_Images/Stage12/StageTwelve.png");
+    
+    Stage13* stage13 = new Stage13(
+                                   "../Stage_Images/Stage13/StageThirteen.png");
 
-	Stage* stages[11];
+    Stage14* stage14 = new Stage14(
+                                   "../Stage_Images/Stage14/StageFourteen.png");
+    
+    Stage15* stage15 = new Stage15(
+                                   "../Stage_Images/Stage15/StageFifteen.png");
+
+    
+	Stage* stages[15];
 	cout << sizeof(*stage4) << endl;
 	stages[0] = stage1;
 	stages[1] = stage2;
@@ -74,6 +87,10 @@ int main()
     stages[8] = stage9;
     stages[9] = stage10;
     stages[10] = stage11;
+    stages[11] = stage12;
+    stages[12] = stage13;
+    stages[13] = stage14;
+    stages[14] = stage15;
 
 	
 	//MAIN MENU WINDOW/LOOP
@@ -141,6 +158,10 @@ int main()
     delete stage9;
     delete stage10;
     delete stage11;
+    delete stage12;
+    delete stage13;
+    delete stage14;
+    delete stage15;
    // delete game;
 	
 	
