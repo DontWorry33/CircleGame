@@ -178,3 +178,9 @@ Oh and i'm not removing the debugging messages as I need them to fix the bugs.
 	IF, a player finishes the stage faster than the “Predicted Completion Time” and yet started with something other than the Ideal Choice, they are rewarded with an extra bonus that not only nullifies the penalization of choosing the “Wrong” character first, but rewards them greatly for doing so. As it should be assumed they found a far more ideal way to finish the stage than intended.
 	Music is still up in the air, but I will try finding some new talent next week. 
 	Over all, estimate for percentage of completion of the games is a clean 40%. Still need to design the other 14 stages and we might just have a product to show.
+
+- 05/14/15 (Dedie)
+    We did it. All 15 planned stages have now been implemented and are fully functional. Aside from bugs, the game is closer to being ready than ever before. Last on the list is the tutorial, and I don't think I'll have any more say in terms of development.
+    Pause screens have likewise been implemented to complement each of the new additions.
+    What's left, as mentioned, seems to be: Tutorials, Proper ordering of stages. I'll try my best to get the tutorial done by between today and tomorrow. Then, only testing will be there. Cannot wait.
+    For now, enjoy!
