@@ -922,7 +922,7 @@ struct Stage14 : public Stage
         lines[3] = new Line ("../Stage_Images/Stage14/quad3Hor1.png", 140, 780);
         lines[4] = new Line ("../Stage_Images/Stage14/quad4Hor1.png", 1060, 600);
         
-        switches[0] = new Switch("../Stage_Images/Stage14/quad2Switch1.png", 600,307,0,4);
+        switches[0] = new Switch("../Stage_Images/Stage14/quad2Switch1.png", 600,287,0,4);
         switches[1] = new Switch("../Stage_Images/Stage14/quad3Switch1.png", 40,697,2,1);
         switches[2] = new Switch("../Stage_Images/Stage14/quad4Switch1.png", 1140,552,1,5);
         
@@ -931,7 +931,7 @@ struct Stage14 : public Stage
         platforms[1] = new Platform ("../Stage_Images/Stage14/quad2VerPlatform1.png", 682, 600, 500, 0);
         platforms[2] = new Platform ("../Stage_Images/Stage14/quad3VerPlatform1.png", 370, 1165, 540, 0);
         
-        portals[0] = new Portal(760,200,0);
+        portals[0] = new Portal(760,310,0);
         portals[1] = new Portal(1080,770,1);
         
         oven = new Oven(40,293);
