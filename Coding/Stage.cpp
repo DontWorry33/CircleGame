@@ -185,7 +185,7 @@ struct Stage3 : public Stage
         lines[1] = new Line ("../Stage_Images/Stage3/quad1Ver1.png", 520, 428);
         lines[2] = new Line ("../Stage_Images/Stage3/quad2Hor1.png", 630, 428);
         lines[3] = new Line ("../Stage_Images/Stage3/quad2Hor2.png", 1110, 220);
-        lines[4] = new Line ("../Stage_Images/Stage3/quad3Hor1.png", 89, 640);
+        lines[4] = new Line ("../Stage_Images/Stage3/quad3Hor1.png", 89, 685);
         lines[5] = new Line ("../Stage_Images/Stage3/quad3Hor2.png", 387, 429);
         lines[6] = new Line ("../Stage_Images/Stage3/quad4Hor1.png", 1084, 785);
       
