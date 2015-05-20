@@ -358,47 +358,43 @@ struct Stage6 : public Stage
     {
         //Dedie: Done.
         
-        bakerStartPos.x = 995;
-        bakerStartPos.y = 50;
+        bakerStartPos.x = 630;
+        bakerStartPos.y = 230;
 
         lineCount = 7;
         lines = new Entity* [lineCount];
         
-        platformCount = 4;
+        platformCount = 3;
         platforms = new Entity* [platformCount];
         
-        switchCount = 4;
+        switchCount = 3;
         switches = new Entity* [switchCount];
         
-        portalCount = 2;
+        portalCount = 1;
         portals = new Entity* [portalCount];
         backgroundTexture.loadFromFile(bkg_filename);
         
         bouleTexture.loadFromFile("../Stage_Images/Stage6/StageSix_Boule.png");
         background.setTexture(backgroundTexture);
         
-  
-        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 308, 371);
+        lines[0] = new Line ("../Stage_Images/Stage6/quad1Hor1.png", 202, 371);
         lines[1] = new Line ("../Stage_Images/Stage6/quad2Hor1.png", 694, 371);
         lines[2] = new Line ("../Stage_Images/Stage6/quad2Hor2.png", 1048, 200);
-        lines[3] = new Line ("../Stage_Images/Stage6/quad3Hor1.png", 100, 830);
+        lines[3] = new Line ("../Stage_Images/Stage6/quad3Hor1.png", 105, 600);
         lines[4] = new Line ("../Stage_Images/Stage6/quad4Hor1.png", 758, 598);
         lines[5] = new Line ("../Stage_Images/Stage6/quad4Hor2.png", 1112, 830);
         lines[6] = new Line ("../Stage_Images/Stage6/quad4Ver1.png", 936, 597);
         
-        switches[0] = new Switch("../Stage_Images/Stage6/quad1Switch1.png", 280,333,3,4);
-        switches[1] = new Switch("../Stage_Images/Stage6/quad2Switch1.png", 1146,163,0,4);
-        switches[2] = new Switch("../Stage_Images/Stage6/quad3Switch1.png", 46,732,2,4);
-        switches[3] = new Switch("../Stage_Images/Stage6/quad4Switch1.png", 1168,732,1,5);
-
+        switches[0] = new Switch("../Stage_Images/Stage6/quad2Switch1.png", 1146,163,1,4);
+        switches[1] = new Switch("../Stage_Images/Stage6/quad3Switch1.png", 40,560,2,4);
+        switches[2] = new Switch("../Stage_Images/Stage6/quad4Switch1.png", 1168,732,0,5);
         
-        platforms[0] = new Platform ("../Stage_Images/Stage6/quad1HorPlatform1.png", 98, 180, 0, 0);
-        platforms[1] = new Platform ("../Stage_Images/Stage6/quad1VerPlatform1.png", 440, 376, 550, 0);
-        platforms[2] = new Platform ("../Stage_Images/Stage6/quad2HorPlatform1.png", 1078, 364, 0, 0);
-        platforms[3] = new Platform ("../Stage_Images/Stage6/quad4VerPlatform1.png", 742, 540, 0, 0);
         
-        portals[0] = new Portal(90,130,0);
-        portals[1] = new Portal(940,150,1);
+        platforms[0] = new Platform ("../Stage_Images/Stage6/quad1VerPlatform1.png", 440, 376, 550, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage6/quad2HorPlatform1.png", 1078, 364, 0, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage6/quad4VerPlatform1.png", 742, 540, 0, 0);
+        
+        portals[0] = new Portal(120,770,1);
         
         oven = new Oven(870,560);
     }
@@ -713,32 +709,32 @@ struct Stage11 : public Stage
         bouleTexture.loadFromFile("../Stage_Images/Stage11/StageEleven_Boule.png");
         background.setTexture(backgroundTexture);
         
-        lines[0] = new Line ("../Stage_Images/Stage11/quad1Ver1.png", 440, 364);
-        lines[1] = new Line ("../Stage_Images/Stage11/quad2Hor1.png", 718, 278);
-        lines[2] = new Line ("../Stage_Images/Stage11/quad3Hor1.png", 186, 780);
-        lines[3] = new Line ("../Stage_Images/Stage11/quad3Hor2.png", 382, 582);
-        lines[4] = new Line ("../Stage_Images/Stage11/quad3Ver1.png", 222, 583);
-        lines[5] = new Line ("../Stage_Images/Stage11/quad4Hor1.png", 882, 480);
-        lines[6] = new Line ("../Stage_Images/Stage11/quad4Hor2.png", 882, 582);
-        lines[7] = new Line ("../Stage_Images/Stage11/quad4Ver1.png", 994, 583);
+        lines[0] = new Line ("../Stage_Images/Stage11/quad1Ver1.png", 440, 334);
+        lines[1] = new Line ("../Stage_Images/Stage11/quad2Hor1.png", 718, 248);
+        lines[2] = new Line ("../Stage_Images/Stage11/quad3Hor1.png", 186, 790);
+        lines[3] = new Line ("../Stage_Images/Stage11/quad3Hor2.png", 382, 553);
+        lines[4] = new Line ("../Stage_Images/Stage11/quad3Ver1.png", 222, 553);
+        lines[5] = new Line ("../Stage_Images/Stage11/quad4Hor1.png", 882, 450);
+        lines[6] = new Line ("../Stage_Images/Stage11/quad4Hor2.png", 882, 552);
+        lines[7] = new Line ("../Stage_Images/Stage11/quad4Ver1.png", 994, 553);
         
         
-        switches[0] = new Switch("../Stage_Images/Stage11/quad1Switch1.png", 520,238,2,4);
+        switches[0] = new Switch("../Stage_Images/Stage11/quad1Switch1.png", 520,203,2,4);
         switches[1] = new Switch("../Stage_Images/Stage11/quad3Switch1.png", 80,752,0,4);
-        switches[2] = new Switch("../Stage_Images/Stage11/quad3Switch2.png", 280,544,3,1);
+        switches[2] = new Switch("../Stage_Images/Stage11/quad3Switch2.png", 280,511,3,1);
         switches[3] = new Switch("../Stage_Images/Stage11/quad4Switch1.png", 1130,780,1,4);
         
         
-        platforms[0] = new Platform ("../Stage_Images/Stage11/quad1HorPlatform1.png", 336, 366, 0, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage11/quad1HorPlatform1.png", 336, 336, 0, 0);
         platforms[1] = new Platform ("../Stage_Images/Stage11/quad3VerPlatform1.png", 220, 730, 0, 0);
-        platforms[2] = new Platform ("../Stage_Images/Stage11/quad3VerPlatform2.png", 530, 780, 0, 0);
-        platforms[3] = new Platform ("../Stage_Images/Stage11/quad4HorPlatform1.png", 660, 580, 455, 0);
+        platforms[2] = new Platform ("../Stage_Images/Stage11/quad3VerPlatform2.png", 530, 760, 0, 0);
+        platforms[3] = new Platform ("../Stage_Images/Stage11/quad4HorPlatform1.png", 660, 550, 455, 0);
         
         
-        portals[0] = new Portal(730,220,1);
+        portals[0] = new Portal(730,190,1);
         portals[1] = new Portal(850,770,2);
         
-        oven = new Oven(940,440);
+        oven = new Oven(940,410);
     }
     
     ~Stage11()
@@ -920,9 +916,9 @@ struct Stage14 : public Stage
         bouleTexture.loadFromFile("../Stage_Images/Stage14/StageFourteen_Boule.png");
         background.setTexture(backgroundTexture);
         
-        lines[0] = new Line ("../Stage_Images/Stage14/quad1Hor1.png", 142, 360);
-        lines[1] = new Line ("../Stage_Images/Stage14/quad1Hor2.png", 556, 360);
-        lines[2] = new Line ("../Stage_Images/Stage14/quad2Hor1.png", 850, 250);
+        lines[0] = new Line ("../Stage_Images/Stage14/quad1Hor1.png", 142, 340);
+        lines[1] = new Line ("../Stage_Images/Stage14/quad1Hor2.png", 556, 340);
+        lines[2] = new Line ("../Stage_Images/Stage14/quad2Hor1.png", 850, 370);
         lines[3] = new Line ("../Stage_Images/Stage14/quad3Hor1.png", 140, 780);
         lines[4] = new Line ("../Stage_Images/Stage14/quad4Hor1.png", 1060, 600);
         
@@ -931,14 +927,14 @@ struct Stage14 : public Stage
         switches[2] = new Switch("../Stage_Images/Stage14/quad4Switch1.png", 1140,552,1,5);
         
         
-        platforms[0] = new Platform ("../Stage_Images/Stage14/quad1VerPlatform1.png", 270, 290, 0, 0);
+        platforms[0] = new Platform ("../Stage_Images/Stage14/quad1VerPlatform1.png", 270, 270, 0, 0);
         platforms[1] = new Platform ("../Stage_Images/Stage14/quad2VerPlatform1.png", 682, 600, 500, 0);
         platforms[2] = new Platform ("../Stage_Images/Stage14/quad3VerPlatform1.png", 370, 1165, 540, 0);
         
         portals[0] = new Portal(760,200,0);
         portals[1] = new Portal(1080,770,1);
         
-        oven = new Oven(40,313);
+        oven = new Oven(40,293);
     }
     
     ~Stage14()
