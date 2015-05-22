@@ -300,7 +300,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
 
-	postScreen_img.loadFromFile("../User_Interfaces/postgamescreen.png");
+	postScreen_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Layout.png");
 	postScreen.setTexture(postScreen_img);
 	mDrawPostScreen = false;
 	currentPoints = 0;
