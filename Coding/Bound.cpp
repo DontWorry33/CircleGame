@@ -31,6 +31,7 @@ class Game
 		bool bottomCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		bool rightCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		bool leftCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		bool topCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
 		void checkGravity(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int character);
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
 		int isTouchingPortal(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
@@ -685,7 +686,7 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 								updateEntityPosition(entities,stages);
 
 								
-								//entities[shotChooser]->gCurrent = 0;	
+								entities[shotChooser]->gCurrent = 0;	
 								//entities[shotChooser]->isCreated = true;
 							}
 
@@ -760,6 +761,14 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 			//const float pushValue = 1000.f;
 
 					//sf::Time applyRepulsion = shotClock.getElapsedTime();
+
+					if (topCircleCollision(entities,stages,0) || topCircleCollision(entities,stages,1))
+					{
+						std::cout << "NOT SUPPOSED TO SEE THIS. TOP CIRCLE COLLISION DETECTED, SHOULD HAVE BEEN STOPPED IN THE FUNCTION activateRotiPowerAlpha" << std::endl;
+						rotiActive = false;
+
+					}
+
 					if (!skipBaker)
 					{
 						if (bakerHitting[1] == 3 && rotiHitting[1] == 2)
@@ -1202,21 +1211,74 @@ void Game::activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIE
 			//check data[0] max height
 			//std::cout << entities[0]->eBounds.y << std::endl;
 			//std::cout << stages[currentStage]->platforms[bakerHitting[0]]->eBounds.y << std::endl;
-			if (rotiHitting[2]==0) if (entities[1]->eBounds.y+entities[1]->cRadius-25 <= stages[currentStage]->lines[rotiHitting[0]]->eBounds.y)
+			if (rotiHitting[2]==0)
 			{
-				negateGravity = false;
+				std::cout << "line roti is touching eboundY: " << stages[currentStage]->lines[rotiHitting[0]]->eBounds.y << std::endl;
+				std::cout << "roti pos+radius-25: " << entities[1]->eBounds.y+entities[1]->cRadius-25 << std::endl;
+				if ( (entities[1]->eBounds.y+entities[1]->cRadius-25 <= stages[currentStage]->lines[rotiHitting[0]]->eBounds.y) )
+				{
+
+					negateGravity = false;
+					std::cout << "weird formula stopped grav" << std::endl;
+				}
+				else if (topCircleCollision(entities,stages,0))
+				{
+
+					negateGravity = false;
+					std::cout << "0 stopped grav" << std::endl;
+				}
+				else if (topCircleCollision(entities,stages,1))
+				{
+					negateGravity = false;
+					std::cout << "1 stopped grav" << std::endl;
+
+				}
 			}
+
 			else 
 			{
+				std::cout << "I AM THE REASON THE GAME IS BROKEN LINE" << std::endl;
+				if (topCircleCollision(entities,stages,0)) 
+					{
+						std::cout << "baker touching top" << std::endl;
+
+					}
+				if (topCircleCollision(entities,stages,1)) 
+					{
+
+						std::cout << "roti touching top" << std::endl;
+					}
+
 				negateGravity = true;
 
 			}				
-			if (rotiHitting[2] == 1) if (entities[1]->eBounds.y+entities[1]->cRadius-25 <= stages[currentStage]->platforms[rotiHitting[0]]->eBounds.y)
+			if (rotiHitting[2] == 1) 
 			{
-				negateGravity = false;
+				std::cout << "line roti is touching eboundY: " << stages[currentStage]->platforms[rotiHitting[0]]->eBounds.y << std::endl;
+				std::cout << "roti pos+radius-25: " << entities[1]->eBounds.y+entities[1]->cRadius-25 << std::endl;
+				if ( (entities[1]->eBounds.y+entities[1]->cRadius-25 <= stages[currentStage]->platforms[rotiHitting[0]]->eBounds.y))
+				{
+					negateGravity = false;
+					std::cout << "weird formula stopped grav" << std::endl;
+				}
+				else if (topCircleCollision(entities,stages,0))
+				{
+
+					negateGravity = false;
+					std::cout << "0 stopped grav" << std::endl;
+				}
+				else if (topCircleCollision(entities,stages,1))
+				{
+					negateGravity = false;
+					std::cout << "1 stopped grav" << std::endl;
+
+				}
 			}
 			else
 			{
+				std::cout << "I AM THE REASON THE GAME IS BROKEN PLATFORM" << std::endl;
+				if (topCircleCollision(entities,stages,0)) std::cout << "baker touching top" << std::endl;
+				if (topCircleCollision(entities,stages,1)) std::cout << "roti touching top" << std::endl;
 				negateGravity = true;
 				
 			}
@@ -1828,6 +1890,8 @@ int Game::isTouchingBread(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_M
 	return -1;
 }
 
+
+
 bool Game::isTouchingRotiSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x)
 {
 	for (int a=0; a<stages[currentStage]->platformCount; a++)
@@ -2208,6 +2272,45 @@ bool Game::leftCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STA
 	return false;
 }
 
+bool Game::topCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x)
+{
+
+	for (int a=0; a<stages[currentStage]->platformCount; a++)
+	{
+		if (entities[x]->topCircle[1] >= stages[currentStage]->platforms[a]->eBounds.y &&
+			entities[x]->topCircle[1] <= stages[currentStage]->platforms[a]->eBounds.y + stages[currentStage]->platforms[a]->eTextureSize.y &&
+			entities[x]->topCircle[0] >= stages[currentStage]->platforms[a]->eBounds.x &&
+			entities[x]->topCircle[0] <= stages[currentStage]->platforms[a]->eBounds.x + stages[currentStage]->platforms[a]->eTextureSize.x)
+			{
+
+				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y+entities[x]->cRadius);
+				std::cout << "t circle" << std::endl;
+				entities[x]->gCurrent = 0;	
+				return true;
+			}
+	}
+
+
+	for (int a=0; a<stages[currentStage]->lineCount; a++)
+	{
+
+		 if (entities[x]->topCircle[1] >= stages[currentStage]->lines[a]->eBounds.y &&
+			entities[x]->topCircle[1] <= stages[currentStage]->lines[a]->eBounds.y + stages[currentStage]->lines[a]->eTextureSize.y &&
+			entities[x]->topCircle[0] >= stages[currentStage]->lines[a]->eBounds.x &&
+			entities[x]->topCircle[0] <= stages[currentStage]->lines[a]->eBounds.x + stages[currentStage]->lines[a]->eTextureSize.x)
+			{
+
+				//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->platforms[a]->eBounds.y+entities[x]->cRadius);
+				std::cout << "t circle" << std::endl;
+				entities[x]->gCurrent = 0;	
+				return true;
+			}
+	}
+
+	return false;
+
+}
+
 //returns true if bottom of circle is touching stuff.
 //NEED +2 so it doesn't "mini bounce"
 bool Game::bottomCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x)
@@ -2572,7 +2675,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 				case sf::Event::KeyPressed:
 
 					handlePlayerInput(event.key.code, true);
-					std::cout << "after hpi" << std::endl;
+					//std::cout << "after hpi" << std::endl;
 					breadSelector(event.key.code, 0);
 					powerMetreUpdate(event.key.code); 
 					if (event.key.code == sf::Keyboard::R) 
@@ -2602,7 +2705,7 @@ void Game::processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], S
 
 
 				case sf::Event::MouseButtonPressed:
-					std::cout << "mouse button pressed" << std::endl;
+					//std::cout << "mouse button pressed" << std::endl;
 					activateAnpanPower(entities,stages);
 					if (event.mouseButton.button == sf::Mouse::Right && currentEntityIndex==3 ) 
 						{
