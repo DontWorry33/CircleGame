@@ -62,7 +62,7 @@ struct Stage1 : public Stage
 
 		switches[0] = new Switch("../Stage_Images/Stage1/quad4Switch1.png", 1000, 784, 0, 0);
 
-		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 100, 783, 500, 1);
+		platforms[0] = new Platform ("../Stage_Images/Stage1/quad3VerPlatform1.png", 490, 783, 500, 1);
 
 		portals[0] = new Portal (900,600,0);
 		portals[1] = new Portal(100,600,1);
