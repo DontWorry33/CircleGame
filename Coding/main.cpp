@@ -12,70 +12,38 @@ int main()
 
 {
 
+	//create objects
 	Baker* baker = new Baker;
 	Roti* roti = new Roti;
 	Anpan* anpan = new Anpan;
 	Boule* boule = new Boule;
-
+	//entities is an array of pointers of the objects 
 	Entity* entities[4];
 	entities[0] = baker;
 	entities[1] = roti;
 	entities[2] = anpan;
 	entities[3] = boule;
-	cout << sizeof(entities) << endl;
-	cout << sizeof(*baker) << endl;
-	//Baker b2;
-	//cout << sizeof(b2) << endl;
-	Stage1* stage1 = new Stage1(
-					"../Stage_Images/Stage1/IntroStage.png",
-			  	 	"../Stage_Images/Stage1/quad4Ver1.png"
-				 );
-    
-	Stage2* stage2 = new Stage2(
-				"../Stage_Images/Stage2/StageTwo.png");
-    
-    Stage3* stage3 = new Stage3(
-                                "../Stage_Images/Stage3/StageThree.png");
-    
-    Stage4* stage4 = new Stage4(
-                                "../Stage_Images/Stage4/StageFour.png");
-    
-    Stage5* stage5 = new Stage5(
-                                "../Stage_Images/Stage5/StageFive.png");
-    
-    Stage6* stage6 = new Stage6(
-                                "../Stage_Images/Stage6/StageSix.png");
-    
-    Stage7* stage7 = new Stage7(
-                                "../Stage_Images/Stage7/StageSeven.png");
 
-    Stage8* stage8 = new Stage8(
-                                "../Stage_Images/Stage8/StageEight.png");
-    
-    Stage9* stage9 = new Stage9(
-                                "../Stage_Images/Stage9/StageNine.png");
-    
-    Stage10* stage10 = new Stage10(
-                                "../Stage_Images/Stage10/StageTen.png");
-    
-    Stage11* stage11 = new Stage11(
-                                   "../Stage_Images/Stage11/StageEleven.png");
-    
-    Stage12* stage12 = new Stage12(
-                                   "../Stage_Images/Stage12/StageTwelve.png");
-    
-    Stage13* stage13 = new Stage13(
-                                   "../Stage_Images/Stage13/StageThirteen.png");
 
-    Stage14* stage14 = new Stage14(
-                                   "../Stage_Images/Stage14/StageFourteen.png");
-    
-    Stage15* stage15 = new Stage15(
-                                   "../Stage_Images/Stage15/StageFifteen.png");
 
-    
+	//initalize all stages
+	Stage1* stage1 = new Stage1("../Stage_Images/Stage1/IntroStage.png");
+	Stage2* stage2 = new Stage2("../Stage_Images/Stage2/StageTwo.png");    
+    Stage3* stage3 = new Stage3("../Stage_Images/Stage3/StageThree.png");    
+    Stage4* stage4 = new Stage4("../Stage_Images/Stage4/StageFour.png");    
+    Stage5* stage5 = new Stage5("../Stage_Images/Stage5/StageFive.png");    
+    Stage6* stage6 = new Stage6("../Stage_Images/Stage6/StageSix.png");    
+    Stage7* stage7 = new Stage7("../Stage_Images/Stage7/StageSeven.png");
+    Stage8* stage8 = new Stage8("../Stage_Images/Stage8/StageEight.png");    
+    Stage9* stage9 = new Stage9("../Stage_Images/Stage9/StageNine.png");    
+    Stage10* stage10 = new Stage10("../Stage_Images/Stage10/StageTen.png");
+    Stage11* stage11 = new Stage11("../Stage_Images/Stage11/StageEleven.png");
+    Stage12* stage12 = new Stage12("../Stage_Images/Stage12/StageTwelve.png");    
+    Stage13* stage13 = new Stage13("../Stage_Images/Stage13/StageThirteen.png");
+    Stage14* stage14 = new Stage14("../Stage_Images/Stage14/StageFourteen.png");    
+    Stage15* stage15 = new Stage15("../Stage_Images/Stage15/StageFifteen.png");
+    //initialize array of pointers to stages
 	Stage* stages[15];
-	cout << sizeof(*stage4) << endl;
 	stages[0] = stage1;
 	stages[1] = stage2;
     stages[2] = stage3;
@@ -94,10 +62,18 @@ int main()
 
 	
 	//MAIN MENU WINDOW/LOOP
-    Main_Menu 	menu(1200,800);
+
+	//create menu window
+    Main_Menu menu(1200,800);
+
+    //create game object with already created window so we dont have to create new one in the game
     Game* game = new Game(menu.win);
+
+   
+
     while (menu.win->isOpen())
     {
+    	//display all the items on the window
 	    menu.render();
 
 	    sf::Event event;
@@ -112,6 +88,7 @@ int main()
 	    			}
 	    			if (event.key.code == sf::Keyboard::Return)
 	    			{
+	    				//if you press return (enter) run the game and pass both arrays of pointers to the game
 	    				game->run(entities,stages);
 	    				std::cout << "asd" << std::endl;
 	    				delete game;
@@ -127,10 +104,13 @@ int main()
 	    			{
 	    				//menu.fade(menu.UI_options[0]->option, stages[0]->background);
 	    				//std::cout << "fade finished" << std::endl;
+
+	    				//if mouse click event on option 0 (continue), run the game and pass both arrays of pointers to the game
 						game->run(entities,stages);
 						std::cout << "asd" << std::endl;
 						delete game;
 	    			}
+	    			
 	    			else if (menu.isTouchingOption() == 3)
 	    			{
 	    				menu.win->close();
@@ -142,7 +122,7 @@ int main()
 
     }
     
-
+    //cleaning memory 
 	delete baker;
 	delete roti;
 	delete anpan;
