@@ -224,13 +224,119 @@ struct Pause_Menu : UI
 };
 
 
-//comments identical to Main_Menu
 struct Tutorial_Menu : UI
 {
+	Option* main;
+	Option* hud;
+	Option* controls;
+	Option* dream;
+	Option* lie;
+	Option* wish;
+	Option* switches;
+
+	int currentScreen;
+
+	//similar comments to Main_Menu
 	Tutorial_Menu(sf::RenderWindow* curr_win)
 	{
 		win = curr_win;
+		main = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Main.png");
+		UI_options.push_back(main);
+		hud = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_HUD.png");
+		UI_options.push_back(hud);
+		controls = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Controls.png");
+		UI_options.push_back(controls);
+		dream = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Dream.png");
+		UI_options.push_back(dream);
+		lie = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Lie.png");
+		UI_options.push_back(lie);
+		wish = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Wish.png");
+		UI_options.push_back(wish);
+		switches = new Option("../User_Interfaces/Tutorial_Screens/Tutorial_Switches.png");
+		UI_options.push_back(switches);
 
+		currentScreen = 0;
+
+	}
+	//need a loop as we have to have events that capture keyboard presses to move on to screens
+	bool MainLoop()
+	{
+		while (win->isOpen())
+		{
+			sf::Event event;
+		    while (win->pollEvent(event))
+		    {
+		    	//std::cout << "inside tut loop" << std::endl;
+		    	switch (event.type)
+		    	{
+					case sf::Event::KeyPressed:
+						//if the right arrow key is pressed, move on to the next screen and check if we are at the last one
+		    			if (event.key.code == sf::Keyboard::Right)
+		    			{
+		    				NextScreen();
+		    				if (IsComplete()) return true;
+		    			}
+		    			//if the left arrow key is pressed, go back a screen
+		    			else if (event.key.code == sf::Keyboard::Left)
+		    			{
+		    				PreviousScreen();
+		    			}
+		    			//if escape is pressed, return to the main menu
+		    			else if (event.key.code == sf::Keyboard::Escape)
+		    			{
+		    				return true;
+		    			}
+		    			break;
+		    	}
+		    	Render();
+		    }
+		}
+	}
+
+	//moves to the next screen
+	void NextScreen()
+	{
+		//checks if we are at last index
+		if (currentScreen < UI_options.size()) currentScreen++;
+	}
+	//moves to previous screen
+	void PreviousScreen()
+	{
+		//makes sure we cant go under 0
+		if (currentScreen > 0) currentScreen--;
+	}
+
+	bool IsComplete()
+	{
+		//check if on last screen
+		if (currentScreen==7) 
+		{
+			//need to reset index to 0 in case tutorial is launched again
+			currentScreen = 0;
+			return true;
+		}
+		return false;
+
+	}
+
+	//draw to screen
+	void Render()
+	{
+		win->clear();
+		win->draw(UI_options[currentScreen]->option);
+		win->display();
+
+	}
+
+	~Tutorial_Menu()
+	{
+		delete main;
+		delete hud;
+		delete controls;
+		delete dream;
+		delete lie;
+		delete wish;
+		delete switches;
 	}
 
 };

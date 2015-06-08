@@ -66,10 +66,12 @@ int main()
 	//create menu window
     Main_Menu menu(1200,800);
 
+    Tutorial_Menu tutorial(menu.win);
+
     //create game object with already created window so we dont have to create new one in the game
     Game* game = new Game(menu.win);
 
-   
+
 
     while (menu.win->isOpen())
     {
@@ -109,6 +111,16 @@ int main()
 						game->run(entities,stages);
 						std::cout << "asd" << std::endl;
 						delete game;
+	    			}
+
+	    			if (menu.isTouchingOption() == 2)
+	    			{
+	    				std::cout << "tut starting" << std::endl;
+	    				if (tutorial.MainLoop())
+	    				{
+	    					continue;
+	    				}
+
 	    			}
 	    			
 	    			else if (menu.isTouchingOption() == 3)
