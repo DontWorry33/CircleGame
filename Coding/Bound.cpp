@@ -235,6 +235,8 @@ class Game
 		bool mDrawPostScreen;
 		int currentPoints;
 
+		int lastDownSwitchHit;
+
 		bool debug;
 
 
@@ -375,6 +377,8 @@ Game::Game(sf::RenderWindow* tmpWin) :
     debug = false;
 
     itrnum = 0;
+
+    lastDownSwitchHit=-1;
 
 	//if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
 	//if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
@@ -1603,7 +1607,10 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 					else if (stages[currentStage]->switches[tSwitch]->switchType == 5)
 					{
 						if (stages[currentStage]->platforms[x]->eSprite.getPosition().y >= stages[currentStage]->platforms[x]->eStartPos.y)  stages[currentStage]->platforms[x]->eSprite.move(0, -100*elapsedTime.asSeconds());
+						stages[currentStage]->platforms[stages[currentStage]->switches[tSwitch]->platformToActivate]->activatePlatform = false;
 					}
+
+					if (tSwitch >= 0 && stages[currentStage]->platforms[stages[currentStage]->switches[tSwitch]->platformToActivate]->activatePlatform == false) stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
 				}
 
 				//SWITCH 6
@@ -1615,7 +1622,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 						stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = true;
 						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture2);
 
-					}	
+					}
 					//checks if platform has attained mininmum hieght and is currently moving downwards, then sets activate platform to false
 					if (stages[currentStage]->platforms[x]->eSprite.getPosition().y >= stages[currentStage]->platforms[x]->maxHeight && stages[currentStage]->platforms[x]->move == 2) 
 						{
