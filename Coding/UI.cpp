@@ -37,8 +37,8 @@ struct UI
 struct Main_Menu : UI
 {
 	//creating option pointers (Option.cpp)
-	Option* continue_game;
 	Option* new_game;
+	Option* about;
 	Option* tutorials;
 	Option* quit;
 
@@ -51,10 +51,10 @@ struct Main_Menu : UI
 		//initalize variables with positions and add all to vector 
 		UI_bkg_img.loadFromFile("../User_Interfaces/Main_Menu/Menu-Default.png");
 		UI_bkg.setTexture(UI_bkg_img);
-		continue_game = new Option("../User_Interfaces/Main_Menu/Menu-Continue.png", 62, 136, 240, 179);
-		UI_options.push_back(continue_game);
-		new_game = new Option("../User_Interfaces/Main_Menu/Menu-NewGame.png", 62, 179, 240, 222);
+		new_game = new Option("../User_Interfaces/Main_Menu/Menu-NewGame.png", 62, 136, 240, 179);
 		UI_options.push_back(new_game);
+		about = new Option("../User_Interfaces/Main_Menu/Menu-About.png", 62, 179, 240, 222);
+		UI_options.push_back(about);
 		tutorials  = new Option("../User_Interfaces/Main_Menu/Menu-Tutorials.png", 62, 222, 240, 260);
 		UI_options.push_back(tutorials);
 		quit = new Option("../User_Interfaces/Main_Menu/Menu-Quit.png", 62, 260, 240, 300);
@@ -68,8 +68,8 @@ struct Main_Menu : UI
 	~Main_Menu()
 	{
 		delete win;
-		delete continue_game;
 		delete new_game;
+		delete about;
 		delete tutorials;
 		delete quit;
 		std::cout << "main menu destroyed" << std::endl;
@@ -269,6 +269,9 @@ struct Tutorial_Menu : UI
 		    	//std::cout << "inside tut loop" << std::endl;
 		    	switch (event.type)
 		    	{
+		    		case sf::Event::Closed:
+						win->close();
+						break;
 					case sf::Event::KeyPressed:
 						//if the right arrow key is pressed, move on to the next screen and check if we are at the last one
 		    			if (event.key.code == sf::Keyboard::Right)
@@ -338,6 +341,91 @@ struct Tutorial_Menu : UI
 		delete wish;
 		delete switches;
 	}
+
+};
+
+struct AboutPage : UI
+{
+	float speedMultiplier;
+
+	AboutPage(sf::RenderWindow* curr_win)
+	{
+		win = curr_win;
+		UI_bkg_img.loadFromFile("../User_Interfaces/Main_Menu/AboutPage.png");
+		UI_bkg.setTexture(UI_bkg_img);
+		UI_bkg.setPosition(UI_bkg.getPosition().x, 800);
+		speedMultiplier = 1;
+	}
+
+
+	bool MainLoop()
+	{
+		while (win->isOpen())
+		{
+			sf::Event event;
+		    while (win->pollEvent(event))
+		    {
+		    	//std::cout << "inside tut loop" << std::endl;
+		    	switch (event.type)
+		    	{
+					case sf::Event::Closed:
+						win->close();
+						break;
+					case sf::Event::KeyPressed:
+						//if the right arrow key is pressed, move on to the next screen and check if we are at the last one
+		    			if (event.key.code == sf::Keyboard::Return)
+		    			{
+		    				UI_bkg.setPosition(UI_bkg.getPosition().x,800);
+		    				return true;
+		    			}
+		    			if (event.key.code == sf::Keyboard::Space)
+		    			{
+		    				speedMultiplier -= 0.05;
+		    			}
+		    			break;
+		    		case sf::Event::KeyReleased:
+						if (event.key.code == sf::Keyboard::Space)
+		    			{
+		    				speedMultiplier = 1;
+		    			}		    			
+		    			break;
+		    	}
+
+		    }
+		    ScrollUp();
+		    Render();
+		}
+
+	}
+
+	void ScrollUp()
+	{
+		if (UI_bkg.getPosition().y <= 0) 
+		{
+			if (UI_bkg.getPosition().y == 0) return;
+			std::cout << "resetting bkg pos" << std::endl;
+			UI_bkg.setPosition(UI_bkg.getPosition().x, 0);
+			return;
+		}
+		sf::Time scrollTime = fadeClock.getElapsedTime();
+		if (scrollTime.asSeconds() > 0.05*speedMultiplier) 
+		{
+			scrollTime = fadeClock.restart();
+			UI_bkg.move(0, -1);
+		}
+		
+
+	}
+
+	void Render()
+	{
+		win->clear();
+		win->draw(UI_bkg);
+		win->display();
+
+	}
+
+
 
 };
 

@@ -68,6 +68,7 @@ int main()
 
     Tutorial_Menu tutorial(menu.win);
 
+    AboutPage about(menu.win);
     //create game object with already created window so we dont have to create new one in the game
     Game* game = new Game(menu.win);
 
@@ -111,6 +112,15 @@ int main()
 						game->run(entities,stages);
 						std::cout << "asd" << std::endl;
 						delete game;
+	    			}
+
+	    			if (menu.isTouchingOption() == 1)
+	    			{
+	    				std::cout << "about page starting";
+	    				if (about.MainLoop())
+	    				{
+	    					continue;
+	    				}
 	    			}
 
 	    			if (menu.isTouchingOption() == 2)
