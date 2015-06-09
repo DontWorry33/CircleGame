@@ -1,0 +1,37 @@
+*Snap switches send Baker to a particular part of stage. With all bread back inside of it.
+
+Stage 1
+1. quad4Switch1 activates quad3VerPlatform1
+
+Stage 2 
+1. quad3Switch1 activates quad2VerPlatform1
+2. quad4Switch1 activates quad1VerPlatform1
+
+Stage 3
+1. quad1Switch1 activates quad2HorPlatform1
+2. quad2Switch1 activates quad1VerPlatform1
+3. quad3Switch1 resets Characters to quad3Hor1
+4. quad4Switch1 activates quad3VerPlatform1
+
+Stage 4
+1. quad2Switch1 displaces Roti quad2 (to itself)
+2. quad2Switch2 activates quad3HorPlatform1
+3. quad3Switch1 activates quad4HorPlatform1
+4. quad3Switch2 activates quad4VerPlatform1
+5. quad3Switch3 activates quad2HorPlatform1
+6. quad4Switch1 displaces Roti quad3 (Where Anpan is)
+7. quad4Switch2 activates quad3VerPlatform1
+
+Stage 5
+1. quad1Switch1 resets Characters to quad2
+2. quad3Switch1 resets Characters to quad1
+3. quad4Switch1 activates quad4VerPlatform1
+4. quad4Switch2 activates quad3VerPlatform1
+
+Stage 6
+1. quad1Switch1 activates quad1HorPlatform1
+2. quad2Switch1 resets Characters
+3. quad3Switch1 activates quad4VerPlatform1
+5. quad4Switch1 resets Characters
+6. quad4Switch2 activates quad3VerPlatform1
+	
