@@ -26,46 +26,88 @@ class Game
 	
 		Game(sf::RenderWindow* tmpWin);
 		//functions
+
+		//main loop
 		void run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//updates positions of all entities
 		void updateEntityPosition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+
+
+		//checks if a specific entity has anything touching the bottom of it (mainly for gravity) returns true if anything touching, otherwise false
 		bool bottomCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if a specific entity has anything touching the right side of it (mainly for roti repel power) returns true if anything touching, otherwise false
 		bool rightCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if a specific entity has anything touching the left side of it (mainly for roti repel power) returns true if anything touching, otherwise false
 		bool leftCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if a specific entity has anything touching the top of it (maily for roti attraction power) returns true if anything touching, otherwise false
 		bool topCircleCollision(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if gravity should be applied and does so if needed
 		void checkGravity(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int character);
+		//specifically for gravity, special checking
 		void checkBounds(Entity* entities[ENTITIES_MAX]);
+		//checks if a specific entity (boule) is touching any portal on the map, returns index of portal it is touching
 		int isTouchingPortal(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if a specific entity (boule) is touching any other bread on the map, returns index of bread it is touching
 		int isTouchingBread(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if a specific entity (the one being shot) is touching anything on any part of it based on collision points. returns true if so.
 		bool isTouchingSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//just checks top and bottom collision points for a specific entity. returns true if so.
 		bool isTouchingRotiSurface(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int x);
+		//checks if specific entity is hitting anything. Modifies argument (*data) and fills it with information about what was hit and which side
+		void checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int airborneEntity, bool isSwitch, int* data);
+		//sets obejct specific variables to do with movement. Esentially checks if entity can move or not
+		void motionCheck(int character, Entity* entities[ENTITIES_MAX],Stage* stages[STAGES_MAX]);
+
+
+		//checks if the baker is touching portal and initalizes all variables to swap to next stage
 		void swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//a while loop that exits upon pressing enter (so that we can display stats)
 		void initPostStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//does fade actions from current stage screen into the transition screens. After last transition screen loads, press Q to start next stage
 		void startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//resets level when you press R. Also called after moving on to next stage
 		void resetLevel(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 
-		void breadSelector(sf::Keyboard::Key key, int selectedEntity); 
-		void powerMetreUpdate(sf::Keyboard::Key key);	
+
+		//chooses which bread to shoot out upon pressing tab
+		void breadSelector(sf::Keyboard::Key key, int selectedEntity);
+		//updates power metre as you hold space
+		void powerMetreUpdate(sf::Keyboard::Key key);
+		//bread is selected upon clicking it
 		void entitySelector(Entity* entities[ENTITIES_MAX]);
+		//calcules position on the baker to position arrow according to mouse position
 		void Arrow(Entity* entities[ENTITIES_MAX]);
+		//applies trajectory to bread being shot
 		void trajectory(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX]); 
-		void checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX], int airborneEntity, bool isSwitch, int* data);
-		
+
+
+		//activates the attraction part of the roti power
 		void activateRotiPowerAlpha(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//sets variable for repulsion part of roti power based on outcome of activateRotipowerAlpha
 		void activateRotiPowerBeta(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//activates the anpan power (swapping)
 		void activateAnpanPower(Entity* entities[ENTITIES_MAX],Stage* stages[STAGES_MAX]);
+		//specific for the boule power. swaps background to "negated" and back
 		void swapBackground(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//activates boule power (negation, portals, switches)
 		void activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX],sf::Time elapsedTime);
 
-		void processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+
+		//initalizes the pause menu
 		int pauseMenuRun();
-
-
-		void motionCheck(int character, Entity* entities[ENTITIES_MAX],Stage* stages[STAGES_MAX]);
-		void update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
-		void render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
-
-		void updateStatistics(sf::Time elapsedTime);	
+		//processes events for the game (mouse movements, keypresses, etc)
+		void processEvents(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//handles player key presses
 		void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+		//updates many functions of the game including movement, shooting, etc
+		void update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//renders everything needed to the window
+		void render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+		//shows stats at the top of screen (fps, time per update, etc)
+		void updateStatistics(sf::Time elapsedTime);	
+
+
+		//destructor
 		~Game();
 		
 	
@@ -73,11 +115,7 @@ class Game
 		static const float PlayerSpeed;
 		static const sf::Time TimePerFrame;
 
-		//int* retValLeft;
-		//int* retValRight;
-		//int* retValS;
 		sf::RenderWindow* mWindow;		
-
 
 		//Arrow Indicator
 		sf::Texture mArrowTexture;
@@ -108,6 +146,7 @@ class Game
 		//mouse position
 		sf::Vector2i mMousePos;
 	
+
 		//statistics
 		sf::Font mFont;
 		sf::Text mStatisticsText;
@@ -115,22 +154,25 @@ class Game
 		std::size_t	mStatisticsNumFrames;
 
 
+		//currently elapsed time in the stage/text to draw
+		sf::Clock stageTime;
+		sf::Text stageTimeText;
+		//how long has elapsed during the stage
+		sf::Time currentStageTime;
+
+
+		//current points displayed while playing
+		sf::Text currentPointsText;
+		//display points in the post screen
 		sf::Text postScreenText;
 
-
-		sf::Clock stageTime;
-		sf::Text currentPointsText;
-		sf::Text stageTimeText;
-
-		//power gauuge
+		//power gauge
 		sf::Sprite mPowerGaugeShell;
 		sf::CircleShape mPowerGaugeMetre;
-
 		sf::Texture mPowerGaugeShellTexture;
 		sf::Texture mPowerGaugeMetreTexture;
 
-
-	
+		//power gauge value
 		float powerMetre;
 
 		//Gravity
@@ -139,26 +181,29 @@ class Game
 		float gCurrent; //curent gravity
 		sf::Clock gravityClock; //measure time
 	
-	
+		//the index of which entity is selected
 		int currentEntityIndex;
+
+		//which bread is going to be fired % 3
 		int currentlySelected; 
+
+		//based on currentlySelected, is the integer value of the index of which bread is going to be fired
 		int shotChooser;
 
+		//locks mouse while bread is in the air to avoid complications
 		bool mouseLock;
-		bool rotiActivated;
 		
-		bool repulsionReadyA; //Baker pushed Leftwards
-		bool repulsionReadyB; //Baker pushed Rightwards
-		bool repulsionReadyC; //Baker pushed Downwards
-
+		//locks position of the baker when bread is the air to avoid complications
 		bool positionLock;
 
+		//if true, resets the game
 		bool mResetGame;
 
+		//Drawing the power metre only when needed
 		bool mDrawMetre;
 		bool mDrawNull;
 
-
+		//The sign that shows up in the top left of the screen when there is not enough space to swap with the Baker with anpan
 		sf::Texture mNullSignTexture;
 		sf::Sprite mNullSign;
 
@@ -168,35 +213,44 @@ class Game
 		//stores position of baker so we can manipulate  positionLock.
 		sf::Vector2f traj_pos;
 
+		//Display the sign for a certain amount of time
 		sf::Clock nullSignTime;
 		sf::Clock missingSignTime;
 
-		sf::Clock rotiShotTime;
-
-
+		//main game time variables
 		sf::Time elapsedTime;
 		sf::Clock clock;
 		sf::Time timeSinceLastUpdate;
 
-		sf::Time currentStageTime;
-
+		//negates gravity to move upwards during roti power
 		bool negateGravity;
 
+		//checks if roti is pulling the Baker
 		bool isBeingAttracted;
 
+		//checks if boule power is active
 		bool bouleActivated;
 
+		//variables for moving from portal->bread and bread->portal
 		bool portalTeleport;
 		bool breadTeleport;
 		bool bLock;
 		bool pLock;
 
-		bool displaced;
-		bool disp;
-		bool negate;
 
+		//checks if you were just displaced and still touching the displacement object you were sent to
+		bool displaced;
+
+		//displaces the platform for platform disappear switch
+		bool disp;
+
+		//the current stage you are on.
 		int currentStage;
+
+		//for multiple switches next to eachother, needed special logic
 		int tSwitch;
+		
+		//tells you which switch was displaced
 		int displacedSwitch;
 
 /*
@@ -208,35 +262,45 @@ class Game
    		sf::Music music5;
    		sf::Music music6;
 */
+   		//current song playing (we dont have any music yet but if we did....)
    		int currSong;
+   		
+   		//variables for roti power repel
    		bool rotiActive;
    		bool skipRoti;
    		bool skipBaker;
+
+   		//check if a point needs to be added for an action done in game
    		bool pointAdded;
 
+   		//debugging purposes
    		int itrnum;
 
+   		//values of how much baker/roti should be repulsed
   		sf::Vector2f bakerRepulsion;
 		sf::Vector2f rotiRepulsion;
 
+
+		//arrow resources
 		sf::Texture arrowTailImage;
 		sf::Sprite arrowTail;
 
+		//pause menu and transition arrays of pointers
 		Pause_Menu** pauseMenu; 
 		Transition** transitList;
 
+		//clock for fading in/out of things
 		sf::Clock fadeClock;
 
+		//post screen resources
 		sf::Texture postScreen_img;
 		sf::Sprite postScreen;
-
-
-
 		bool mDrawPostScreen;
+
+		//current points added up
 		int currentPoints;
 
-		int lastDownSwitchHit;
-
+		//prints debug messages
 		bool debug;
 
 
@@ -250,16 +314,17 @@ const sf::Time Game::TimePerFrame = sf::seconds(1.f/60.f);
 //instantiates most objects and sets starting values 
 Game::Game(sf::RenderWindow* tmpWin) : 
 			   mIsMovingUp(false), mIsMovingDown(false), mIsMovingRight(false),
-			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(), rotiActivated(false), 
+			   mIsMovingLeft(false), mIsSpaceBar(false), mTeleportation(false), mStatisticsText(), mStatisticsUpdateTime(),
 			   mFont(), mArrowTexture(), mPowerGaugeShell(), mPowerGaugeShellTexture() , mArrow(), g(0.6), 
 			   timePerGravityUpdate(0.0002), mPowerGaugeMetreTexture(), mPowerGaugeMetre(),  timePerShot(1), shotChooser(0), mNullSignTexture(), mNullSign(), nullSignTime(), missingSignTime(),
-			   rotiShotTime(), arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
+			   arrowTailImage(), arrowTail(), fadeClock(), postScreen(), postScreen_img(), stageTime()
 
 {
    // mWindow->create(sf::VideoMode(1200, 800), "CircleGame!");
    // mWindow->setFramerateLimit(120);
 
 	mWindow = tmpWin;
+
 	//set all statistics
 	mWindow->setFramerateLimit(60);
 	mStatisticsNumFrames = 0;
@@ -300,9 +365,11 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mPowerGaugeMetre.setOrigin(mPowerGaugeMetreTexture.getSize().x/2,mPowerGaugeMetreTexture.getSize().y/2);
 
 
+	//set null sign stuff
 	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
 
+	//set post game screen stuff
 	postScreen_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Layout.png");
 	postScreen.setTexture(postScreen_img);
 	mDrawPostScreen = false;
@@ -357,7 +424,6 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
 	displaced = false;
 	disp = false;
-	negate = false;
 
 	tSwitch = 0;
 	currSong = 0;
@@ -378,14 +444,11 @@ Game::Game(sf::RenderWindow* tmpWin) :
 
     itrnum = 0;
 
-    lastDownSwitchHit=-1;
-
 	//if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
 	//if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
 	//if (!music3.openFromFile("../Music/puzzlegametheme.ogg")) NULL; music.push_back(&music3);
 	//if (!music4.openFromFile("../Music/freneticpuzzlegame.ogg")) NULL; music.push_back(&music4);
 	//if (!music5.openFromFile("../Music/puzzlegamemusic.ogg")) NULL; music.push_back(&music5);
-    //LET CALLERS PER FUCNTION ALLOCATE ARRAY ON STACK THEN MODIFY IN CHECKHITTING AND RETURN!
 	//retValLeft = new int[2];
 	//retValRight = new int[2];
 	//retValS = new int[1];
@@ -396,7 +459,6 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	arrowTail.setTexture(arrowTailImage);
 
 	pauseMenu = new Pause_Menu* [STAGES_MAX];
-//NEED TO CREATE PAUSE MENUS FOR STAGES 7 - 15. Using prior pauseMenus in the meantime.
     
 	pauseMenu[0] = new Pause_Menu(mWindow, 
 		"../User_Interfaces/Pause_Screens/1Pause/1Pause_Default.png",
