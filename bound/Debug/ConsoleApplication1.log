@@ -1,0 +1,109 @@
+﻿Build started 12/24/2014 4:33:28 PM.
+     1>Project "C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\SFML-2.1\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\..\..\GitHub\CircleGame\Coding\main.cpp
+         main.cpp
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(78): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(82): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(83): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(110): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(114): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(115): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(128): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(129): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(146): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(148): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(149): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(190): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(192): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(193): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(216): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(243): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(245): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(246): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(275): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(278): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(298): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(300): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(301): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(322): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(324): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(325): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(353): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(354): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(374): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(379): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(380): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(383): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(384): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(387): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(388): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(391): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(392): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(396): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(399): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(400): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(433): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(436): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(459): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(460): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(471): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(476): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(477): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(479): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(480): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(482): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(483): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(485): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(486): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(489): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(490): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(492): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(493): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(529): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(532): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(552): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(553): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(564): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(568): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(569): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(571): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(572): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(574): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(575): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(577): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(578): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(581): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(582): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(584): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(585): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(628): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(631): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(653): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(654): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(665): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(667): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(669): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(670): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(672): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(673): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(675): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(676): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(678): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(679): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(681): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(682): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(684): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\github\circlegame\coding\entity.cpp(685): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\Debug\ConsoleApplication1.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\SFML-2.1\lib" "sfml-audio.lib" "sfml-graphics.lib" "sfml-window.lib" "sfml-system.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\Debug\ConsoleApplication1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\Debug\ConsoleApplication1.lib" /MACHINE:X86 Debug\Entity.obj
+         Debug\main.obj
+         Debug\Stage.obj
+         Debug\Bound.obj
+         ConsoleApplication1.vcxproj -> C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\Debug\ConsoleApplication1.exe
+     1>Done Building Project "C:\Users\dontworry\Documents\Visual Studio 2012\Projects\ConsoleApplication1\ConsoleApplication1\ConsoleApplication1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.54

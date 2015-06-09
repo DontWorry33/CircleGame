@@ -1,0 +1,81 @@
+Stage1
+
+• Lines
+	quad4Ver1 = 770, 782
+
+• Switches
+	quad4Switch1 = 1000, 780
+
+• Platforms
+	quad3VerPlatform1 = 490, 783
+
+• Portals
+	BakerPortal = 100, 600
+	RotiPortal = 900, 600
+	AnpanPortal = 1110, 600
+
+• Oven
+	Oven = 200,780
+______
+Stage2
+
+• Lines
+	quad1Hor1 = 218, 400
+	quad2Hor1 = 861, 394
+	quad2Hor2 = 784, 179
+	quad3Hor1 = 78, 682
+	quad3Ver1 = 178, 700
+	quad4Hor1 = 776, 790
+
+• Switches
+	quad3Switch1
+	quad4Switch1
+
+• Platforms
+	quad1VerPlatform1 = 530, 360
+	quad2VerPlatform1 = 710, 160
+
+• Portals
+	BakerPortal = 995, 740
+
+• Ovens
+	Oven = 300, 800
+______
+Stage3
+
+• Lines
+	quad1Hor1 = 263, 180
+	quad1Hor2 = 389, 380
+	quad1Ver1 = 513, 380
+	quad2Hor1 = 613, 380
+	quad2Hor2 = 1138, 220
+	quad3Hor1 = 78, 628
+	quad4Hor1 = 773, 582
+	quad4Hor2 = 951, 496
+	quad4Ver1 = 704, 553
+	quad4Ver2 = 704, 679
+	quad4Ver3 = 868, 582
+	quad4Ver4 = 1100, 723
+
+• Switches
+	quad1Switch1 = 95, 159
+	quad1Switch2 = 417, 159
+	quad2Switch1 = 995, 363
+	quad2Switch2 = 1158, 201
+	quad3Switch1 = 104, 778
+	quad4Switch1 = 952, 462
+	quad4Switch2 = 1164, 781
+
+• Platforms
+	quad2VerPlatform1 = 691, 347
+	quad2VerPlatform2 = 865, 347
+	quad2HorPlatform1 = 953m 379
+	quad3VerPlatform1 = 353, 771
+
+• Portals
+	BakerPortal = 1145, 359
+	RotiPortal = 1017, 250
+	AnpanPortal = 263, 147
+
+• Oven
+	Oven = 470, 351

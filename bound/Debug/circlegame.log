@@ -1,0 +1,515 @@
+﻿Build started 6/9/2015 1:07:56 AM.
+     1>Project "C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\circlegame.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"C:\SFML-2.1\include" /Zi /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt coding\Bound.cpp coding\Entity.cpp coding\main.cpp Coding\Option.cpp coding\Stage.cpp Coding\Transition.cpp Coding\UI.cpp
+         UI.cpp
+     1>Coding\UI.cpp(88): warning C4018: '<' : signed/unsigned mismatch
+     1>Coding\UI.cpp(199): warning C4018: '<' : signed/unsigned mismatch
+     1>Coding\UI.cpp(306): warning C4018: '<' : signed/unsigned mismatch
+     1>Coding\UI.cpp(386): warning C4305: '-=' : truncation from 'double' to 'float'
+         Transition.cpp
+         Stage.cpp
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(88): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(91): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(92): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(119): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(124): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(125): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(138): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(159): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(161): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(162): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(203): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(205): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(206): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(229): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(259): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(260): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(291): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(294): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(314): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(316): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(317): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(338): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(340): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(341): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(369): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(370): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(390): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(396): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(399): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(400): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(403): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(404): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(407): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(408): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(411): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(412): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(415): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(416): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(419): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(420): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(423): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(424): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(461): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(464): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(490): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(491): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(502): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(507): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(508): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(510): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(511): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(513): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(514): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(516): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(517): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(520): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(521): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(523): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(524): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(526): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(527): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(529): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(530): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(568): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(571): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(595): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(596): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(607): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(611): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(612): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(614): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(615): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(617): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(618): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(620): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(621): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(624): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(625): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(627): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(628): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(631): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(632): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(634): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(635): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(680): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(683): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(707): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(708): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(719): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(721): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(723): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(724): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(726): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(727): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(729): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(730): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(732): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(733): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(735): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(736): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(738): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(739): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(742): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(743): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(745): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(746): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         Option.cpp
+         main.cpp
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(88): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(91): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(92): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(119): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(124): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(125): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(138): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(159): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(161): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(162): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(203): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(205): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(206): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(229): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(259): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(260): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(291): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(294): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(314): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(316): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(317): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(338): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(340): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(341): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(369): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(370): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(390): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(396): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(399): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(400): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(403): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(404): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(407): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(408): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(411): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(412): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(415): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(416): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(419): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(420): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(423): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(424): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(461): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(464): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(490): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(491): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(502): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(507): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(508): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(510): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(511): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(513): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(514): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(516): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(517): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(520): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(521): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(523): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(524): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(526): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(527): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(529): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(530): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(568): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(571): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(595): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(596): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(607): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(611): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(612): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(614): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(615): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(617): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(618): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(620): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(621): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(624): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(625): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(627): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(628): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(631): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(632): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(634): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(635): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(680): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(683): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(707): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(708): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(719): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(721): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(723): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(724): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(726): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(727): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(729): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(730): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(732): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(733): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(735): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(736): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(738): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(739): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(742): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(743): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(745): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(746): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(88): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(199): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(306): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(386): warning C4305: '-=' : truncation from 'double' to 'float'
+         Entity.cpp
+     1>coding\Entity.cpp(88): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(91): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(92): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(119): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(124): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(125): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(138): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(159): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(161): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(162): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(203): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(205): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(206): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(229): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(259): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(260): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(291): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(294): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(314): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(316): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(317): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(338): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(340): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(341): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(369): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(370): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(390): warning C4305: '=' : truncation from 'double' to 'float'
+     1>coding\Entity.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(396): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(399): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(400): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(403): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(404): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(407): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(408): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(411): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(412): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(415): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(416): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(419): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(420): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(423): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(424): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(461): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(464): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(490): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(491): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(502): warning C4305: '=' : truncation from 'double' to 'float'
+     1>coding\Entity.cpp(507): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(508): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(510): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(511): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(513): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(514): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(516): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(517): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(520): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(521): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(523): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(524): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(526): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(527): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(529): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(530): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(568): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(571): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(595): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(596): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(607): warning C4305: '=' : truncation from 'double' to 'float'
+     1>coding\Entity.cpp(611): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(612): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(614): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(615): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(617): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(618): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(620): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(621): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(624): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(625): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(627): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(628): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(631): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(632): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(634): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(635): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(680): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(683): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Entity.cpp(707): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(708): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Entity.cpp(719): warning C4305: '=' : truncation from 'double' to 'float'
+     1>coding\Entity.cpp(721): warning C4305: '=' : truncation from 'double' to 'float'
+     1>coding\Entity.cpp(723): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(724): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(726): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(727): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(729): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(730): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(732): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(733): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(735): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(736): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(738): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(739): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(742): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(743): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(745): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Entity.cpp(746): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         Bound.cpp
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(88): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(91): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(92): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(119): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(124): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(125): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(138): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(139): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(159): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(161): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(162): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(203): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(205): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(206): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(229): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(257): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(259): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(260): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(291): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(294): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(314): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(316): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(317): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(338): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(340): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(341): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(369): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(370): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(390): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(395): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(396): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(399): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(400): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(403): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(404): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(407): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(408): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(411): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(412): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(415): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(416): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(419): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(420): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(423): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(424): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(461): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(464): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(490): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(491): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(502): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(507): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(508): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(510): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(511): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(513): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(514): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(516): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(517): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(520): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(521): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(523): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(524): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(526): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(527): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(529): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(530): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(568): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(571): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(595): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(596): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(607): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(611): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(612): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(614): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(615): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(617): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(618): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(620): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(621): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(624): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(625): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(627): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(628): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(631): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(632): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(634): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(635): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(680): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(683): warning C4244: '=' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(707): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(708): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(719): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(721): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(723): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(724): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(726): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(727): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(729): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(730): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(732): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(733): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(735): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(736): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(738): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(739): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(742): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(743): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(745): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\Entity.cpp(746): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(88): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(199): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(306): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\UI.cpp(386): warning C4305: '-=' : truncation from 'double' to 'float'
+     1>coding\Bound.cpp(28): warning C4305: 'initializing' : truncation from 'double' to 'const float'
+     1>coding\Bound.cpp(70): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Bound.cpp(71): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
+     1>coding\Bound.cpp(428): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(441): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(457): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(473): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(646): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(647): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(649): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(650): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(652): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(653): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(655): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(656): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(658): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(659): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(661): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(662): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(664): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(665): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(667): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(668): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(676): warning C4244: 'initializing' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(677): warning C4244: 'initializing' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(680): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(683): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(685): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>coding\Bound.cpp(686): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>coding\Bound.cpp(1514): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>coding\Bound.cpp(1987): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(2425): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(2426): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>coding\Bound.cpp(2770): warning C4244: '=' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(2808): warning C4244: '=' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(2846): warning C4244: '=' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(2884): warning C4244: '=' : conversion from 'const float' to 'int', possible loss of data
+     1>coding\Bound.cpp(2890): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>coding\Bound.cpp(2891): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Generating Code...
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\ui.cpp(402): warning C4715: 'AboutPage::MainLoop' : not all control paths return a value
+     1>c:\users\dontworry\documents\visual studio 2012\projects\proj1\coding\ui.cpp(300): warning C4715: 'Tutorial_Menu::MainLoop' : not all control paths return a value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\Debug\circlegame.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\SFML-2.1\lib" "sfml-graphics-d.lib" "sfml-window-d.lib" "sfml-system-d.lib" "sfml-audio-d.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\Debug\circlegame.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\Debug\circlegame.lib" /MACHINE:X86 Debug\Bound.obj
+         Debug\Entity.obj
+         Debug\main.obj
+         Debug\Option.obj
+         Debug\Stage.obj
+         Debug\Transition.obj
+         Debug\UI.obj
+         circlegame.vcxproj -> C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\Debug\circlegame.exe
+     1>Done Building Project "C:\Users\dontworry\Documents\Visual Studio 2012\Projects\proj1\circlegame.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.15
