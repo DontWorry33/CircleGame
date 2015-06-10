@@ -160,11 +160,12 @@ class Game
 		//how long has elapsed during the stage
 		sf::Time currentStageTime;
 
-
 		//current points displayed while playing
 		sf::Text currentPointsText;
 		//display points in the post screen
 		sf::Text postScreenText;
+		//displays formula for points
+		sf::Text pointsInfoText;
 
 		//power gauge
 		sf::Sprite mPowerGaugeShell;
@@ -297,8 +298,22 @@ class Game
 		sf::Sprite postScreen;
 		bool mDrawPostScreen;
 
+
 		//current points added up
 		int currentPoints;
+		int totalPoints;
+
+		//medal resources for post-game screen
+		sf::Texture gold_medal_img;
+		sf::Texture silver_medal_img;
+		sf::Texture bronze_medal_img;
+
+		sf::Sprite gold_medal;
+		sf::Sprite silver_medal;
+		sf::Sprite bronze_medal;
+		sf::Sprite medal_right;
+		//decides which medal, 1=gold, 2=silver, 3=bronze;
+		int medalToDraw;
 
 		//prints debug messages
 		bool debug;
@@ -338,11 +353,16 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	postScreenText.setColor(sf::Color::Black);
 	postScreenText.setCharacterSize(35);
 
+
 	currentPointsText.setFont(mFont);
 	currentPointsText.setColor(sf::Color::Black);
 	currentPointsText.setCharacterSize(30);
 	currentPointsText.setPosition(900,10);
 	
+	pointsInfoText.setFont(mFont);
+	pointsInfoText.setColor(sf::Color::Black);
+	pointsInfoText.setCharacterSize(25);
+	pointsInfoText.setFont(mFont);
 
 	stageTimeText.setFont(mFont);
 	stageTimeText.setColor(sf::Color::Black);
@@ -369,11 +389,20 @@ Game::Game(sf::RenderWindow* tmpWin) :
 	mNullSignTexture.loadFromFile("../Stage_Images/Universal_StageParts/Stage_NullSign.png");
 	mNullSign.setTexture(mNullSignTexture);
 
+	gold_medal_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Gold.png");
+	silver_medal_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Silver.png");
+	bronze_medal_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Bronze.png");
+
+	gold_medal.setTexture(gold_medal_img);
+	silver_medal.setTexture(silver_medal_img);
+	bronze_medal.setTexture(bronze_medal_img);
+
 	//set post game screen stuff
-	postScreen_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Layout.png");
+	postScreen_img.loadFromFile("../User_Interfaces/Scoring_Screens/Scoring_Layout_New.png");
 	postScreen.setTexture(postScreen_img);
 	mDrawPostScreen = false;
 	currentPoints = 0;
+	totalPoints = 0;
 
 	//current entity index is the bread which is clicked
 	currentEntityIndex = 0;
@@ -443,6 +472,7 @@ Game::Game(sf::RenderWindow* tmpWin) :
     debug = false;
 
     itrnum = 0;
+    medalToDraw = 0;
 
 	//if (!music1.openFromFile("../Music/bossX.ogg")) NULL; music.push_back(&music1);
 	//if (!music2.openFromFile("../Music/puzzlegamebackgroundmusic.ogg")) NULL; music.push_back(&music2);
@@ -1024,6 +1054,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mIsMovingUp = false;
 		mIsMovingDown = false;
 
+		totalPoints  = totalPoints + stages[currentStage]->averagePoints+(stages[currentStage]->averagePoints-currentPoints);
 		mDrawPostScreen = true;
 		render(entities,stages);
 		initPostStage(entities,stages);
@@ -1054,6 +1085,7 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 		mIsMovingUp = false;
 		mIsMovingDown = false;
 		
+		totalPoints = totalPoints + stages[currentStage]->averagePoints+(stages[currentStage]->averagePoints-currentPoints);
 		mDrawPostScreen = true;
 		render(entities,stages);
 		initPostStage(entities,stages);
@@ -1073,18 +1105,35 @@ void Game::swapStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 
 void Game::initPostStage(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 {
+		//(735,289) -tl , (795,343) -br, (735,343) -bl, (795,289) - tr
 		
 		sf::Event event4;
 		while (true)
 		{
 			while (mWindow->pollEvent(event4))
 			{
+				mMousePos = sf::Mouse::getPosition(*(mWindow));
 				switch (event4.type)
 				{
 					case sf::Event::KeyPressed:
 						if (event4.key.code == sf::Keyboard::Return) return;
-
+						break;
+					case sf::Event::Closed:
+						mWindow->close();
+						break;
 				}
+				std::cout << "mmouseX: " << mMousePos.x << "\tmMouseY: " << mMousePos.y << std::endl;
+			}
+
+			if (mMousePos.x >= 735 && mMousePos.x <= 795 && mMousePos.y >=289 && mMousePos.y <= 343)
+			{
+				mWindow->draw(pointsInfoText);
+				mWindow->display();
+			}
+			else 
+			{
+				render(entities,stages);
+
 			}
 
 		}
@@ -1169,6 +1218,10 @@ void Game::startTransition(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_
 				{
 					case sf::Event::KeyPressed:
 						if (event3.key.code == sf::Keyboard::Q) return;
+						break;
+					case sf::Event::Closed:
+						mWindow->close();
+						break;
 
 				}
 			}
@@ -1476,6 +1529,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 								if (sw<tSwitch)
 								{
 									//std::cout << "within" << std::endl;
+									std::cout << "ONE OF US IS STUPID 1" << std::endl;
 									if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 									if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y <= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
 									stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->activatePlatform = false;
@@ -1490,6 +1544,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 								{
 									if (sw>tSwitch)
 									{
+										std::cout << "ONE OF US IS STUPID 2" << std::endl;
 										if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 										if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y<= stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eStartPos.y) stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.move(0, 100*elapsedTime.asSeconds());
 										stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->activatePlatform = false;
@@ -1508,6 +1563,7 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 					else if (stages[currentStage]->switches[tSwitch]->switchType == 1)
 						{
 							//std::cout << "SWAPPING TEXTURE BACK ON: " << tSwitch << std::endl;
+								std::cout << "ONE OF US IS STUPID 3" << std::endl;
 								stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
 								stages[currentStage]->switches[tSwitch]->switchUsed = false;					
 
@@ -1583,16 +1639,22 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			{
 				std::cout << currentSwitch[0] << std::endl;
 				std::cout << "platform dissappear switch activated" << std::endl;
-				//stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.setTexture(stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->disappear,true);
+					//stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.setTexture(stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->disappear,true);
 				if (stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.getPosition().x <= 0) 
 					{
+
+						stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = false;
+						std::cout << "SWAPPING BACK TO NORMAL " << std::endl;
 						stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.setPosition(stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eStartPos);
 						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture);
 					}
 				else
 					{
+						stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->activatePlatform = true;
+						std::cout << "SWAPPING TO HIT" << std::endl;
 						stages[currentStage]->platforms[stages[currentStage]->switches[currentSwitch[0]]->platformToActivate]->eSprite.setPosition(-999,-999);
 						stages[currentStage]->switches[currentSwitch[0]]->eSprite.setTexture(stages[currentStage]->switches[currentSwitch[0]]->eTexture2);
+						std::cout << "SWAPPED TEXTURE" << std::endl;
 
 					}
 
@@ -1618,6 +1680,8 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 								if (sw<tSwitch)
 								{
 									//std::cout << "within" << std::endl;
+									std::cout << "ONE OF US IS STUPID 4" << std::endl;
+									
 									if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 
 									if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y >= 
@@ -1636,6 +1700,8 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 								{
 									if (sw>tSwitch)
 									{
+										std::cout << "ONE OF US IS STUPID 5" << std::endl;
+										
 										if (stages[currentStage]->switches[sw]->switchUsed) stages[currentStage]->switches[sw]->eSprite.setTexture(stages[currentStage]->switches[sw]->eTexture);
 
 										if (stages[currentStage]->platforms[stages[currentStage]->switches[sw]->platformToActivate]->eSprite.getPosition().y >= 
@@ -1672,7 +1738,11 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 						stages[currentStage]->platforms[stages[currentStage]->switches[tSwitch]->platformToActivate]->activatePlatform = false;
 					}
 
-					if (tSwitch >= 0 && stages[currentStage]->platforms[stages[currentStage]->switches[tSwitch]->platformToActivate]->activatePlatform == false) stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
+					if (tSwitch >= 0 && stages[currentStage]->platforms[stages[currentStage]->switches[tSwitch]->platformToActivate]->activatePlatform == false) 
+					{
+						std::cout << "ONE OF US IS STUPID 6" << std::endl;
+						stages[currentStage]->switches[tSwitch]->eSprite.setTexture(stages[currentStage]->switches[tSwitch]->eTexture);
+					}
 				}
 
 				//SWITCH 6
@@ -1714,7 +1784,11 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 			if (currentSwitch[0] < 0) 
 			{
 				displaced = false;	
-				if (displacedSwitch!=-1) stages[currentStage]->switches[displacedSwitch]->eSprite.setTexture(stages[currentStage]->switches[displacedSwitch]->eTexture);
+				if (displacedSwitch!=-1) 
+					{
+						std::cout << "swapping texture back!" << std::endl;
+						stages[currentStage]->switches[displacedSwitch]->eSprite.setTexture(stages[currentStage]->switches[displacedSwitch]->eTexture);
+					}
 				disp = false;
 
 			}
@@ -2550,7 +2624,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				entities[airborneEntity]->bottomRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					std::cout << "brc" << std::endl;
+					//std::cout << "brc" << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -2560,7 +2634,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				entities[airborneEntity]->bottomLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					std::cout << "blc" << std::endl;
+					//td::cout << "blc" << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -2570,7 +2644,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				entities[airborneEntity]->bottomLLCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					std::cout << "bllc" << std::endl;
+					//std::cout << "bllc" << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -2581,7 +2655,7 @@ void Game::checkHitting(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX
 				entities[airborneEntity]->bottomRRCircle[0] <= stages[currentStage]->switches[a]->eBounds.x + stages[currentStage]->switches[a]->eTextureSize.x)
 				{
 					//entities[x]->cCircle.setPosition(entities[x]->cCircle.getPosition().x , stages[currentStage]->lines[a]->eBounds.y-(entities[x]->cRadius));
-					std::cout << "brrc" << std::endl;
+					//std::cout << "brrc" << std::endl;
 					data[0] = a;
 					return;
 				}
@@ -3282,8 +3356,39 @@ void Game::render(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 	}
 	if (mDrawPostScreen) 
 	{
-		postScreenText.setPosition(422,300);
-		postScreenText.setString(toString(currentPoints) + "\n\n\n" + "50+(50-" + toString(currentPoints) + ") = " + toString(50+(50-currentPoints)));
+		//(735,289) -tl , (795,343) -br, (735,343) -bl, (795,289) - tr
+		//stages[currentStage]->averagePoints+(stages[currentStage]->averagePoints-currentPoints) = current points earned on a stage with the formula
+
+		if (currentPoints <= stages[currentStage]->goldMedal) 
+		{
+			medalToDraw = 1;
+			medal_right.setTexture(gold_medal_img);
+		}
+		else if (currentPoints <= stages[currentStage]->silverMedal)
+		{
+			medalToDraw = 2;
+			medal_right.setTexture(silver_medal_img);
+		} 
+		else
+		{
+			medalToDraw = 3;
+			medal_right.setTexture(bronze_medal_img);
+		} 
+
+		gold_medal.setPosition(150,250);
+		silver_medal.setPosition(gold_medal.getPosition());
+		bronze_medal.setPosition(gold_medal.getPosition());
+
+		medal_right.setPosition(gold_medal.getPosition().x+735, gold_medal.getPosition().y);
+
+		if (medalToDraw == 1) mWindow->draw(gold_medal);
+		if (medalToDraw == 2) mWindow->draw(silver_medal);
+		if (medalToDraw == 3) mWindow->draw(bronze_medal);
+		mWindow->draw(medal_right);
+		pointsInfoText.setPosition(340,350);
+		pointsInfoText.setString("Average for this stage: "+toString(stages[currentStage]->averagePoints)+"\n Curernt Points: " + toString(currentPoints) + ": "+toString(stages[currentStage]->averagePoints)+"+("+toString(stages[currentStage]->averagePoints)+"-" + toString(currentPoints) + ") = " + toString(stages[currentStage]->averagePoints+(stages[currentStage]->averagePoints-currentPoints)));
+		postScreenText.setPosition(340,300);
+		postScreenText.setString("Points for this stage: " + toString(stages[currentStage]->averagePoints+(stages[currentStage]->averagePoints-currentPoints)) + "\n\n\n" + "Current Total: " + toString(totalPoints));
 		mWindow->draw(postScreen);
 		mWindow->draw(postScreenText);
 	}

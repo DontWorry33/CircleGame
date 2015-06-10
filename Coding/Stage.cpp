@@ -25,6 +25,12 @@ struct Stage
 	int switchCount;
 	int portalCount;
 
+    //avg points for Stage
+    int averagePoints;
+    //represents high value for each medal, 1-goldMedal = gold, goldMedal+1-silverMedal = silver, anything > silverMedal+1 = bronze
+    int goldMedal;
+    int silverMedal;
+
 	Oven* oven;
 };
 
@@ -36,7 +42,9 @@ struct Stage1 : public Stage
 	Stage1(const char* bkg_filename)
 	{
 
-        //Dedie: Done.
+        averagePoints = 4;
+        goldMedal = 2;
+        silverMedal = 4;
 
         bakerStartPos.x = 600;
         bakerStartPos.y = 700;
@@ -95,7 +103,11 @@ struct Stage2 : public Stage
 
 	Stage2(const char* bkg_filename)
 	{
-        
+        averagePoints = 13;
+        goldMedal = 8;
+        silverMedal = 13;
+
+
         bakerStartPos.x = 500;
         bakerStartPos.y = 780;
         
@@ -160,6 +172,10 @@ struct Stage3 : public Stage
     
     Stage3(const char* bkg_filename)
     {
+
+        averagePoints = 15;
+        goldMedal = 8;
+        silverMedal = 15;
  
         bakerStartPos.x = 900;
         bakerStartPos.y = 100;
@@ -229,6 +245,10 @@ struct Stage4 : public Stage
     
     Stage4(const char* bkg_filename)
     {
+
+        averagePoints = 6;
+        goldMedal = 4;
+        silverMedal = 6;
         //Dedie: Done.
         
         bakerStartPos.x = 600;
@@ -290,7 +310,11 @@ struct Stage5 : public Stage
     Stage5(const char* bkg_filename)
     {
         //Dedie: Done.
-        
+
+        averagePoints = 15;
+        goldMedal = 11;
+        silverMedal = 18;
+
         bakerStartPos.x = 212;
         bakerStartPos.y = 248;
         
@@ -358,6 +382,10 @@ struct Stage6 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 10;
+        goldMedal = 7;
+        silverMedal = 10;
+
         bakerStartPos.x = 630;
         bakerStartPos.y = 230;
 
@@ -385,8 +413,8 @@ struct Stage6 : public Stage
         lines[5] = new Line ("../Stage_Images/Stage6/quad4Hor2.png", 1112, 830);
         lines[6] = new Line ("../Stage_Images/Stage6/quad4Ver1.png", 936, 597);
         
-        switches[0] = new Switch("../Stage_Images/Stage6/quad2Switch1.png", 1146,163,1,4);
-        switches[1] = new Switch("../Stage_Images/Stage6/quad3Switch1.png", 40,560,2,4);
+        switches[1] = new Switch("../Stage_Images/Stage6/quad2Switch1.png", 1146,163,1,4);
+        switches[0] = new Switch("../Stage_Images/Stage6/quad3Switch1.png", 40,560,2,4);
         switches[2] = new Switch("../Stage_Images/Stage6/quad4Switch1.png", 1168,732,0,5);
         
         
@@ -424,6 +452,10 @@ struct Stage7 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 9;
+        goldMedal = 7;
+        silverMedal = 9;
+
         bakerStartPos.x = 135;
         bakerStartPos.y = 620;
         
@@ -485,6 +517,10 @@ struct Stage8 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 11;
+        goldMedal = 9;
+        silverMedal = 11;
+
         bakerStartPos.x = 460;
         bakerStartPos.y = 630;
         
@@ -552,7 +588,10 @@ struct Stage9 : public Stage
     Stage9(const char* bkg_filename)
     {
         //Dedie: Done.
-        
+
+        averagePoints = 6;
+        goldMedal = 4;
+        silverMedal = 6;        
         bakerStartPos.x = 240;
         bakerStartPos.y = 210;
         
@@ -583,7 +622,7 @@ struct Stage9 : public Stage
         lines[7] = new Line ("../Stage_Images/Stage9/quad4Hor1.png", 910, 564);
         lines[8] = new Line ("../Stage_Images/Stage9/quad4Ver1.png", 1046, 780);
         
-        switches[0] = new Switch("../Stage_Images/Stage9/quad1Switch1.png", 530,250,1,4);
+        switches[0] = new Switch("../Stage_Images/Stage9/quad1Switch1.png", 530,246,1,4);
         switches[1] = new Switch("../Stage_Images/Stage9/quad2Switch1.png", 1000,320,0,4);
         switches[2] = new Switch("../Stage_Images/Stage9/quad4Switch1.png", 1160,783,2,480, 450);
         
@@ -619,6 +658,10 @@ struct Stage10 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 10;
+        goldMedal = 7;
+        silverMedal = 10;
+
         bakerStartPos.x = 240;
         bakerStartPos.y = 190;
         
@@ -690,6 +733,10 @@ struct Stage11 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 15;
+        goldMedal = 12;
+        silverMedal = 15;
+
         bakerStartPos.x = 585;
         bakerStartPos.y = 130;
         
@@ -715,7 +762,7 @@ struct Stage11 : public Stage
         lines[2] = new Line ("../Stage_Images/Stage11/quad3Hor1.png", 186, 790);
         lines[3] = new Line ("../Stage_Images/Stage11/quad3Hor2.png", 382, 493);
         lines[4] = new Line ("../Stage_Images/Stage11/quad3Ver1.png", 222, 493);
-        lines[5] = new Line ("../Stage_Images/Stage11/quad4Hor1.png", 882, 390);
+        lines[5] = new Line ("../Stage_Images/Stage11/quad4Hor1.png", 882, 400);
         lines[6] = new Line ("../Stage_Images/Stage11/quad4Hor2.png", 882, 492);
         lines[7] = new Line ("../Stage_Images/Stage11/quad4Ver1.png", 994, 492);
         
@@ -729,13 +776,13 @@ struct Stage11 : public Stage
         platforms[0] = new Platform ("../Stage_Images/Stage11/quad1HorPlatform1.png", 336, 276, 0, 0);
         platforms[1] = new Platform ("../Stage_Images/Stage11/quad3VerPlatform1.png", 220, 730, 0, 0);
         platforms[2] = new Platform ("../Stage_Images/Stage11/quad3VerPlatform2.png", 530, 780, 0, 0);
-        platforms[3] = new Platform ("../Stage_Images/Stage11/quad4HorPlatform1.png", 660, 490, 455, 0);
+        platforms[3] = new Platform ("../Stage_Images/Stage11/quad4HorPlatform1.png", 660, 490, 375, 0);
         
         
         portals[0] = new Portal(730,190,1);
         portals[1] = new Portal(850,770,2);
         
-        oven = new Oven(940,350);
+        oven = new Oven(940,357);
     }
     
     ~Stage11()
@@ -762,6 +809,10 @@ struct Stage12 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 10;
+        goldMedal = 8;
+        silverMedal = 11;
+
         bakerStartPos.x = 105;
         bakerStartPos.y = 90;
         
@@ -831,6 +882,10 @@ struct Stage13 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 11;
+        goldMedal = 7;
+        silverMedal = 11;
+
         bakerStartPos.x = 740;
         bakerStartPos.y = 100;
         
@@ -897,6 +952,10 @@ struct Stage14 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 11;
+        goldMedal = 8;
+        silverMedal = 11;
+
         bakerStartPos.x = 870;
         bakerStartPos.y = 50;
         
@@ -931,7 +990,7 @@ struct Stage14 : public Stage
         
         platforms[0] = new Platform ("../Stage_Images/Stage14/quad1VerPlatform1.png", 270, 270, 0, 0);
         platforms[2] = new Platform ("../Stage_Images/Stage14/quad4VerPlatform1.png", 680, 1180, 610, 0);
-        platforms[1] = new Platform ("../Stage_Images/Stage14/quad3VerPlatform1.png", 370, 1165, 540, 0);
+        platforms[1] = new Platform ("../Stage_Images/Stage14/quad3VerPlatform1.png", 370, 1165, 525, 0);
         
         portals[0] = new Portal(760,310,0);
         portals[1] = new Portal(1080,770,1);
@@ -963,6 +1022,10 @@ struct Stage15 : public Stage
     {
         //Dedie: Done.
         
+        averagePoints = 15;
+        goldMedal = 10;
+        silverMedal = 15;
+
         bakerStartPos.x = 390;
         bakerStartPos.y = 430;
         
