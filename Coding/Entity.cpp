@@ -90,7 +90,7 @@ struct Switch : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-        if (!eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Switch_Hit.png")) std::cout << "can't load switch hit" << std:endl;
+        if (!eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Switch_Hit.png")) std::cout << "can't load switch hit" << std::endl;
 		eStartPos.x = startPosX;
 		eStartPos.y = startPosY-eTextureSize.y/2;
 

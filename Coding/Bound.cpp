@@ -20,6 +20,7 @@
 #define STAGES_MAX 15
 #define G_MAX 160.0
 
+
 class Game
 {
 	public:
@@ -91,6 +92,9 @@ class Game
 		void swapBackground(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
 		//activates boule power (negation, portals, switches)
 		void activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX],sf::Time elapsedTime);
+		//increments point counter and checks to make sure we can't go into negatives
+		void currentPointIncrement(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX]);
+
 
 
 		//initalizes the pause menu
@@ -903,8 +907,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						//std::cout << "applying baker force" << std::endl;
 						if (!skipBaker) std::cout << "starting skip baker" << std::endl;
 						skipBaker=true;
-						if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl; currentPoints+=1;}
-						if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl; currentPoints+=1;}
+						if (bakerRepulsion.x > 0) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "baker, > 0" << std::endl; currentPointIncrement(entities,stages);}
+						if (bakerRepulsion.x < 0) if (leftCircleCollision(entities,stages,0)) { rotiActive = false; std::cout << "baker, < 0" << std::endl; currentPointIncrement(entities,stages);}
 						entities[0]->cCircle.move( bakerRepulsion * elapsedTime.asSeconds());
 					}
 					else
@@ -918,8 +922,8 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 						//std::cout << "applying roti force" << std::endl;
 						if (!skipRoti) std::cout << "starting skip roti" << std::endl;
 						skipRoti = true;
-						if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl; currentPoints+=1;}
-						if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl; currentPoints+=1;}
+						if (rotiRepulsion.x > 0) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, > 0" << std::endl; currentPointIncrement(entities,stages);}
+						if (rotiRepulsion.x < 0) if (leftCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "roti, < 0" << std::endl; currentPointIncrement(entities,stages);}
 						entities[1]->cCircle.move( rotiRepulsion * elapsedTime.asSeconds());
 					}
 					else
@@ -934,12 +938,12 @@ void Game::run(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
 					//BUG WITH THIS! WHEN ROTI/BAKER ARE AT TOP, I THINK IT TRIGGERS BL OR
 					if ( (isTouchingRotiSurface(entities,stages,0) || (entities[0]->cCircle.getPosition().y >=  785-entities[0]->cRadius)) && (isTouchingRotiSurface(entities,stages,1) || (entities[1]->cCircle.getPosition().y >=  785-entities[1]->cRadius)))
 					{
-						if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c1" << std::endl; currentPoints+=1;}
-						if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c2" << std::endl; currentPoints+=1;}
-						if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c3" << std::endl; currentPoints+=1;}
-						if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c4" << std::endl; currentPoints+=1;}
+						if (bakerRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c1" << std::endl; currentPointIncrement(entities,stages);}
+						if (bakerRepulsion.x < 0 && (skipRoti || skipBaker)) if (leftCircleCollision(entities,stages,0)) { rotiActive=false; std::cout << "c2" << std::endl; currentPointIncrement(entities,stages);}
+						if (rotiRepulsion.x > 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c3" << std::endl; currentPointIncrement(entities,stages);}
+						if (rotiRepulsion.x < 0 && (skipRoti || skipBaker)) if (rightCircleCollision(entities,stages,1)) { rotiActive=false; std::cout << "c4" << std::endl; currentPointIncrement(entities,stages);}
 						std::cout << "rotiactive is false" << std::endl;
-						currentPoints+=1;
+						currentPointIncrement(entities,stages);
 						rotiActive = false;
 					}
 				}
@@ -1497,7 +1501,7 @@ void Game::swapBackground(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_M
 {
 	if(stages[currentStage]->background.getTexture() == &(stages[currentStage]->backgroundTexture)) 
 		{
-			currentPoints+=1;
+			currentPointIncrement(entities,stages);
 			stages[currentStage]->background.setTexture(stages[currentStage]->bouleTexture);
 			bouleActivated = true;
 		}
@@ -1868,6 +1872,12 @@ void Game::activateBoulePower(Entity* entities[ENTITIES_MAX], Stage* stages[STAG
 
 		}
 	
+}
+
+void Game::currentPointIncrement(Entity* entities[ENTITIES_MAX], Stage* stages[STAGES_MAX])
+{
+	if (currentPoints < (stages[currentStage]->averagePoints * 2)) currentPoints+=1;
+
 }
 
 void Game::breadSelector(sf::Keyboard::Key key, int selectedEntity)
@@ -3276,7 +3286,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 		if (currentlySelected%3 == 1 && !entities[1]->isCreated && !positionLock)
 		{
 
-			if (shotChooser != 1) currentPoints+=1;
+			if (shotChooser != 1) currentPointIncrement(entities,stages);
 			entities[1]->create();
 			entities[1]->cCircle.setPosition(entities[0]->cCircle.getPosition().x, entities[0]->cCircle.getPosition().y);
 			shotChooser = 1;
@@ -3284,7 +3294,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 
 		else if (currentlySelected%3 == 2 && !entities[2]->isCreated && !positionLock)
 		{
-			if (shotChooser != 2) currentPoints+=1;
+			if (shotChooser != 2) currentPointIncrement(entities,stages);
 			entities[2]->create();
 			entities[2]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 			shotChooser = 2;
@@ -3292,7 +3302,7 @@ void Game::update(sf::Time elapsedTime, Entity* entities[ENTITIES_MAX], Stage* s
 		
 		else if (currentlySelected%3 == 0 && !entities[3]->isCreated && !positionLock)
 		{
-			if (shotChooser != 3) currentPoints+=1;
+			if (shotChooser != 3) currentPointIncrement(entities,stages);
 			entities[3]->create();
 			entities[3]->cCircle.setPosition(entities[0]->cCircle.getPosition());
 			shotChooser = 3;
