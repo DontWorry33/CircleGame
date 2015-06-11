@@ -58,6 +58,8 @@ struct Entity
 	int move;
 
 	float* topCircle;
+	float* topLCircle;
+	float* topRCircle;
 	float* rightCircle;
 	float* bottomCircle;
 	float* leftCircle;
@@ -88,7 +90,7 @@ struct Switch : public Entity
 		eSprite.setTexture(eTexture);
 		eSprite.setOrigin(eTextureSize.x/2,eTextureSize.y/2);
 
-        eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Switch_Hit.png");
+        if (!eTexture2.loadFromFile("../Stage_Images/Universal_StageParts/Switch_Hit.png")) std::cout << "can't load switch hit" << std:endl;
 		eStartPos.x = startPosX;
 		eStartPos.y = startPosY-eTextureSize.y/2;
 
@@ -396,6 +398,14 @@ struct Baker : public Entity
 		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
 		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
 
+		topLCircle = new float[2];
+		topLCircle[0] = cCircle.getPosition().x + (cRadius*cos(5*PI/4));
+		topLCircle[1] = cCircle.getPosition().y + (cRadius*sin(5*PI/4));		
+
+		topRCircle = new float[2];
+		topRCircle[0] = cCircle.getPosition().x + (cRadius*cos(7*PI/4));
+		topRCircle[1] = cCircle.getPosition().y + (cRadius*sin(7*PI/4));
+
 		rightCircle = new float[2];
 		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
 		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
@@ -431,6 +441,8 @@ struct Baker : public Entity
 	{
 		std::cout << "destructing baker" << std::endl;
 		delete[] topCircle;
+		delete[] topLCircle;
+		delete[] topRCircle;
 		delete[] rightCircle;
 		delete[] bottomCircle;
 		delete[] leftCircle;
@@ -466,6 +478,8 @@ struct Roti : public Entity
 
 		eSprite2.setPosition(eStartPos2);
 		topCircle = new float[2];
+		topLCircle = new float[2];
+		topRCircle = new float[2];
 		rightCircle = new float[2];
 		bottomCircle = new float[2];
 		leftCircle = new float[2];
@@ -508,6 +522,12 @@ struct Roti : public Entity
 		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
 		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
 
+		topLCircle[0] = cCircle.getPosition().x + (cRadius*cos(5*PI/4));
+		topLCircle[1] = cCircle.getPosition().y + (cRadius*sin(5*PI/4));		
+
+		topRCircle[0] = cCircle.getPosition().x + (cRadius*cos(7*PI/4));
+		topRCircle[1] = cCircle.getPosition().y + (cRadius*sin(7*PI/4));
+
 		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
 		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
 
@@ -534,6 +554,8 @@ struct Roti : public Entity
 	{
 		std::cout << "destructing roti" << std::endl;
 		delete[] topCircle;
+		delete[] topLCircle;
+		delete[] topRCircle;
 		delete[] rightCircle;
 		delete[] bottomCircle;
 		delete[] leftCircle;
@@ -573,6 +595,8 @@ struct Anpan : public Entity
 
 		eSprite2.setPosition(eStartPos2);
 		topCircle = new float[2];
+		topLCircle = new float[2];
+		topRCircle = new float[2];
 		rightCircle = new float[2];
 		bottomCircle = new float[2];
 		leftCircle = new float[2];
@@ -612,6 +636,12 @@ struct Anpan : public Entity
 		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
 		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
 
+		topLCircle[0] = cCircle.getPosition().x + (cRadius*cos(5*PI/4));
+		topLCircle[1] = cCircle.getPosition().y + (cRadius*sin(5*PI/4));		
+
+		topRCircle[0] = cCircle.getPosition().x + (cRadius*cos(7*PI/4));
+		topRCircle[1] = cCircle.getPosition().y + (cRadius*sin(7*PI/4));
+
 		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
 		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
 
@@ -645,6 +675,8 @@ struct Anpan : public Entity
 	{
 		std::cout << "destructing Anpan" << std::endl;
 		delete[] topCircle;
+		delete[] topLCircle;
+		delete[] topRCircle;
 		delete[] rightCircle;
 		delete[] bottomCircle;
 		delete[] leftCircle;
@@ -686,6 +718,8 @@ struct Boule : public Entity
 		eSprite2.setPosition(eStartPos2);
 		//----------------------------
 		topCircle = new float[2];
+		topLCircle = new float[2];
+		topRCircle = new float[2];
 		rightCircle = new float[2];
 		bottomCircle = new float[2];
 		leftCircle = new float[2];
@@ -724,6 +758,12 @@ struct Boule : public Entity
 		topCircle[0] = cCircle.getPosition().x + (cRadius*cos(3*PI/2));
 		topCircle[1] = cCircle.getPosition().y + (cRadius*sin(3*PI/2));
 
+		topLCircle[0] = cCircle.getPosition().x + (cRadius*cos(5*PI/4));
+		topLCircle[1] = cCircle.getPosition().y + (cRadius*sin(5*PI/4));		
+
+		topRCircle[0] = cCircle.getPosition().x + (cRadius*cos(7*PI/4));
+		topRCircle[1] = cCircle.getPosition().y + (cRadius*sin(7*PI/4));
+
 		rightCircle[0] = cCircle.getPosition().x + (cRadius*cos(2*PI));
 		rightCircle[1] = cCircle.getPosition().y + (cRadius*sin(2*PI));
 
@@ -752,6 +792,8 @@ struct Boule : public Entity
 	{
 		std::cout << "destructing roti" << std::endl;
 		delete[] topCircle;
+		delete[] topLCircle;
+		delete[] topRCircle;
 		delete[] rightCircle;
 		delete[] bottomCircle;
 		delete[] leftCircle;
